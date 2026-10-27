@@ -1,0 +1,92 @@
+Schieß die Alien-Invasoren ab und bring das Licht der Sterne zurück!
+Spielen
+Level
+Hangar
+Schiffe
+Upgrades
+Einstellungen
+Sound
+Musik
+Erzählstimme
+Vibration
+Grafik
+Auto
+Niedrig
+Hoch
+Sprache
+Auto
+Schwierigkeit
+Leicht
+Normal
+Schwer
+Pause
+Weiter
+Neu starten
+Beenden
+Spiel vorbei
+Level geschafft!
+Sektor geschafft!
+Punkte
+Rekord
+Credits
+Weiter
+Nochmal
+Karte
+Weiterspielen (Video)
+Credits x2 (Video)
+WARNUNG
+Riesiges Mutterschiff im Anflug!
+Nutzen
+Aktiv
+MAX
+Feuerrate
+Schaden
+Schild
+Magnet
+Endlos
+Level
+Überspringen
+Ziehen zum Fliegen · Autofeuer · B = Bombe
+Erstellt von
+Datenschutz
+Schaffe Level {n}
+Neuer Rekord!
+Sieg!
+Bombe
+Gerade kein Video verfügbar
+Nicht genug Credits
+Geschichte
+Doppelblaster · ausgewogen
+Breitstreuung · sehr schnell
+Schwere Durchschlagskanone · Extraschild
+Streuung
+Laser
+Raketen
+Schild +1
+Bombe +1
+Tempo +
+1UP!
+Violetter Schleier
+Aschegürtel
+Frostmond Rime
+Doppelsonnen-Sektor
+Korallendrift
+Sturmspalt
+Glaskometenfeld
+Glutschmiede
+Stockhöhle
+Herz des Schwarms
+Jahr 2190. Der Zorbix-Schwarm stiehlt das Licht der Sterne! Nur eine Rakete ist startbereit: deine.
+Pilot, der Schwarm versteckt sich im Nebel Violetter Schleier. Starte jetzt und dräng sie zurück!
+Der Träger ist besiegt! Der Schwarm flieht in den Aschegürtel. Pass auf die Felsen auf!
+Gürtel geschafft! Ihre Spur führt zum Frostmond Rime.
+Die Mondbaken leuchten wieder. Nächstes Ziel: die Doppelsonnen.
+Beide Sonnen strahlen wieder! Ein rosa Nebel versteckt ihre Flotte.
+Der Leviathan schwimmt davon. Vor dir öffnet sich ein Sturmspalt. Achtung, Laserstrahlen!
+Durch den Sturm! Als Nächstes kommen ihre Kristallkometen.
+Die Kometen sind frei. Finde die Schmiede, in der sie Schiffe bauen!
+Die Schmiede ist still. Ihr Stock ist jetzt ganz nah.
+Die Matriarchin floh ins Herz des Schwarms. Das ist die letzte Mission. Viel Glück, Pilot!
+Die Arche ist besiegt und die Sterne leuchten wieder! Doch es kommen mehr Schiffe. Wie weit fliegst du?
+Sektor geschafft! Der Schwarm schickt eine stärkere Flotte. Weiter so!
+Toll geflogen! Auf dem Radar sind noch größere Mutterschiffe!

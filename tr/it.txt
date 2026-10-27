@@ -1,0 +1,92 @@
+Abbatti gli invasori alieni e riporta la luce delle stelle!
+Gioca
+Livelli
+Hangar
+Navi
+Potenziamenti
+Impostazioni
+Suoni
+Musica
+Voce narrante
+Vibrazione
+Grafica
+Auto
+Bassa
+Alta
+Lingua
+Auto
+Difficoltà
+Facile
+Normale
+Difficile
+In pausa
+Riprendi
+Ricomincia
+Esci
+Game over
+Livello superato!
+Settore superato!
+Punti
+Record
+Crediti
+Avanti
+Riprova
+Mappa
+Continua (video)
+Crediti x2 (video)
+ALLARME
+Nave madre gigante in arrivo!
+Usa
+In uso
+MAX
+Cadenza
+Danno
+Scudo
+Calamita
+Infinito
+Livello
+Salta
+Trascina per volare · fuoco automatico · B = bomba
+Creato da
+Privacy
+Supera il livello {n}
+Nuovo record!
+Vittoria!
+Bomba
+Video non disponibile ora
+Crediti insufficienti
+Storia
+Doppio cannone · equilibrata
+Colpo ampio · velocissima
+Cannone perforante · scudo extra
+Ventaglio
+Laser
+Missili
+Scudo +1
+Bomba +1
+Più velocità
+1UP!
+Velo Viola
+Cintura di Cenere
+Luna Gelata Rime
+Settore dei Soli Gemelli
+Deriva di Corallo
+Squarcio della Tempesta
+Campo di Comete di Vetro
+Forgia delle Braci
+Cavità dell'Alveare
+Cuore dello Sciame
+Anno 2190. Lo Sciame Zorbix sta rubando la luce delle stelle! Solo un razzo è pronto al decollo: il tuo.
+Pilota, lo Sciame si nasconde nella nebulosa Velo Viola. Decolla e respingili!
+Il Vettore è abbattuto! Lo Sciame fugge nella cintura di asteroidi. Attento alle rocce!
+Cintura superata! La loro scia porta alla luna gelata Rime.
+I fari della luna brillano di nuovo. Prossima tappa: i Soli Gemelli.
+I due soli splendono ancora! Una nebulosa rosa nasconde la loro flotta.
+Il Leviatano nuota via. Davanti si apre uno squarcio di tempesta. Attento ai laser!
+Hai attraversato la tempesta! Ora tocca alle comete di cristallo.
+Le comete sono libere. Trova la Forgia dove costruiscono le navi!
+La Forgia tace. Il loro Alveare è vicinissimo.
+La Matriarca è fuggita nel Cuore dello Sciame. È la missione finale. Buona fortuna, pilota!
+L'Arca è sconfitta e le stelle brillano di nuovo! Ma arrivano altre navi. Fin dove arriverai?
+Settore superato! Lo Sciame manda una flotta più forte. Avanti!
+Volo fantastico! Il radar vede navi madri ancora più grandi!

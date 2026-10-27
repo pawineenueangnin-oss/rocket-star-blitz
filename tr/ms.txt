@@ -1,0 +1,92 @@
+Tembak penceroboh makhluk asing dan kembalikan cahaya bintang!
+Main
+Peringkat
+Hangar
+Kapal
+Naik taraf
+Pengaturan
+Suara
+Musik
+Suara cerita
+Getaran
+Grafik
+Auto
+Rendah
+Tinggi
+Bahasa
+Auto
+Kesulitan
+Mudah
+Normal
+Sulit
+Dijeda
+Sambung
+Mula semula
+Keluar
+Permainan tamat
+Peringkat selesai!
+Sektor selesai!
+Skor
+Terbaik
+Kredit
+Berikutnya
+Cuba lagi
+Peta
+Teruskan (video)
+Kredit x2 (video)
+AWAS
+Kapal induk raksasa mendekat!
+Guna
+Sedang diguna
+MAKS
+Kecepatan tembak
+Kerosakan
+Perisai
+Magnet
+Tanpa henti
+Peringkat
+Langkau
+Seret untuk terbang · tembak automatik · B = bom
+Dibuat oleh
+Kebijakan privasi
+Tamatkan peringkat {n}
+Rekor baru!
+Menang!
+Bom
+Video tiada buat masa ini
+Kredit tidak mencukupi
+Kisah
+Blaster ganda · seimbang
+Tembakan lebar · sangat cepat
+Meriam tembus berat · perisai ekstra
+Sebar
+Laser
+Rudal
+Perisai +1
+Bom +1
+Lebih laju
+1UP!
+Selubung Ungu
+Jalur Bara
+Bulan Ais Rime
+Sektor Matahari Kembar
+Arus Karang
+Celah Ribut
+Padang Komet Kaca
+Tempaan Bara
+Rongga Sarang
+Jantung Kawanan
+Tahun 2190. Kawanan Zorbix sedang mencuri cahaya bintang! Hanya satu roket sedia untuk dilancarkan: roket anda.
+Juruterbang, Kawanan bersembunyi di nebula Selubung Ungu. Lancarkan sekarang dan halau mereka!
+Kapal Pengangkut tumpas! Kawanan lari ke jalur asteroid. Hati-hati dengan batu!
+Jalur dilepasi! Jejak mereka menuju ke bulan ais Rime.
+Suar bulan menyala semula. Seterusnya: Matahari Kembar.
+Kedua-dua matahari bersinar semula! Nebula merah jambu menyembunyikan armada mereka.
+Leviathan berenang pergi. Celah ribut terbuka di hadapan. Awas pancaran laser!
+Berjaya merentas ribut! Seterusnya komet kristal mereka.
+Komet sudah bebas. Cari Tempaan tempat mereka membina kapal!
+Tempaan sudah senyap. Sarang mereka sangat dekat.
+Permaisuri lari ke Jantung Kawanan. Ini misi terakhir. Semoga berjaya, juruterbang!
+Bahtera tewas dan bintang bersinar semula! Tetapi lebih banyak kapal datang. Sejauh mana anda boleh terbang?
+Sektor selesai! Kawanan menghantar armada lebih kuat. Teruskan!
+Penerbangan hebat! Radar mengesan kapal induk yang lebih besar!

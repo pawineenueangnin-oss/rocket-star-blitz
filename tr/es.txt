@@ -1,0 +1,92 @@
+¡Derriba a los invasores alienígenas y devuelve la luz a las estrellas!
+Jugar
+Niveles
+Hangar
+Naves
+Mejoras
+Ajustes
+Sonido
+Música
+Voz de la historia
+Vibración
+Gráficos
+Auto
+Bajo
+Alto
+Idioma
+Auto
+Dificultad
+Fácil
+Normal
+Difícil
+En pausa
+Seguir
+Reiniciar
+Salir
+Fin del juego
+¡Nivel superado!
+¡Sector superado!
+Puntos
+Récord
+Créditos
+Siguiente
+Reintentar
+Mapa
+Continuar (vídeo)
+Créditos x2 (vídeo)
+ALERTA
+¡Se acerca una nave nodriza gigante!
+Usar
+En uso
+MÁX
+Cadencia
+Daño
+Escudo
+Imán
+Infinito
+Nivel
+Saltar
+Arrastra para volar · disparo automático · B = bomba
+Hecho por
+Política de privacidad
+Supera el nivel {n}
+¡Nuevo récord!
+¡Victoria!
+Bomba
+Vídeo no disponible ahora
+Créditos insuficientes
+Historia
+Cañones dobles · equilibrada
+Disparo amplio · muy rápida
+Cañón perforante · escudo extra
+Abanico
+Láser
+Misiles
+Escudo +1
+Bomba +1
+Más velocidad
+1UP!
+Velo Violeta
+Cinturón de Ceniza
+Luna Helada Rime
+Sector de los Soles Gemelos
+Deriva de Coral
+Grieta de Tormenta
+Campo de Cometas de Cristal
+Forja de Brasas
+Hueco de la Colmena
+Corazón del Enjambre
+Año 2190. ¡El Enjambre Zorbix está robando la luz de las estrellas! Solo un cohete está listo para despegar: el tuyo.
+Piloto, el Enjambre se esconde en la nebulosa Velo Violeta. ¡Despega ya y hazlos retroceder!
+¡El Portador ha caído! El Enjambre huye al cinturón de asteroides. ¡Cuidado con las rocas!
+¡Cinturón despejado! Su rastro lleva a la luna helada Rime.
+Las balizas de la luna brillan de nuevo. Próxima parada: los Soles Gemelos.
+¡Los dos soles brillan otra vez! Una nebulosa rosa esconde su flota.
+El Leviatán se aleja nadando. Delante se abre una grieta de tormenta. ¡Cuidado con los láseres!
+¡Atravesaste la tormenta! Ahora van sus cometas de cristal.
+Los cometas son libres. ¡Busca la Forja donde construyen sus naves!
+La Forja está en silencio. Su Colmena ya está muy cerca.
+La Matriarca huyó al Corazón del Enjambre. Es la misión final. ¡Suerte, piloto!
+¡El Arca ha caído y las estrellas brillan de nuevo! Pero vienen más naves. ¿Hasta dónde llegarás?
+¡Sector superado! El Enjambre envía una flota más fuerte. ¡Sigue adelante!
+¡Vuelo increíble! ¡El radar detecta naves nodriza aún más grandes!

@@ -1,0 +1,92 @@
+Abats les envahisseurs extraterrestres et rends leur lumière aux étoiles !
+Jouer
+Niveaux
+Hangar
+Vaisseaux
+Améliorations
+Réglages
+Sons
+Musique
+Voix de l'histoire
+Vibration
+Graphismes
+Auto
+Bas
+Élevé
+Langue
+Auto
+Difficulté
+Facile
+Normal
+Difficile
+Pause
+Reprendre
+Recommencer
+Quitter
+Partie terminée
+Niveau réussi !
+Secteur réussi !
+Score
+Record
+Crédits
+Suivant
+Réessayer
+Carte
+Continuer (vidéo)
+Crédits x2 (vidéo)
+ALERTE
+Vaisseau-mère géant en approche !
+Utiliser
+Utilisé
+MAX
+Cadence
+Dégâts
+Bouclier
+Aimant
+Infini
+Niveau
+Passer
+Glisse pour voler · tir auto · B = bombe
+Créé par
+Politique de confidentialité
+Réussis le niveau {n}
+Nouveau record !
+Victoire !
+Bombe
+Vidéo indisponible pour l'instant
+Pas assez de crédits
+Histoire
+Double canon · équilibré
+Tir large · très rapide
+Canon perçant · bouclier en plus
+Éventail
+Laser
+Missiles
+Bouclier +1
+Bombe +1
+Vitesse +
+1UP !
+Voile Violet
+Ceinture de Cendres
+Lune Glacée Rime
+Secteur des Soleils Jumeaux
+Dérive de Corail
+Faille Orageuse
+Champ de Comètes de Verre
+Forge des Braises
+Creux de la Ruche
+Cœur de l'Essaim
+An 2190. L'Essaim Zorbix vole la lumière des étoiles ! Une seule fusée est prête à décoller : la tienne.
+Pilote, l'Essaim se cache dans la nébuleuse du Voile Violet. Décolle et repousse-les !
+Le Porteur est abattu ! L'Essaim fuit dans la ceinture d'astéroïdes. Attention aux rochers !
+Ceinture traversée ! Leur piste mène à la lune glacée Rime.
+Les balises de la lune brillent à nouveau. Prochaine étape : les Soleils Jumeaux.
+Les deux soleils brillent encore ! Une nébuleuse rose cache leur flotte.
+Le Léviathan s'enfuit. Une faille orageuse s'ouvre devant. Attention aux lasers !
+Tu as traversé l'orage ! Voici leurs comètes de cristal.
+Les comètes sont libres. Trouve la Forge où ils construisent leurs vaisseaux !
+La Forge s'est tue. Leur Ruche est toute proche.
+La Matriarche a fui au Cœur de l'Essaim. C'est la mission finale. Bonne chance, pilote !
+L'Arche est vaincue et les étoiles brillent à nouveau ! Mais d'autres vaisseaux arrivent. Jusqu'où iras-tu ?
+Secteur réussi ! L'Essaim envoie une flotte plus forte. Continue !
+Pilotage génial ! Le radar voit des vaisseaux-mères encore plus grands !

@@ -1,0 +1,92 @@
+Derrube os invasores alienígenas e traga de volta a luz das estrelas!
+Jogar
+Fases
+Hangar
+Naves
+Melhorias
+Configurações
+Som
+Música
+Voz da história
+Vibração
+Gráficos
+Auto
+Baixo
+Alto
+Idioma
+Auto
+Dificuldade
+Fácil
+Normal
+Difícil
+Pausado
+Continuar
+Reiniciar
+Sair
+Fim de jogo
+Fase concluída!
+Setor concluído!
+Pontos
+Recorde
+Créditos
+Próxima
+Tentar de novo
+Mapa
+Continuar (vídeo)
+Créditos x2 (vídeo)
+ALERTA
+Nave-mãe gigante se aproximando!
+Usar
+Em uso
+MÁX
+Cadência
+Dano
+Escudo
+Ímã
+Infinito
+Fase
+Pular
+Arraste para voar · tiro automático · B = bomba
+Feito por
+Política de privacidade
+Conclua a fase {n}
+Novo recorde!
+Vitória!
+Bomba
+Vídeo indisponível agora
+Créditos insuficientes
+História
+Canhões duplos · equilibrada
+Tiro espalhado · muito rápida
+Canhão perfurante · escudo extra
+Leque
+Laser
+Mísseis
+Escudo +1
+Bomba +1
+Mais velocidade
+1UP!
+Véu Violeta
+Cinturão de Cinzas
+Lua Gelada Rime
+Setor dos Sóis Gêmeos
+Deriva de Coral
+Fenda da Tempestade
+Campo de Cometas de Vidro
+Forja das Brasas
+Oco da Colmeia
+Coração do Enxame
+Ano 2190. O Enxame Zorbix está roubando a luz das estrelas! Só um foguete está pronto para decolar: o seu.
+Piloto, o Enxame se esconde na nebulosa Véu Violeta. Decole agora e faça-os recuar!
+O Cargueiro caiu! O Enxame fugiu para o cinturão de asteroides. Cuidado com as rochas!
+Cinturão limpo! O rastro leva à lua gelada Rime.
+Os faróis da lua brilham de novo. Próxima parada: os Sóis Gêmeos.
+Os dois sóis brilham outra vez! Uma nebulosa rosa esconde a frota deles.
+O Leviatã nadou para longe. Uma fenda de tempestade se abre. Cuidado com os lasers!
+Você atravessou a tempestade! Agora vêm os cometas de cristal.
+Os cometas estão livres. Encontre a Forja onde eles constroem naves!
+A Forja silenciou. A Colmeia deles está bem perto.
+A Matriarca fugiu para o Coração do Enxame. É a missão final. Boa sorte, piloto!
+A Arca foi derrotada e as estrelas brilham de novo! Mas mais naves estão vindo. Até onde você vai?
+Setor concluído! O Enxame mandou uma frota mais forte. Continue!
+Voo incrível! O radar mostra naves-mãe ainda maiores!

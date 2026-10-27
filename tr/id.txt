@@ -1,0 +1,92 @@
+Tembak para penyerbu alien dan kembalikan cahaya bintang!
+Main
+Tahap
+Hangar
+Pesawat
+Tingkatkan
+Pengaturan
+Suara
+Musik
+Suara cerita
+Getar
+Grafis
+Otomatis
+Rendah
+Tinggi
+Bahasa
+Otomatis
+Kesulitan
+Mudah
+Normal
+Sulit
+Jeda
+Lanjut
+Ulangi
+Keluar
+Permainan berakhir
+Tahap selesai!
+Sektor selesai!
+Skor
+Terbaik
+Kredit
+Berikutnya
+Coba lagi
+Peta
+Lanjutkan (video)
+Kredit x2 (video)
+AWAS
+Kapal induk raksasa mendekat!
+Pakai
+Dipakai
+MAKS
+Kecepatan tembak
+Kekuatan
+Perisai
+Magnet
+Tanpa akhir
+Tahap
+Lewati
+Geser untuk terbang · tembak otomatis · B = bom
+Dibuat oleh
+Kebijakan privasi
+Selesaikan tahap {n}
+Rekor baru!
+Menang!
+Bom
+Video belum tersedia
+Kredit tidak cukup
+Cerita
+Blaster ganda · seimbang
+Tembakan lebar · sangat cepat
+Meriam tembus berat · perisai ekstra
+Sebar
+Laser
+Rudal
+Perisai +1
+Bom +1
+Tambah cepat
+1UP!
+Selubung Ungu
+Sabuk Bara
+Bulan Es Rime
+Sektor Matahari Kembar
+Arus Karang
+Celah Badai
+Ladang Komet Kaca
+Tempa Bara
+Rongga Sarang
+Jantung Kawanan
+Tahun 2190. Kawanan Zorbix mencuri cahaya bintang! Hanya satu roket yang siap meluncur: roketmu.
+Pilot, Kawanan bersembunyi di nebula Selubung Ungu. Meluncurlah dan usir mereka!
+Kapal Pengangkut jatuh! Kawanan kabur ke sabuk asteroid. Awas batu!
+Sabuk dilewati! Jejak mereka menuju bulan es Rime.
+Mercusuar bulan menyala lagi. Berikutnya: Matahari Kembar.
+Kedua matahari bersinar lagi! Nebula merah muda menyembunyikan armada mereka.
+Leviathan berenang pergi. Celah badai terbuka di depan. Awas sinar laser!
+Melewati badai! Berikutnya komet kristal mereka.
+Komet sudah bebas. Cari Tempa tempat mereka membuat kapal!
+Tempa sudah sepi. Sarang mereka sudah dekat sekali.
+Sang Ratu kabur ke Jantung Kawanan. Ini misi terakhir. Semoga berhasil, pilot!
+Bahtera kalah dan bintang bersinar lagi! Tapi kapal Kawanan terus datang. Seberapa jauh kamu bisa terbang?
+Sektor selesai! Kawanan mengirim armada lebih kuat. Terus maju!
+Terbang hebat! Radar melihat kapal induk yang lebih besar!

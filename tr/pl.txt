@@ -1,0 +1,92 @@
+Zestrzel kosmicznych najeźdźców i przywróć światło gwiazd!
+Graj
+Poziomy
+Hangar
+Statki
+Ulepszenia
+Ustawienia
+Dźwięk
+Muzyka
+Głos narratora
+Wibracje
+Grafika
+Auto
+Niska
+Wysoka
+Język
+Auto
+Trudność
+Łatwy
+Normalny
+Trudny
+Pauza
+Wznów
+Od nowa
+Wyjdź
+Koniec gry
+Poziom ukończony!
+Sektor ukończony!
+Wynik
+Rekord
+Kredyty
+Dalej
+Jeszcze raz
+Mapa
+Kontynuuj (wideo)
+Kredyty x2 (wideo)
+UWAGA
+Nadlatuje olbrzymi statek-matka!
+Użyj
+W użyciu
+MAX
+Szybkostrzelność
+Obrażenia
+Tarcza
+Magnes
+Bez końca
+Poziom
+Pomiń
+Przeciągnij, by latać · auto ogień · B = bomba
+Twórca
+Prywatność
+Ukończ poziom {n}
+Nowy rekord!
+Zwycięstwo!
+Bomba
+Wideo teraz niedostępne
+Za mało kredytów
+Historia
+Podwójne blastery · zbalansowany
+Szeroki rozrzut · bardzo szybki
+Ciężkie działo przebijające · dodatkowa tarcza
+Rozrzut
+Laser
+Rakiety
+Tarcza +1
+Bomba +1
+Szybciej
+1UP!
+Fioletowa Zasłona
+Pas Popiołu
+Lodowy Księżyc Rime
+Sektor Bliźniaczych Słońc
+Koralowy Dryf
+Szczelina Burzy
+Pole Szklanych Komet
+Kuźnia Żaru
+Dziupla Roju
+Serce Roju
+Rok 2190. Rój Zorbix kradnie światło gwiazd! Tylko jedna rakieta jest gotowa do startu: twoja.
+Pilocie, Rój ukrywa się w mgławicy Fioletowa Zasłona. Startuj i odepchnij ich!
+Nosiciel zestrzelony! Rój ucieka w pas planetoid. Uważaj na skały!
+Pas pokonany! Ich ślad prowadzi do lodowego księżyca Rime.
+Latarnie księżyca znów świecą. Następny przystanek: Bliźniacze Słońca.
+Oba słońca znów jasno świecą! Różowa mgławica kryje ich flotę.
+Lewiatan odpłynął. Przed tobą szczelina burzy. Uważaj na lasery!
+Przez burzę! Teraz ich kryształowe komety.
+Komety są wolne. Znajdź Kuźnię, gdzie budują statki!
+Kuźnia ucichła. Ich Rój jest już bardzo blisko.
+Matka Roju uciekła do Serca Roju. To ostatnia misja. Powodzenia, pilocie!
+Arka pokonana, a gwiazdy znów świecą! Ale nadlatują kolejne statki. Jak daleko dolecisz?
+Sektor ukończony! Rój wysyła silniejszą flotę. Leć dalej!
+Świetny lot! Radar widzi jeszcze większe statki-matki!
