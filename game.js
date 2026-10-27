@@ -263,7 +263,7 @@ function drawBG(dt){const cfg=STAGE_BG[BGS.i],t=G.scroll;
  const a=st[2];cx.globalCompositeOperation='lighter';cx.fillStyle='rgba(200,220,255,.35)';const sp=(G.mode==='play'?260:140)*(G.mode==='clear'&&G.clearT>1?4:1);for(let k=0;k<a.length;k+=6){const y=(a[k+1]+t*sp*(1+(k%5)*.15))%GH;cx.fillRect(a[k],y,1,Math.max(2,sp*.025));}cx.globalCompositeOperation='source-over';}
 // ---------- render ----------
 function spr(s,x,y,sc,rot){const w=s.w*(sc||1),h=s.h*(sc||1);if(rot){cx.save();cx.translate(x,y);cx.rotate(rot);cx.drawImage(s.c,-w/2,-h/2,w,h);cx.restore();}else cx.drawImage(s.c,x-w/2,y-h/2,w,h);}
-function render(dt){cx.setTransform(SC*DPR,0,0,SC*DPR,0,0);let sx=0,sy=0;if(G.shake>0&&QUAL>0){sx=rnd(-1,1)*G.shake*.6;sy=rnd(-1,1)*G.shake*.6;}cx.translate(sx,sy);
+function render(dt){cx.globalAlpha=1;cx.globalCompositeOperation='source-over';cx.shadowBlur=0;cx.setTransform(SC*DPR,0,0,SC*DPR,0,0);let sx=0,sy=0;if(G.shake>0&&QUAL>0){sx=rnd(-1,1)*G.shake*.6;sy=rnd(-1,1)*G.shake*.6;}cx.translate(sx,sy);
  drawBG(dt);const S=ART.spr;
  // hazards
  for(const h of HZ){if(!h.a)continue;if(h.t<h.warn){const a=.35+.35*Math.sin(h.t*30);cx.fillStyle='rgba(255,60,90,'+a*.35+')';cx.fillRect(h.x-h.w/2,0,h.w,GH);cx.fillStyle='rgba(255,90,120,'+a+')';cx.fillRect(h.x-1,0,2,GH);

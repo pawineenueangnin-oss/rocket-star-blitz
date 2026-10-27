@@ -1,6 +1,6 @@
 @font-face{font-family:PS2P;src:url(fonts/ps2p.ttf) format('truetype');font-display:block}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-html,body{margin:0;height:100%;overflow:hidden;background:#05010f radial-gradient(ellipse at 20% 30%,#2a0a4a 0,transparent 55%),radial-gradient(ellipse at 80% 70%,#3a1a08 0,transparent 50%);color:#fff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Thai",sans-serif;touch-action:none;overscroll-behavior:none}
+html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellipse at 20% 30%,#2a0a4a 0,transparent 55%),radial-gradient(ellipse at 80% 70%,#3a1a08 0,transparent 50%),#05010f;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Thai",sans-serif;touch-action:none;overscroll-behavior:none}
 #probe{position:fixed;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);visibility:hidden;pointer-events:none}
 #c{position:fixed;display:block;touch-action:none;box-shadow:0 0 40px rgba(120,60,255,.35)}
 #ui{position:fixed;pointer-events:none;font-size:calc(14px * var(--s,1));overflow:hidden}
