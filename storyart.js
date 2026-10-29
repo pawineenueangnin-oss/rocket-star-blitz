@@ -22,8 +22,8 @@ const SART={raf:0,cache:{},
    const sx=W*.5+Math.sin(t*1.3)*14,sy=H-34-ez*0+(1-ez)*50+Math.sin(t*2.1)*3,fl=.7+.3*Math.sin(t*40);
    const drawShip=(x,y,s)=>{glow(x,y+s*24,s*14*fl,'rgba(90,200,255,.9)');glow(x,y+s*30,s*7*fl,'rgba(255,255,255,.9)');dr(ship,x,y,s);};
    if(sc.k==='boss'||sc.k==='fleet'||sc.k==='intro'){const bx=W*.42+Math.sin(t*.5)*10,by=-60+ez*(sc.k==='intro'?100:92)+Math.sin(t*.8)*3,s=Math.min(1,250/boss.w)*(sc.k==='intro'?.85:1);
-    const pulse=.55+.45*Math.sin(t*5);dr(boss,bx,by,s);const a1=BOSS_DEF[sc.b!=null?sc.b:9][3];
-    g.globalCompositeOperation='lighter';[-1,1].forEach(d=>{glow(bx+d*boss.w*s*.14,by+boss.h*s*.1,9*pulse+4,a1);glow(bx+d*boss.w*s*.14,by+boss.h*s*.1,3,'#fff');glow(bx+d*boss.w*s*.3,by-boss.h*s*.3,7*fl,'rgba(255,120,200,.6)');});g.globalCompositeOperation='source-over';
+    const pulse=.55+.45*Math.sin(t*5);g.save();g.translate(bx,by);g.scale(s,s);bossDraw(g,sc.b!=null?sc.b:9,{t,ph:0,la:Math.PI/2});g.restore();const a1=BOSS_DEF[sc.b!=null?sc.b:9][3];
+    g.globalCompositeOperation='lighter';g.globalCompositeOperation='source-over';
     if(sc.k==='intro'){g.fillStyle='rgba(255,230,120,.12)';g.beginPath();g.moveTo(bx-10,by+30);g.lineTo(W*.8-30,H*.32+40);g.lineTo(W*.8+30,H*.32+40);g.lineTo(bx+10,by+30);g.fill();}}
    if(sc.k==='launch'||sc.k==='fleet'||sc.k==='intro'){for(const f of fleet){const fy=f[1]-30+ez*30+Math.sin(t*2+f[3])*4+(sc.k==='launch'?0:60),fx=f[0]+Math.sin(t+f[3])*6;if(sc.k!=='launch'&&fy<55)continue;dr(S[f[2]],fx,fy,.55);}}
    if(sc.k==='win'){for(let k=0;k<5;k++){const p=((t*.9+k*.37)%1.6)/1.6,x=60+((k*97)%200),y=30+((k*53)%60);g.globalCompositeOperation='lighter';glow(x,y,6+p*34,`rgba(255,${150+k*20},60,${(1-p)*.9})`);glow(x,y,3+p*12,`rgba(255,255,255,${1-p})`);g.globalCompositeOperation='source-over';}
