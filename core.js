@@ -92,6 +92,8 @@ const AU={ac:null,on:false,voices:0,maxVoices:30,next:0,step:0,song:null,songId:
    case'boom':this.noise(D,t,.008,.1,.5,.45,'lowpass',1800,90);this.tone(D,'sine',120,t,.008,.08,.4,.45,30);break;
    case'bigboom':this.noise(D,t,.01,.3,1.2,.55,'lowpass',2400,60);this.tone(D,'sine',90,t,.01,.3,1,.5,25);this.tone(D,'sawtooth',60,t+.1,.02,.2,.8,.15,30,400);break;
    case'coin':this.tone(D,'square',1320,t,.006,.02,.05,.05);this.tone(D,'square',1760,t+.05,.006,.02,.08,.05);break;
+   case'evolve':[392,523,659,784,1047,1319].forEach((f,i)=>this.tone(D,'square',f,t+i*.05,.006,.04,.08,.07,0,5000));this.tone(D,'sine',180,t,.02,.25,.4,.2,520);break;
+   case'tierdown':[784,587,440].forEach((f,i)=>this.tone(D,'triangle',f,t+i*.07,.006,.04,.1,.12,0,3000));break;
    case'power':[523,659,784,1047].forEach((f,i)=>this.tone(D,'square',f,t+i*.055,.006,.03,.06,.07,0,4000));break;
    case'hurt':this.tone(D,'sawtooth',400,t,.006,.05,.3,.25,70,1800);this.noise(D,t,.006,.05,.3,.25,'lowpass',1500,200);break;
    case'shieldhit':this.tone(D,'triangle',900,t,.006,.03,.2,.18,400);break;

@@ -90,3 +90,8 @@ st9|The Matriarch fled to the Heart of the Swarm. This is the final mission. Goo
 st10|The Ark is beaten and the stars shine again! But more Swarm ships are coming. How far can you fly?
 st11|Sector clear! The Swarm sends a stronger fleet. Keep going!
 st12|Amazing flying! Even bigger motherships are on the radar!
+pMagnet|MAGNET!
+pScore2|SCORE x2!
+pPower|POWER UP!
+evolve|EVOLVE!
+tierDown|TIER DOWN

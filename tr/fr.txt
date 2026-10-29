@@ -90,3 +90,8 @@ La Matriarche a fui au Cœur de l'Essaim. C'est la mission finale. Bonne chance,
 L'Arche est vaincue et les étoiles brillent à nouveau ! Mais d'autres vaisseaux arrivent. Jusqu'où iras-tu ?
 Secteur réussi ! L'Essaim envoie une flotte plus forte. Continue !
 Pilotage génial ! Le radar voit des vaisseaux-mères encore plus grands !
+AIMANT !
+SCORE x2 !
+PUISSANCE !
+ÉVOLUTION !
+NIVEAU PERDU

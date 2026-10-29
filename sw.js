@@ -1,4 +1,4 @@
-const C='rocketstar-v2';const F=['./','index.html','style.css','i18n.js','core.js','art.js','game.js','ui.js','privacy.html','manifest.json','icon-192.png','icon-512.png','icon-maskable-192.png','icon-maskable-512.png','studio-logo.png','fonts/ps2p.ttf'];
+const C='rocketstar-v3';const F=['./','index.html','style.css','i18n.js','core.js','art.js','game.js','ui.js','privacy.html','manifest.json','icon-192.png','icon-512.png','icon-maskable-192.png','icon-maskable-512.png','studio-logo.png','fonts/ps2p.ttf'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(F)));self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim();});
 // network-first so new builds show up; cache fallback for offline
