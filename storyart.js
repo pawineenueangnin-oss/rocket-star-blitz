@@ -1,0 +1,35 @@
+'use strict';
+// Story illustration panel: small animated canvas scenes built from the game's own sprites (original art).
+const SART={raf:0,cache:{},
+ scene(key,n){if(key==='st0')return{k:'intro',bg:9};if(key==='st1b')return{k:'launch',bg:0};if(key==='st10'&&n!==0)return{k:'win',bg:9};
+  if(n===0)return{k:'fleet',bg:(G.sector||0)%10,b:Math.min(9,(G.sector||0)%10)};return{k:'boss',bg:n-1,b:n-1};},
+ bossName(sc){return sc.k==='boss'?BOSS_DEF[sc.b][0]:'';},
+ get(id,fn){return this.cache[id]||(this.cache[id]=fn());},
+ start(cv,sc){this.stop();if(!cv)return;const dpr=Math.min(2,window.devicePixelRatio||1),W=320,H=150;cv.width=W*dpr;cv.height=H*dpr;const g=cv.getContext('2d');
+  const neb=this.get('n'+sc.bg,()=>nebulaTile(sc.bg)),body=this.get('b'+sc.bg,()=>bodySpr(STAGE_BG[sc.bg].body,sc.bg));
+  const boss=sc.b!=null?(ART.bossSpr[sc.b]||(ART.bossSpr[sc.b]=bossSpr(sc.b))):sc.k==='intro'||sc.k==='win'?(ART.bossSpr[9]||(ART.bossSpr[9]=bossSpr(9))):null;
+  const S=ART.spr,ship=S.shipT[SAVE.ship||0][sc.k==='win'?4:sc.k==='boss'?Math.min(4,(sc.b/2)|0):0];
+  let sd=7;const R=()=>{sd=(sd*16807)%2147483647;return sd/2147483647;};const stars=[];for(let i=0;i<46;i++)stars.push([R()*W,R()*H,.3+R()*1.2,R()]);
+  const foes=['zig','vwing','diver','sine','kami','saucer'];const fleet=[];for(let i=0;i<9;i++)fleet.push([40+(i%5)*60+(i>4?30:0),20+(i>4?30:0),foes[i%foes.length],R()*6]);
+  const t0=performance.now();
+  const dr=(o,x,y,s,a)=>{if(!o)return;g.globalAlpha=a==null?1:a;g.drawImage(o.c,x-o.w*s/2,y-o.h*s/2,o.w*s,o.h*s);g.globalAlpha=1;};
+  const glow=(x,y,r,c)=>{const q=g.createRadialGradient(x,y,0,x,y,r);q.addColorStop(0,c);q.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=q;g.beginPath();g.arc(x,y,r,0,7);g.fill();};
+  const fr=now=>{const t=(now-t0)/1000,e=Math.min(1,t/.7),ez=1-Math.pow(1-e,3);g.setTransform(dpr,0,0,dpr,0,0);
+   const b=STAGE_BG[sc.bg].b;const lgr=g.createLinearGradient(0,0,0,H);lgr.addColorStop(0,b[0]);lgr.addColorStop(1,b[1]);g.fillStyle=lgr;g.fillRect(0,0,W,H);
+   const ny=(t*6)%neb.height*(W/neb.width);g.globalAlpha=.9;for(let k=-1;k<2;k++)g.drawImage(neb,0,ny+k*neb.height*(W/neb.width),W,neb.height*(W/neb.width));g.globalAlpha=1;
+   for(const s of stars){const y=(s[1]+t*s[2]*14)%H;g.globalAlpha=.4+.6*Math.abs(Math.sin(t*2+s[3]*9));g.fillStyle='#fff';g.fillRect(s[0],y,s[2],s[2]);}g.globalAlpha=1;
+   const bs=sc.k==='intro'?.75:.5;dr(body,W*.8,H*.32+Math.sin(t*.3)*3,bs,.85);
+   const sx=W*.5+Math.sin(t*1.3)*14,sy=H-34-ez*0+(1-ez)*50+Math.sin(t*2.1)*3,fl=.7+.3*Math.sin(t*40);
+   const drawShip=(x,y,s)=>{glow(x,y+s*24,s*14*fl,'rgba(90,200,255,.9)');glow(x,y+s*30,s*7*fl,'rgba(255,255,255,.9)');dr(ship,x,y,s);};
+   if(sc.k==='boss'||sc.k==='fleet'||sc.k==='intro'){const bx=W*.42+Math.sin(t*.5)*10,by=-60+ez*(sc.k==='intro'?100:92)+Math.sin(t*.8)*3,s=Math.min(1,250/boss.w)*(sc.k==='intro'?.85:1);
+    const pulse=.55+.45*Math.sin(t*5);dr(boss,bx,by,s);const a1=BOSS_DEF[sc.b!=null?sc.b:9][3];
+    g.globalCompositeOperation='lighter';[-1,1].forEach(d=>{glow(bx+d*boss.w*s*.14,by+boss.h*s*.1,9*pulse+4,a1);glow(bx+d*boss.w*s*.14,by+boss.h*s*.1,3,'#fff');glow(bx+d*boss.w*s*.3,by-boss.h*s*.3,7*fl,'rgba(255,120,200,.6)');});g.globalCompositeOperation='source-over';
+    if(sc.k==='intro'){g.fillStyle='rgba(255,230,120,.12)';g.beginPath();g.moveTo(bx-10,by+30);g.lineTo(W*.8-30,H*.32+40);g.lineTo(W*.8+30,H*.32+40);g.lineTo(bx+10,by+30);g.fill();}}
+   if(sc.k==='launch'||sc.k==='fleet'||sc.k==='intro'){for(const f of fleet){const fy=f[1]-30+ez*30+Math.sin(t*2+f[3])*4+(sc.k==='launch'?0:60),fx=f[0]+Math.sin(t+f[3])*6;if(sc.k!=='launch'&&fy<55)continue;dr(S[f[2]],fx,fy,.55);}}
+   if(sc.k==='win'){for(let k=0;k<5;k++){const p=((t*.9+k*.37)%1.6)/1.6,x=60+((k*97)%200),y=30+((k*53)%60);g.globalCompositeOperation='lighter';glow(x,y,6+p*34,`rgba(255,${150+k*20},60,${(1-p)*.9})`);glow(x,y,3+p*12,`rgba(255,255,255,${1-p})`);g.globalCompositeOperation='source-over';}
+    dr(boss,W*.5,40+t*4,.5,Math.max(0,.5-t*.05));}
+   drawShip(sc.k==='win'?W*.5:sx,sc.k==='win'?H-40+Math.sin(t*2)*4:sy,sc.k==='intro'?.6:.75);
+   g.fillStyle='rgba(0,0,0,'+(1-ez)+')';g.fillRect(0,0,W,H);
+   if(UI.cur==='storyS'&&document.body.contains(cv))this.raf=requestAnimationFrame(fr);};
+  this.raf=requestAnimationFrame(fr);},
+ stop(){cancelAnimationFrame(this.raf);this.raf=0;}};

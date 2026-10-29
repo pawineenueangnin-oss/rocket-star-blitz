@@ -38,9 +38,11 @@ const UI={cur:null,
   <div class="studio big"><img src="studio-logo.png" alt=""><span>${T('madeBy')} <b>P-Prece Studio</b><br>พีพีช Studio</span></div><a class="priv" href="privacy.html" target="_blank">${T('privacy')}</a>`,'settings');
   $('sQ').onchange=e=>{SAVE.q=e.target.value;persist();setQuality();};$('sD').onchange=e=>{SAVE.diff=+e.target.value;persist();};
   $('sL').onchange=e=>{const v=e.target.value;try{if(v==='auto')localStorage.removeItem('rsb_lang');else localStorage.setItem('rsb_lang',v);}catch(_){}LANG=v==='auto'?detectLang():v;applyLang();this.settings(this.from);};},
- story(key,then,n){G.mode='story';this.hud(false);Ads.banner(false);const txt=T(key);
-  this.show(`<div class="story"><div class="sh">${n?T('stage')+' '+n:n===0?T('endless'):T('storyT')}</div><p id="stx"></p><div class="row"><button class="b sm" data-a="sskip">${T('skip')}</button><button class="b" data-a="snext">${T('next')} ▶</button></div></div>`,'storyS');
-  this.then=then;let i=0;const p=$('stx');clearInterval(this.ti);this.ti=setInterval(()=>{i+=2;p.textContent=txt.slice(0,i);if(i>=txt.length)clearInterval(this.ti);},28);VOICE.say(txt);},
+ story(key,then,n){G.mode='story';this.hud(false);Ads.banner(false);const txt=T(key);const sc=SART.scene(key,n),bn=SART.bossName(sc);
+  this.show(`<div class="story"><canvas id="scv" class="scv" data-a="snext"></canvas><div class="sh">${n?T('stage')+' '+n:n===0?T('endless'):T('storyT')}${bn?` <span class="bn">⚠ ${bn}</span>`:''}</div><p id="stx" data-a="snext"></p><div class="row"><button class="b sm" data-a="sskip">${T('skip')}</button><button class="b" data-a="snext">${T('next')} ▶</button></div></div>`,'storyS');
+  SART.start($('scv'),sc);
+  this.then=then;let i=0;const p=$('stx');clearInterval(this.ti);clearTimeout(this.ta);this.ti=setInterval(()=>{i+=2;p.textContent=txt.slice(0,i);if(i>=txt.length)clearInterval(this.ti);},28);VOICE.say(txt);
+  const k=this.then;this.ta=setTimeout(()=>{if(this.cur==='storyS'&&this.then===k){VOICE.stop();this.then=null;SART.stop();k&&k();}},Math.max(6000,txt.length*28/2+4200));},
  result(win,o){Ads.banner(true);this.hud(false);const s=G.stage;const canR=Ads.canReward();
   const sc=`<div class="res"><div class="rs">${T('score')} <b>${G.score}</b></div><div class="rs">${T('credits')} <b>◆ ${G.credits}</b></div><div class="rs">${T('best')} <b>${G.endless?SAVE.endBest:SAVE.best[s-1]||0}</b></div></div>`;
   if(win){this.show(`<h2 class="big gold">${T('clear')}</h2><div class="stars">${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div>${o.nb?`<div class="nb">${T('newBest')}</div>`:''}${sc}
@@ -69,7 +71,7 @@ const UI={cur:null,
    case'equip':SAVE.ship=i;persist();P.ship=i;this.hangar();break;
    case'buyship':if(SAVE.cr>=this.SC[i]){SAVE.cr-=this.SC[i];SAVE.ships[i]=1;SAVE.ship=i;persist();AU.sfx('power');}else toast(T('needCr'));this.hangar();break;
    case'upg':{const k=b.dataset.k,c=this.UC[SAVE.upg[k]];if(SAVE.cr>=c){SAVE.cr-=c;SAVE.upg[k]++;persist();AU.sfx('power');}this.hangar();break;}
-   case'snext':case'sskip':clearInterval(this.ti);VOICE.stop();if(a==='sskip'){let f=this.then;this.then=null;f&&f();}else{const f=this.then;this.then=null;f&&f();}break;
+   case'snext':case'sskip':clearInterval(this.ti);clearTimeout(this.ta);SART.stop();VOICE.stop();if(a==='sskip'){let f=this.then;this.then=null;f&&f();}else{const f=this.then;this.then=null;f&&f();}break;
    case'next':if(G.stage>=10){this.story('st10',()=>this.menu());}else this.begin(G.stage+1);break;
    case'retry':G.sector=0;startStage(G.endless?0:G.stage,G.endless);break;
    case'dbl':b.disabled=true;Ads.rewarded().then(ok=>{if(ok){SAVE.cr+=G.credits;G.credits*=2;persist();AU.sfx('coin');toast('◆ x2');}else toast(T('noVideo'));this.result(true,{stars:SAVE.stars[G.stage-1]||1});});break;

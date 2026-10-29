@@ -51,3 +51,7 @@ h2.big{font-family:PS2P,system-ui;font-size:1.5em;line-height:1.4;margin:.2em 0}
 #toast{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%) scale(.9);background:rgba(0,0,0,.8);border:1px solid #ffcf5a;border-radius:.8em;padding:.6em 1em;opacity:0;transition:.2s;pointer-events:none;font-weight:700}
 #toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
 [dir=rtl] .un,[dir=rtl] .set{text-align:right}
+.story .scv{display:block;width:100%;aspect-ratio:32/15;border-radius:.6em;margin-bottom:.6em;border:1px solid rgba(122,232,255,.45);box-shadow:0 0 .8em rgba(80,200,255,.3);animation:scvIn .5s ease-out;cursor:pointer;background:#05001a}
+.story .bn{color:#ff7ab8;font-size:.9em}
+.story p{min-height:3em!important}
+@keyframes scvIn{from{opacity:0;transform:translateY(.6em)}to{opacity:1;transform:none}}
