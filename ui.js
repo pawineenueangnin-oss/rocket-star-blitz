@@ -23,7 +23,7 @@ const UI={cur:null,
  hangar(){G.mode='menu';this.hud(false);Ads.banner(true);const costs=[0,800,2000],req=[0,3,6];
   let h=`<div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('hangar')}</h2><span class="cr">◆ ${SAVE.cr}</span></div><h3>${T('ships')}</h3><div class="ships">`;
   SHIPS.forEach((s,i)=>{const own=SAVE.ships[i],can=SAVE.reached>=req[i]||DEBUG;h+=`<div class="ship ${SAVE.ship===i?'sel':''}"><img src="${ART.spr.ship[i].c.toDataURL()}" alt=""><b>${s.n}</b><small>${T('sh'+(i+1))}</small>
-   ${own?(SAVE.ship===i?`<span class="ok">${T('equipped')}</span>`:`<button class="b sm" data-a="equip" data-i="${i}">${T('equip')}</button>`):can?`<button class="b sm gold" data-a="buyship" data-i="${i}">◆ ${costs[i]}</button>`:`<small class="lk">🔒 ${T('unlockAt').replace('{n}',req[i]-1)}</small>`}</div>`;});
+   ${own?(SAVE.ship===i?`<span class="ok">${T('equipped')}</span>`:`<button class="b sm" data-a="equip" data-i="${i}">${T('equip')}</button>`):can?`<button class="b sm gold${SAVE.cr<costs[i]?' poor':''}" data-a="buyship" data-i="${i}">◆ ${costs[i]}</button>`:`<small class="lk">🔒 ${T('unlockAt').replace('{n}',req[i]-1)}</small>`}</div>`;});
   h+=`</div><h3>${T('upgrades')}</h3><div class="upg">`;const UC=[150,350,700,1200];
   [['rate','fireRate'],['dmg','damage'],['shd','shield'],['mag','magnet']].forEach(([k,n])=>{const lv=SAVE.upg[k];h+=`<div class="u"><span class="un">${T(n)}</span><span class="pips">${[0,1,2,3].map(j=>`<i class="${j<lv?'on':''}"></i>`).join('')}</span>${lv>=4?`<span class="ok">${T('max')}</span>`:`<button class="b sm gold" data-a="upg" data-k="${k}" ${SAVE.cr<UC[lv]?'disabled':''}>◆ ${UC[lv]}</button>`}</div>`;});
   this.show(h+'</div>','hangar');this.UC=UC;this.SC=costs;},

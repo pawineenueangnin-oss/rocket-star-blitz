@@ -116,3 +116,16 @@ h2.big.red{filter:drop-shadow(0 0 .3em rgba(255,40,90,.6))}
 #bombB:after{content:attr(data-n);position:absolute;right:-.3em;top:-.3em;min-width:1.5em;height:1.5em;border-radius:1em;background:linear-gradient(#ff7ad0,#d0207a);color:#fff;font:700 .7em/1.5em PS2P,monospace;text-align:center;border:1px solid #fff;box-shadow:0 0 .5em #ff4fb8}
 #bombB.empty{filter:grayscale(.8) brightness(.6);box-shadow:none}
 #toast{background:linear-gradient(rgba(50,30,120,.92),rgba(16,8,46,.95));border-color:rgba(255,210,120,.7);box-shadow:0 0 1em rgba(255,180,60,.35)}
+/* v6.1 contrast fixes */
+.b.gold,.b.sm.gold{background:linear-gradient(#fff2a8,#ffcf3a 48%,#f0a810 54%,#b86a00);color:#3a1a00;text-shadow:0 1px 0 rgba(255,255,255,.45);border:1px solid #fff0b0;box-shadow:0 .16em 0 #5a3000,0 0 .8em rgba(255,200,60,.6),inset 0 1px 0 rgba(255,255,255,.8);font-weight:900}
+.b.gold:disabled,.b.gold.poor{opacity:1;filter:none;background:linear-gradient(rgba(80,70,110,.95),rgba(40,32,70,.95));color:#ffe9a8;text-shadow:0 1px 0 #000;border:1px dashed rgba(255,220,140,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+.b.gold:disabled:before,.b.gold.poor:before{content:'🔒 ';font-size:.85em}
+.cr{font-size:.85em;color:#ffe14a;background:linear-gradient(rgba(60,40,10,.85),rgba(30,16,4,.9));border:1px solid rgba(255,210,90,.7);border-radius:1em;padding:.45em .75em;text-shadow:0 0 .4em rgba(255,180,40,.8),0 1px 0 #000;box-shadow:0 0 .6em rgba(255,180,40,.35)}
+.node .nm,.node .num{text-shadow:0 1px 2px rgba(0,0,0,.85)}
+.node .st i{color:rgba(255,255,255,.45)}
+.node.lock{filter:grayscale(.7) brightness(.8)}
+.ship small,.lk{opacity:1;color:#e6dcff}.lk{color:#ffc8c8}
+.set span,.un,.hi,.howto,.rs{color:#f2ecff}
+.chip{color:#f0eaff}
+select{color:#fff}
+.studio{opacity:1}
