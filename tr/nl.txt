@@ -95,3 +95,4 @@ SCORE x2!
 POWER-UP!
 EVOLUTIE!
 NIVEAU OMLAAG
+Schermschudden

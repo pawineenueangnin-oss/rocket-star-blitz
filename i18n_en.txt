@@ -95,3 +95,4 @@ pScore2|SCORE x2!
 pPower|POWER UP!
 evolve|EVOLVE!
 tierDown|TIER DOWN
+shake|Screen shake

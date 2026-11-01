@@ -7,7 +7,7 @@ const UI={cur:null,
  hideAll(){this.el().style.display='none';this.el().innerHTML='';this.cur=null;$('pz').style.display='none';},
  hud(on){$('hudb').style.display=on?'flex':'none';if(on){this.el().style.display='none';Ads.banner(false);}},
  ttl(){return`<div class="logo"><div class="l1">ROCKET</div><div class="l2">STAR BLITZ</div></div>`;},
- menu(){G.mode='menu';VOICE.stop();this.hud(false);if(BGS.i!==0&&BGS.i!==3)setBG(3);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);
+ menu(){G.mode='menu';VOICE.stop();this.hud(false);if(BGS.i!==4)setBG(4);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);
   this.show(`${this.ttl()}<div class="tag">${T('tag')}</div><div class="sp"></div>
   <button class="b big" data-a="play">▶ ${T('play')}</button>
   <div class="row"><button class="b" data-a="map">${T('select')}</button><button class="b" data-a="hangar">${T('hangar')}</button></div>
@@ -30,7 +30,7 @@ const UI={cur:null,
  settings(from){this.from=from||'menu';const tg=(k,n)=>`<div class="set"><span>${T(n)}</span><button class="tg ${SAVE[k]?'on':''}" data-a="tog" data-k="${k}">${SAVE[k]?'ON':'OFF'}</button></div>`;
   const langs=Object.keys(LANG_NAMES).map(l=>`<option value="${l}" ${l===LANG&&localStorage.getItem('rsb_lang')?'selected':''}>${LANG_NAMES[l]}</option>`).join('');
   this.show(`<div class="hd"><button class="b sm" data-a="back">◀</button><h2>${T('settings')}</h2><span></span></div><div class="sets">
-  ${tg('snd','sound')}${tg('mus','music')}${tg('voice','voice')}${tg('vib','vibration')}
+  ${tg('snd','sound')}${tg('mus','music')}${tg('voice','voice')}${tg('vib','vibration')}${tg('shake','shake')}
   <div class="set"><span>${T('quality')}</span><select id="sQ">${['auto','low','high'].map(q=>`<option value="${q}" ${SAVE.q===q?'selected':''}>${T('q_'+q)}</option>`).join('')}</select></div>
   <div class="set"><span>${T('language')}</span><select id="sL"><option value="auto">${T('auto')}</option>${langs}</select></div>
   <div class="set"><span>${T('difficulty')}</span><select id="sD">${['easy','normal','hard'].map((d,i)=>`<option value="${i}" ${SAVE.diff===i?'selected':''}>${T(d)}</option>`).join('')}</select></div></div>
@@ -55,7 +55,7 @@ const UI={cur:null,
   setTimeout(()=>{SART.stop();f&&f();},220);},
  result(win,o){Ads.banner(true);this.hud(false);const s=G.stage;const canR=Ads.canReward();
   const sc=`<div class="res"><div class="rs">${T('score')} <b>${G.score}</b></div><div class="rs">${T('credits')} <b>◆ ${G.credits}</b></div><div class="rs">${T('best')} <b>${G.endless?SAVE.endBest:SAVE.best[s-1]||0}</b></div></div>`;
-  if(win){this.show(`<h2 class="big gold">${T('clear')}</h2><div class="stars">${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div>${o.nb?`<div class="nb">${T('newBest')}</div>`:''}${sc}
+  if(win){FX.fw=4;this.show(`<div class="burst"></div><h2 class="big gold">${T('clear')}</h2><div class="stars">${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div>${o.nb?`<div class="nb">${T('newBest')}</div>`:''}${sc}
    ${canR&&G.credits>0?`<button class="b pink" data-a="dbl">▶ ${T('double')}</button>`:''}
    <button class="b big" data-a="next">${s>=10?T('victory'):T('next')} ▶</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div>`,'result');}
   else this.show(`<h2 class="big red">${T('gameover')}</h2>${sc}${!G.contUsed&&canR?`<button class="b pink" data-a="cont">▶ ${T('revive')}</button>`:''}
@@ -89,7 +89,7 @@ const UI={cur:null,
 function toast(s){const t=$('toast');t.textContent=s;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1800);}
 function applyLang(){document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';$('bombB').title=T('bomb');}
 // ---------- boot ----------
-function boot(){applyLang();buildArt();setQuality();setBG(3);$('pauseB').onclick=()=>{AU.init();UI.pauseToggle();};
+function boot(){applyLang();buildArt();setQuality();setBG(4,1);$('pauseB').onclick=()=>{AU.init();UI.pauseToggle();};
  $('bombB').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();AU.init();useBomb();});
  document.fonts&&document.fonts.load('10px PS2P').then(()=>{});UI.menu();requestAnimationFrame(t=>{last=t;requestAnimationFrame(frame);});
  if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});

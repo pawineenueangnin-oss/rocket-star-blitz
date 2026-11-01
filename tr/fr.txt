@@ -95,3 +95,4 @@ SCORE x2 !
 PUISSANCE !
 ÉVOLUTION !
 NIVEAU PERDU
+Tremblement de l'écran

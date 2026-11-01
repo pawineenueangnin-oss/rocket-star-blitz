@@ -47,7 +47,7 @@ try{window.AndroidAds&&AndroidAds.configure&&AndroidAds.configure(JSON.stringify
 const LOG=(...a)=>{try{console.log('[RocketStarBlitz]',...a);}catch(e){}};
 // ---------- Save ----------
 const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem('rsb_save')||'{}');}catch(e){}
- const d={reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{rate:0,dmg:0,shd:0,mag:0},snd:1,mus:1,voice:1,vib:1,q:'auto',diff:1,endBest:0,introSeen:0,cleared:0};
+ const d={reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{rate:0,dmg:0,shd:0,mag:0},snd:1,mus:1,voice:1,vib:1,shake:1,q:'auto',diff:1,endBest:0,introSeen:0,cleared:0};
  for(const k in d)if(s[k]===undefined)s[k]=d[k];for(const k in d.upg)if(s.upg[k]===undefined)s.upg[k]=0;return s;})();
 function persist(){try{localStorage.setItem('rsb_save',JSON.stringify(SAVE));}catch(e){}}
 // ---------- Ads (AndroidAds bridge, same conventions as earlier P-Prece games; web stub grants rewards) ----------
