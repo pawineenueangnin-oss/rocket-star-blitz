@@ -13,10 +13,15 @@ const PB=pool(260,()=>({x:0,y:0,vx:0,vy:0,dmg:1,s:null,pierce:0,hom:0,w:4,h:12,t
 function clearAll(){[PB,EB,EN,PT,PK,HZ,TX].forEach(p=>p.forEach(o=>o.a=false));}
 // ---------- world state ----------
 const DIFF=[{hp:.8,spd:.82,fire:.6,gap:1.25,lives:4,name:'easy'},{hp:1,spd:1,fire:1,gap:1,lives:3,name:'normal'},{hp:1.2,spd:1.15,fire:1.4,gap:.82,lives:2,name:'hard'}];
-const G={mode:'menu',stage:1,endless:false,sector:0,t:0,dur:80,boss:null,warnT:0,score:0,combo:0,comboT:0,deaths:0,credits:0,shake:0,flash:0,bg:0,ev:[],evI:0,
+const G={mode:'menu',stage:1,endless:false,sector:0,t:0,dur:80,boss:null,warnT:0,score:0,combo:0,comboT:0,deaths:0,credits:0,shake:0,flash:0,hs:0,bg:0,ev:[],evI:0,
  contUsed:false,clearT:0,pity:0,scroll:0,lvlSpeed:1,dm:DIFF[1],kills:0,stats:{t:0}};
 const P={x:180,y:540,tx:180,ty:540,ship:0,lives:3,shield:0,inv:0,wt:'B',wl:1,bombs:1,spd:0,fcd:0,mcd:0,laser:false,alive:true,bank:0,hitR:3.5,bombT:0,evoT:0,magT:0,x2T:0,downT:0};
 const tierOf=()=>clamp(P.wl-1,0,4);const MAXWL=5;
+// early-game easing: stages 1-3 softer, stage 1 also warms up over its first 60 s; stage 4+ untouched
+const EZ=[{hp:.68,spd:.74,fire:.48,gap:1.5},{hp:.8,spd:.82,fire:.62,gap:1.32},{hp:.86,spd:.86,fire:.7,gap:1.2}];
+function early(){return !G.endless&&G.stage<=3;}
+function warm(){return !G.endless&&G.stage===1&&!G.boss?.82+.18*Math.min(1,G.t/60):1;}
+function mkDM(b,n,endless){const e=endless?null:EZ[n-1];if(!e)return b;return{name:b.name,lives:b.lives,hp:b.hp*e.hp,gap:b.gap*e.gap,get spd(){return b.spd*e.spd*warm();},get fire(){return b.fire*e.fire*warm();}};}
 function sf(){return G.endless?1.75+G.sector*.12:1+(G.stage-1)*.085;} // stage difficulty factor
 // ---------- particles ----------
 function part(x,y,vx,vy,life,sz,g,k){if(PT.lim<=0)return null;const p=take(PT);if(!p)return null;p.x=x;p.y=y;p.vx=vx;p.vy=vy;p.l=life;p.m=life;p.sz=sz;p.g=g;p.k=k||0;p.c=null;return p;}
@@ -57,14 +62,14 @@ function updE(e,dt){e.t+=dt;if(e.fl>0)e.fl-=dt;const t=e.t,f=sf();
 function mineBurst(e,big){const n=big?12:8;for(let i=0;i<n;i++)eShoot(e,i/n*TAU+e.t,big?110:90,ART.spr.eb);boom(e.x,e.y,10,['p','v','w']);AU.sfx('pop');}
 function killE(e){e.a=false;G.kills++;G.combo++;G.comboT=1.7;const m=comboMul();const sc=e.sc*m*(P.x2T>0?2:1);G.score+=sc;AU.sfx(e.r>14?'boom':'pop');
  const cm={zig:['g','c','w'],sine:['v','p','w'],vwing:['p','y','w'],diver:['y','o','w'],kami:['r','o','y'],saucer:['c','b','w'],shield:['b','c','y'],split:['o','y','w'],mini:['o','y'],mine:['p','v']}[e.type]||['o','y','w'];
- boom(e.x,e.y,e.r,cm);if(e.r>14)G.shake=Math.max(G.shake,4);
+ boom(e.x,e.y,e.r,cm);if(e.r>14){shake(5);G.flash=Math.max(G.flash,.12+Math.min(.12,G.combo*.004));}
  if(e.type==='split')for(let s=-1;s<=1;s+=2)spawnE('mini',e.x+s*8,e.y,{vx:s*80});
  if(e.type==='mine')mineBurst(e,0);
  if(e.type.startsWith('rock')&&e.si<2)for(let s=-1;s<=1;s+=2)spawnE('rock'+(e.si+1),e.x,e.y,{vx:e.vx+s*rnd(30,70),vy:e.vy*.8+rnd(-10,20)});
  // drops
- const nc=e.r>14?4:e.type.startsWith('rock')?(e.si===0?2:0):1;for(let i=0;i<nc;i++)drop(e.x+rnd(-8,8),e.y+rnd(-8,8),'C');
+ const nc=(e.r>14?4:e.type.startsWith('rock')?(e.si===0?2:0):1)+(early()&&!e.type.startsWith('rock')?1:0);for(let i=0;i<nc;i++)drop(e.x+rnd(-8,8),e.y+rnd(-8,8),'C');
  const big=e.type==='saucer'||e.type==='shield';G.pity+=big?3:1;
- if(Math.random()<(big?.55:.06)||G.pity>34){G.pity=0;drop(e.x,e.y,pickPU());}
+ if(Math.random()<(big?(early()?.75:.55):(early()?.1:.06))||G.pity>(early()?18:34)){G.pity=0;drop(e.x,e.y,pickPU());}
  if(m>1&&e.r>10)text(e.x,e.y-10,'+'+sc,'#ffe14a');}
 function pickPU(){const r=Math.random()*100;return r<17?'S':r<32?'L':r<45?'H':r<56?'W':r<66?'P':r<74?'B':r<80?'V':r<85?'U':r<93?'M':'X';}
 function drop(x,y,k){const p=take(PK);if(!p)return;p.x=x;p.y=y;p.vx=rnd(-30,30);p.vy=k==='C'?rnd(-60,-20):-40;p.k=k;p.t=0;p.v=1;}
@@ -98,18 +103,18 @@ function buildStage(){G.ev=[];const s=G.endless?1+((G.sector)%10):G.stage;const 
 const BOSS_PAT=[['aimFan','turrets','ring'],['rain','aimFan','minionsD'],['ring','wall','turrets'],['spiral','aimFan','beam'],['flower','minionsK','rain'],['beam','wall','spiral'],['spiral','flower','aimFan'],['wall','turrets','beam','rain'],['minionsK','flower','spiral','ring'],['spiral','beam','flower','wall','aimFan','turrets']];
 const BOSS_EXTRA=['spiral','wall','beam','spiral','aimFan','ring','beam','flower','beam','minionsD'];
 function startBoss(){const i=G.endless?G.sector%10:G.stage-1;const D=BOSS_DEF[i];const f=sf();
- const nt=2+Math.min(2,Math.floor((G.endless?10:G.stage)/3));const tur=[];const hw=D[1]/2,hh=D[2]/2;
+ const nt=(!G.endless&&G.stage===1?1:2)+Math.min(2,Math.floor((G.endless?10:G.stage)/3));const tur=[];const hw=D[1]/2,hh=D[2]/2;
  for(let k=0;k<nt;k++){const fx=nt===1?0:(k/(nt-1)-.5)*1.5;tur.push({ox:fx*hw*.8,oy:hh*(.15+Math.abs(fx)*-.05)+(k%2?10:-6),hp:Math.round((30+f*18)*G.dm.hp),mhp:0,alive:true,ang:Math.PI/2,cd:rnd(.5,1.5),fl:0});}
  tur.forEach(t=>t.mhp=t.hp);
- const hp=Math.round((300+(G.endless?11:G.stage)*105)*G.dm.hp*(G.endless?1+G.sector*.1:1));
+ const hp=Math.round((300+(G.endless?11:G.stage)*105)*G.dm.hp*(G.endless?1+G.sector*.1:1)*(!G.endless&&G.stage===1?.8:1));
  G.boss={i,D,x:GW/2,y:-hh-20,w:D[1],h:D[2],hp,mhp:hp,phase:0,t:0,pt:0,pi:0,pat:BOSS_PAT[i].slice(),cur:null,cur2:null,fl:0,spr:ART.bossSpr[i]||(ART.bossSpr[i]=bossSpr(i)),tur,dead:0,sa:0,beam:null,coreOy:hh*.25};
  if(G.endless&&G.sector>=10)G.boss.pat.push(BOSS_EXTRA[i]);
  AU.play(100+i);}
 function bossFireCore(B,a,spd,spr,r){const b=eShoot({x:B.x,y:B.y+B.coreOy},a,spd,spr,r);return b;}
 function bossUpd(B,dt){B.t+=dt;if(B.fl>0)B.fl-=dt;const hh=B.h/2;
- if(B.dead){B.dead+=dt;if(Math.random()<.32)boom(B.x+rnd(-B.w/2,B.w/2)*.8,B.y+rnd(-hh,hh)*.8,rnd(10,22),['o','y','p','c']);if(Math.random()<.15)AU.sfx('boom');G.shake=6;
+ if(B.dead){B.dead+=dt;if(Math.random()<(QUAL?.5:.3))boom(B.x+rnd(-B.w/2,B.w/2)*.8,B.y+rnd(-hh,hh)*.8,rnd(10,22),['o','y','p','c']);if(Math.random()<.2)AU.sfx(Math.random()<.5?'boom':'pop');shake(6);
   if(!B.dk)B.dk=0;const st=[.05,.9,1.8,2.5];while(B.dk<st.length&&B.dead>st[B.dk]){const k=B.dk++;ring(B.x+(k%3?rnd(-B.w,B.w)*.3:0),B.y+rnd(-10,10),40+k*30,k===3?'#ffffff':B.D[3]);boom(B.x+rnd(-B.w,B.w)*.3,B.y+rnd(-hh,hh)*.5,26+k*6,['w','y','o']);AU.sfx('bigboom');G.flash=Math.max(G.flash,.35);G.shake=10;}
-  if(B.dead>2.9){boom(B.x,B.y,60,['w','y','o','p']);boom(B.x,B.y,40,['c','w']);ring(B.x,B.y,260,'#ffffff');ring(B.x,B.y,170,B.D[3]);ring(B.x,B.y,110,B.D[4]);AU.sfx('bigboom');G.flash=1;G.shake=14;vib(300);G.boss=null;stageClear();}return;}
+  if(B.dead>2.9){boom(B.x,B.y,60,['w','y','o','p']);boom(B.x,B.y,40,['c','w']);ring(B.x,B.y,260,'#ffffff');ring(B.x,B.y,170,B.D[3]);ring(B.x,B.y,110,B.D[4]);AU.sfx('bossboom');G.flash=1.2;shake(16);G.hs=.2;FX.glow(B.x,B.y,1.4,B.D[3]);for(let k=0;k<6;k++)later(.08+k*.09,()=>boom(B.x+rnd(-B.w,B.w)*.45,B.y+rnd(-hh,hh)*.6,rnd(22,36),['w','y','o']));vib(300);G.boss=null;stageClear();}return;}
  const ent=B.t<3;if(ent){B.y+=((GH*.2)-B.y)*dt*1.6;return;}
  B.x=GW/2+Math.sin((B.t-3)*.45)*GW*.16;B.y=GH*.2+Math.sin(B.t*1.3)*8;
  const fr=B.hp/B.mhp;const ph=fr<.34?2:fr<.67?1:0;if(ph>B.phase){B.phase=ph;if(ph===1)B.pat.push(BOSS_EXTRA[B.i]);text(B.x,B.y+hh,'!!','#ff4f6a');AU.sfx('warn');G.shake=8;
@@ -169,7 +174,7 @@ function hitE(e,d,beam){if(e.type==='shield'&&e.shOn&&!beam){AU.sfx('deflect');e
 function hurt(){if(P.inv>0||!P.alive)return;if(DBG.god){P.inv=.5;return;}
  if(P.shield>0){P.shield--;P.inv=1.3;AU.sfx('shieldhit');vib(40);clearNear(80);return;}
  if(P.wl>1){P.wl--;setTier();P.inv=1.6;P.downT=.6;G.combo=0;G.shake=9;G.flash=.35;boom(P.x,P.y,18,['o','c','w']);AU.sfx('tierdown');vib(90);clearNear(110);text(P.x,P.y-34,T('tierDown'),'#ffb35a');return;}
- P.lives--;G.deaths++;G.combo=0;P.wl=1;setTier();P.inv=2.4;P.spd=Math.max(0,P.spd-1);G.shake=12;G.flash=.6;boom(P.x,P.y,26,['o','c','w']);AU.sfx('hurt');vib(160);clearNear(140);P.bombs=Math.max(P.bombs,2);
+ P.lives--;G.deaths++;G.combo=0;P.wl=early()?Math.max(1,P.wl-1):1;setTier();P.inv=early()?3.2:2.4;P.spd=Math.max(0,P.spd-1);G.shake=12;G.flash=.6;boom(P.x,P.y,26,['o','c','w']);AU.sfx('hurt');vib(160);clearNear(140);P.bombs=Math.max(P.bombs,2);
  if(P.lives<0){P.alive=false;P.lives=0;setTimeout(()=>gameOver(),1200);}}
 function clearNear(r){EB.forEach(b=>{if(b.a&&Math.hypot(b.x-P.x,b.y-P.y)<r){b.a=false;part(b.x,b.y,0,0,.25,2.5,ART.glow.c);}});}
 function useBomb(){if(G.mode!=='play'||P.bombs<=0||!P.alive||P.bombT>0)return;P.bombs--;P.bombT=1.2;P.inv=Math.max(P.inv,1.6);AU.sfx('bomb');vib(120);G.shake=14;G.flash=.45;FX.bomb(P.x,P.y);
@@ -188,11 +193,11 @@ function pickup(k,x,y){AU.sfx(k==='C'?'coin':'power');
  else{if(k==='P')P.shield=Math.min(4,P.shield+1);if(k==='B')P.bombs=Math.min(5,P.bombs+1);if(k==='V')P.spd=Math.min(3,P.spd+1);if(k==='U')P.lives=Math.min(9,P.lives+1);if(k==='M')P.magT=12;if(k==='X')P.x2T=12;text(x,y-16,T(nm),PU_COL[k]);}
  G.score+=500;}
 // ---------- stage flow ----------
-function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector=endless?(G.sector||0):0;G.dm=DIFF[SAVE.diff];
+function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector=endless?(G.sector||0):0;G.dm=mkDM(DIFF[SAVE.diff],n,endless);
  clearAll();RINGS.length=0;LATER.length=0;G.t=0;G.boss=null;G.warnT=0;G.deaths=0;G.combo=0;G.contUsed=false;G.clearT=0;G.pity=0;G.kills=0;G.credits=0;G.bg=endless?G.sector%10:n-1;
- if(!endless||G.sector===0){G.score=0;P.ship=SAVE.ship;P.lives=G.dm.lives-1+SHIPS[P.ship].hp;P.wt='B';P.wl=1;P.bombs=2;P.spd=0;}setTier();P.evoT=0;P.magT=0;P.x2T=0;P.downT=0;
- P.shield=[0,1,1,2,3][SAVE.upg.shd]+(P.ship===2?1:0);P.x=P.tx=GW/2;P.y=P.ty=GH-110;P.inv=2;P.alive=true;P.bombT=0;
- Ads.stageRewards=0;buildStage();setBG(G.bg);G.mode='play';AU.play(G.endless?1+(G.sector%10):G.stage);UI.hud(true);LOG('stage',G.stage,'endless',G.endless,G.sector);}
+ if(!endless||G.sector===0){G.score=0;P.ship=SAVE.ship;P.lives=G.dm.lives-1+SHIPS[P.ship].hp+(early()?1:0);P.wt='B';P.wl=1;P.bombs=early()&&G.stage<=2?3:2;P.spd=0;}setTier();P.evoT=0;P.magT=0;P.x2T=0;P.downT=0;
+ P.shield=[0,1,1,2,3][SAVE.upg.shd]+(P.ship===2?1:0);P.x=P.tx=GW/2;P.y=P.ty=GH-110;P.inv=early()?3:2;P.alive=true;P.bombT=0;
+ Ads.stageRewards=0;buildStage();if(early()&&G.stage<=2){later(8,()=>drop(GW*.5,30,'W'));later(30,()=>drop(rnd(90,GW-90),30,G.stage===1?'S':'L'));later(52,()=>drop(rnd(90,GW-90),30,'P'));}setBG(G.bg);G.mode='play';AU.play(G.endless?1+(G.sector%10):G.stage);UI.hud(true);LOG('stage',G.stage,'endless',G.endless,G.sector);}
 function stageClear(){G.mode='clear';G.clearT=0;AU.play(-1);AU.sfx('clear');const s=G.stage;
  if(G.endless){G.sector++;SAVE.endBest=Math.max(SAVE.endBest,G.sector);SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();setTimeout(()=>UI.endlessNext(),1800);return;}
  const stars=G.deaths===0?3:G.deaths===1?2:1;SAVE.stars[s-1]=Math.max(SAVE.stars[s-1]||0,stars);const nb=G.score>(SAVE.best[s-1]||0);if(nb)SAVE.best[s-1]=G.score;if(G.score>SAVE.hi)SAVE.hi=G.score;
@@ -277,7 +282,7 @@ function perf(ms){PERF.ft.push(ms);if(PERF.ft.length>240)PERF.ft.shift();if(SAVE
 // ---------- loop ----------
 let last=performance.now();
 function frame(now){const raw=now-last;last=now;const dt=Math.min(.05,raw/1000);
- if(!DBG.fast){update(dt);if(BGS.i>=0)render(dt);}AU.tick();perf(raw);requestAnimationFrame(frame);}
+ if(!DBG.fast){if(G.hs>0){G.hs-=dt;if(BGS.i>=0)render(0);}else{update(dt);if(BGS.i>=0)render(dt);}}AU.tick();perf(raw);requestAnimationFrame(frame);}
 // ---------- debug hook (?debug=1) ----------
 const DBG={god:false,fast:false,auto:false,
  sim(sec,step){step=step||1/60;const n=Math.round(sec/step);for(let i=0;i<n;i++){if(this.auto)this.pilot(step);update(step);if(G.mode!=='play'&&G.mode!=='clear')break;}return this.state();},

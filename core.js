@@ -65,7 +65,7 @@ const Ads={lastInter:Date.now(),minGap:90000,cleared:0,stageRewards:0,
 // ---------- Audio ----------
 // Every voice: osc -> env gain -> music/sfx gain -> bus (headroom .55) -> compressor -> limiter -> tanh soft-clip -> out.
 // Envelopes always ramp (attack >= 6 ms, release >= 25 ms), polyphony capped, finished nodes disconnected.
-const AU={ac:null,on:false,voices:0,maxVoices:30,next:0,step:0,song:null,songId:-1,lastSfx:{},
+const AU={ac:null,on:false,voices:0,maxVoices:40,next:0,step:0,song:null,songId:-1,lastSfx:{},
  build(ac){this.ac=ac;const bus=ac.createGain();bus.gain.value=.55;
   const c=ac.createDynamicsCompressor();c.threshold.value=-16;c.knee.value=8;c.ratio.value=5;c.attack.value=.004;c.release.value=.18;
   const l=ac.createDynamicsCompressor();l.threshold.value=-4;l.knee.value=0;l.ratio.value=20;l.attack.value=.001;l.release.value=.08;
@@ -81,16 +81,24 @@ const AU={ac:null,on:false,voices:0,maxVoices:30,next:0,step:0,song:null,songId:
   last.connect(g);g.connect(dest);const end=this.env(g,t,a,h,r,v);o.start(t);o.stop(end+.02);o.onended=()=>{this.voices--;try{o.disconnect();g.disconnect();last!==o&&last.disconnect();}catch(e){}};},
  noise(dest,t,a,h,r,v,ftype,fq,fq2){const ac=this.ac;if(this.voices>=this.maxVoices)return;this.voices++;const s=ac.createBufferSource();s.buffer=this.nb;s.loop=true;const bq=ac.createBiquadFilter();bq.type=ftype||'lowpass';bq.frequency.setValueAtTime(fq||2000,t);
   if(fq2)bq.frequency.exponentialRampToValueAtTime(fq2,t+a+h+r);const g=ac.createGain();s.connect(bq);bq.connect(g);g.connect(dest);const end=this.env(g,t,a,h,r,v);s.start(t,Math.random()*.5);s.stop(end+.02);s.onended=()=>{this.voices--;try{s.disconnect();bq.disconnect();g.disconnect();}catch(e){}};},
- sfx(k){if(!this.ac||!SAVE.snd||this.ac.state!=='running')return;const t=this.ac.currentTime+.005,n=performance.now();const gap={shot:75,hit:45,pop:40,boom:70,coin:50}[k]||30;if(this.lastSfx[k]&&n-this.lastSfx[k]<gap)return;this.lastSfx[k]=n;
+ // layered explosion: sub-bass sine with pitch dive, filtered noise crack, low rumble tail. z=size 0..3, booms capped to 4 at once
+ xp(D,t,z){const n=performance.now();this.bq=(this.bq||[]).filter(x=>x>n);if(this.bq.length>=4&&z<3)return;const L=[.45,.75,1.3,2.4][z];this.bq.push(n+L*600);const v=1+(Math.random()-.5)*.16,ac=this.ac;
+  const S=[[.3,140,40,.08],[.42,120,32,.12],[.55,110,28,.2],[.62,100,24,.35]][z];
+  if(this.voices<this.maxVoices){this.voices++;const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.setValueAtTime(S[1]*v,t);o.frequency.exponentialRampToValueAtTime(S[2]*v,t+S[3]);g.connect(D);o.connect(g);const e=this.env(g,t,.006,L*.12,L*.75,S[0]);o.start(t);o.stop(e+.02);o.onended=()=>{this.voices--;try{o.disconnect();g.disconnect();}catch(_){}};}
+  this.noise(D,t,.004,.02,.09+z*.05,[.2,.26,.3,.32][z],'bandpass',3800*v,900);
+  this.noise(D,t,.008,L*.15,L*.8,[.22,.3,.36,.4][z],'lowpass',(1600+z*500)*v,60);
+  if(z>1){this.noise(D,t+.05,.12,L*.3,L,.2,'lowpass',300,40);this.tone(D,'sawtooth',55*v,t+.04,.03,L*.2,L*.6,.08,28,240);}
+  if(z>2)[.18,.42,.7].forEach((d,i)=>this.noise(D,t+d,.01,.08,.5+i*.2,.22-i*.04,'lowpass',1400-i*300,70));},
+ sfx(k){if(!this.ac||!SAVE.snd||this.ac.state!=='running')return;const t=this.ac.currentTime+.005,n=performance.now();const gap={shot:75,hit:45,pop:45,boom:80,bigboom:150,coin:50}[k]||30;if(this.lastSfx[k]&&n-this.lastSfx[k]<gap)return;this.lastSfx[k]=n;
   if(this.voices>this.maxVoices-6&&(k==='shot'||k==='hit'||k==='coin'))return;const D=this.sg;
   switch(k){
    case'shot':this.tone(D,'square',880,t,.006,.01,.04,.05,440,3000);break;
    case'laser':this.tone(D,'sawtooth',220,t,.01,.05,.06,.035,330,1400);break;
    case'missile':this.noise(D,t,.01,.03,.08,.08,'bandpass',1800,600);break;
    case'hit':this.tone(D,'triangle',300,t,.006,.01,.03,.08,150);break;
-   case'pop':this.noise(D,t,.006,.02,.12,.22,'lowpass',2600,300);this.tone(D,'sine',220,t,.006,.02,.12,.18,60);break;
-   case'boom':this.noise(D,t,.008,.1,.5,.45,'lowpass',1800,90);this.tone(D,'sine',120,t,.008,.08,.4,.45,30);break;
-   case'bigboom':this.noise(D,t,.01,.3,1.2,.55,'lowpass',2400,60);this.tone(D,'sine',90,t,.01,.3,1,.5,25);this.tone(D,'sawtooth',60,t+.1,.02,.2,.8,.15,30,400);break;
+   case'pop':this.xp(D,t,0);break;
+   case'boom':this.xp(D,t,1);break;
+   case'bigboom':this.xp(D,t,2);break;case'bossboom':this.xp(D,t,3);break;
    case'coin':this.tone(D,'square',1320,t,.006,.02,.05,.05);this.tone(D,'square',1760,t+.05,.006,.02,.08,.05);break;
    case'evolve':[392,523,659,784,1047,1319].forEach((f,i)=>this.tone(D,'square',f,t+i*.05,.006,.04,.08,.07,0,5000));this.tone(D,'sine',180,t,.02,.25,.4,.2,520);break;
    case'tierdown':[784,587,440].forEach((f,i)=>this.tone(D,'triangle',f,t+i*.07,.006,.04,.1,.12,0,3000));break;
@@ -98,7 +106,7 @@ const AU={ac:null,on:false,voices:0,maxVoices:30,next:0,step:0,song:null,songId:
    case'hurt':this.tone(D,'sawtooth',400,t,.006,.05,.3,.25,70,1800);this.noise(D,t,.006,.05,.3,.25,'lowpass',1500,200);break;
    case'shieldhit':this.tone(D,'triangle',900,t,.006,.03,.2,.18,400);break;
    case'deflect':this.tone(D,'square',1800,t,.006,.005,.03,.03,1200,5000);break;
-   case'bomb':this.noise(D,t,.02,.3,1.4,.6,'lowpass',3000,80);this.tone(D,'sine',160,t,.02,.2,1.2,.5,30);break;
+   case'bomb':this.xp(D,t,3);this.tone(D,'sine',180,t,.02,.2,.9,.12,40);break;
    case'warn':for(let i=0;i<3;i++){this.tone(D,'square',660,t+i*.5,.01,.18,.06,.12,0,2000);this.tone(D,'square',440,t+i*.5+.25,.01,.15,.06,.12,0,2000);}break;
    case'charge':this.tone(D,'sawtooth',110,t,.2,.6,.1,.06,440,1200);break;
    case'beam':this.noise(D,t,.02,.6,.2,.15,'bandpass',900);this.tone(D,'sawtooth',80,t,.02,.6,.2,.12,70,700);break;
