@@ -1,4 +1,4 @@
-// Rocket Star Blitz — DOM menus / screens.
+// Starzoomer — DOM menus / screens.
 'use strict';
 const MHUE=[275,20,195,40,320,215,165,8,95,300];function MSTAR(R,r){let p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,q=k%2?r:R;p.push((Math.cos(a)*q).toFixed(1)+','+(Math.sin(a)*q).toFixed(1));}return p.join(' ');}
 const UI={cur:null,
@@ -7,7 +7,7 @@ const UI={cur:null,
   s.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('click',e=>{AU.init();AU.sfx('ui');this.act(b.dataset.a,b);}));},
  hideAll(){this.el().style.display='none';this.el().innerHTML='';this.cur=null;$('pz').style.display='none';},
  hud(on){$('hudb').style.display=on?'flex':'none';if(on){this.el().style.display='none';Ads.banner(false);}},
- ttl(){return`<div class="logo"><div class="l1">ROCKET</div><div class="l2">STAR BLITZ</div></div>`;},
+ ttl(){return`<div class="logo"><div class="l1">STAR</div><div class="l2">ZOOMER</div></div>`;},
  menu(){G.mode='menu';this.hud(false);if(BGS.i!==4)setBG(4);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);
   this.show(`${this.ttl()}<div class="tag">${T('tag')}</div><div class="sp"></div>
   <button class="b big" data-a="play">▶ ${T('play')}</button>

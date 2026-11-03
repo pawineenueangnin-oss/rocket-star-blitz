@@ -172,3 +172,7 @@ body.banner .scr:not(.pz){padding-bottom:calc(var(--sb,0px) + 66px)}
 
 @media (prefers-reduced-motion:reduce){.snode.cur .sv,.snode.cur:before,.snode.end .portal i,.snode.fresh{animation:none}}
 body.lowq .snode .sv{filter:none}body.lowq .snode.cur:before{animation:none}
+
+/* v12 Starzoomer logo: two big lines, fits 360px */
+.logo .l1{font-size:3.1em;letter-spacing:.08em}.logo .l2{font-size:2.35em;letter-spacing:.07em;margin-top:.12em}
+@media (max-width:370px){.logo .l1{font-size:2.8em}.logo .l2{font-size:2.1em}}

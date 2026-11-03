@@ -1,4 +1,4 @@
-// Rocket Star Blitz — v4 alien motherships. 100% original procedural art.
+// Starzoomer — v4 alien motherships. 100% original procedural art.
 // Each boss = pre-rendered layers (cached offscreen canvases) + a few cheap animated parts drawn live.
 'use strict';
 const BA={c:[],gl:{}};

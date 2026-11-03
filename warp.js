@@ -1,4 +1,4 @@
-// Rocket Star Blitz — stage-to-stage hyperspace warp between stages.
+// Starzoomer — stage-to-stage hyperspace warp between stages.
 // Timeline (s): 0-1 align+engine flare, 1-2.6 stars stretch into streaks & ship blasts off as a light streak,
 // 2.6-3 white flash + new background, 3-5.6 stage title card while streaks decelerate and the ship arrives, then play.
 'use strict';

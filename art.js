@@ -1,4 +1,4 @@
-// Rocket Star Blitz — procedural art (all original). Sprites are pre-rendered once to offscreen canvases.
+// Starzoomer — procedural art (all original). Sprites are pre-rendered once to offscreen canvases.
 'use strict';
 const ART={R:2.5,spr:{},glow:{},bg:{},bossSpr:[],turSpr:[]};
 function mkC(w,h){const c=document.createElement('canvas');c.width=Math.ceil(w);c.height=Math.ceil(h);return c;}

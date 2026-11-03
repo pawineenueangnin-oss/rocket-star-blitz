@@ -1,4 +1,4 @@
-// Rocket Star Blitz — game core: world, entities, stages, bosses, render loop.
+// Starzoomer — game core: world, entities, stages, bosses, render loop.
 'use strict';
 const cv=$('c'),cx=cv.getContext('2d',{alpha:false});
 const GW=360;let GH=640,SC=1,DPR=1,SAFE_T=0,SAFE_B=0,QUAL=2;

@@ -1,4 +1,4 @@
-// Rocket Star Blitz — original game by P-Prece Studio (พีพีช Studio). All art is procedural canvas drawing; all music/SFX are WebAudio synthesis.
+// Starzoomer — original game by P-Prece Studio (พีพีช Studio). All art is procedural canvas drawing; all music/SFX are WebAudio synthesis.
 'use strict';
 const $=id=>document.getElementById(id);
 const Q=new URLSearchParams(location.search);
@@ -44,7 +44,7 @@ window.RSB_AD_UNITS=window.RSB_AD_UNITS||{
   document.body.appendChild(ch);document.body.appendChild(pn);};
  if(document.body)ui();else document.addEventListener('DOMContentLoaded',ui);})();
 try{window.AndroidAds&&AndroidAds.configure&&AndroidAds.configure(JSON.stringify(window.RSB_AD_UNITS));}catch(e){}
-const LOG=(...a)=>{try{console.log('[RocketStarBlitz]',...a);}catch(e){}};
+const LOG=(...a)=>{try{console.log('[Starzoomer]',...a);}catch(e){}};
 // ---------- Save ----------
 const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem('rsb_save')||'{}');}catch(e){}
  const d={reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{rate:0,dmg:0,shd:0,mag:0},snd:1,mus:1,vib:1,shake:1,q:'auto',diff:1,endBest:0,cleared:0};

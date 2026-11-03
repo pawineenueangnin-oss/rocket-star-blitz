@@ -1,4 +1,4 @@
-// Rocket Star Blitz — v6 art direction: polished vector sprites, layered parallax space, cinematic FX, neon glass HUD.
+// Starzoomer — v6 art direction: polished vector sprites, layered parallax space, cinematic FX, neon glass HUD.
 // Everything is still procedural canvas drawing, pre-rendered to offscreen canvases once (per stage for backgrounds).
 'use strict';
 const FX={snap:null,snapT:0,bomb:null,fw:0,fwC:0,shoot:[],t:0,comboPop:0,lastCombo:0,lastBombs:-1,hpLag:1,mf:0};
