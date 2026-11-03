@@ -161,3 +161,30 @@ let _flyT=0;const _dh14=drawHUD;drawHUD=function(){_dh14();const now=performance
   const e=k*k*(3-2*k),mx=(f.x+tx)/2+40,my=Math.min(f.y,ty)+20,u=1-e,x=u*u*f.x+2*u*e*mx+e*e*tx,y=u*u*f.y+2*u*e*my+e*e*ty;
   cx.globalAlpha=1-k*.5;spr(f.k==='C'?ART.glow.y:ART.glow.c,x,y,.9-k*.4);spr(ART.spr.glint,x,y,.7,k*6);}
  cx.globalAlpha=1;cx.globalCompositeOperation='source-over';};
+// ---------- v15: capsule / pill power-ups ----------
+Object.assign(PU_COL,{W:'#ffa82a',B:'#ff4a3a',U:'#ff5aa0',M:'#a67aff'});
+function capSpr(k){const col=PU_COL[k],gold=k==='X'||k==='W';return mk(50,42,g=>{g.rotate(-.32);const L=21,H=12.5;
+ const pill=()=>{g.beginPath();g.moveTo(-L+H,-H);g.lineTo(L-H,-H);g.arc(L-H,0,H,-Math.PI/2,Math.PI/2);g.lineTo(-L+H,H);g.arc(-L+H,0,H,Math.PI/2,Math.PI*1.5);g.closePath();};
+ g.save();g.shadowColor=col;g.shadowBlur=8;pill();g.fillStyle='#0a0618';g.fill();g.restore();
+ // glass tube with glowing liquid
+ g.save();pill();g.clip();g.fillStyle=GL(g,0,-H,0,H,[[0,'#ffffff'],[.18,col],[.55,col],[.56,'rgba(0,0,0,.0)'],[1,'#08061a']]);g.fillRect(-L,-H,L*2,H*2);
+ g.fillStyle=GL(g,0,0,0,H,[[0,col],[1,'#120830']]);g.globalAlpha=.75;g.fillRect(-L,1,L*2,H);g.globalAlpha=1;
+ g.globalCompositeOperation='lighter';g.fillStyle=GR(g,0,2,0,14,[[0,'rgba(255,255,255,.55)'],[.5,hexA(col).replace(/,1\)$/,',.45)')],[1,'rgba(0,0,0,0)']]);g.fillRect(-L,-H,L*2,H*2);
+ g.fillStyle='rgba(255,255,255,.7)';[[-9,6,1.1],[-6.5,3,.7],[8,5.5,.9],[10.5,2.5,.6]].forEach(b=>{g.beginPath();g.arc(b[0],b[1],b[2],0,7);g.fill();});g.globalCompositeOperation='source-over';
+ // metallic end caps
+ const capG=gold?['#fff6c8','#ffc83a','#7a4a00','#ffe28a','#3a2000']:['#ffffff','#c8d0e8','#5a6488','#e8ecff','#1a1e38'];
+ [-1,1].forEach(s=>{g.save();g.beginPath();if(s<0){g.rect(-L-1,-H-1,6.5,H*2+2);}else{g.rect(L-5.5,-H-1,6.5,H*2+2);}g.clip();pill();g.fillStyle=GL(g,0,-H,0,H,[[0,capG[0]],[.25,capG[1]],[.6,capG[2]],[.8,capG[3]],[1,capG[4]]]);g.fill();g.restore();
+  const x=s*(L-5.5);g.strokeStyle='rgba(10,6,24,.9)';g.lineWidth=1;g.beginPath();g.moveTo(x,-H+.5);g.lineTo(x,H-.5);g.stroke();g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=.6;g.beginPath();g.moveTo(x-s*1,-H+1);g.lineTo(x-s*1,H-1);g.stroke();
+  g.strokeStyle='rgba(0,0,0,.35)';g.lineWidth=.6;for(let j=1;j<2;j++){g.beginPath();g.moveTo(x+s*j*2.6,-H+2);g.lineTo(x+s*j*2.6,H-2);g.stroke();}});
+ g.restore();
+ // outline + rim light
+ pill();g.strokeStyle='#05030e';g.lineWidth=1.4;g.stroke();
+ g.save();pill();g.clip();g.strokeStyle=col;g.lineWidth=1.4;g.beginPath();g.moveTo(-L+H,H-.6);g.lineTo(L-H,H-.6);g.stroke();g.restore();
+ // centre oval window
+ g.save();g.beginPath();g.ellipse(0,0,11.2,10.6,0,0,7);g.fillStyle=GL(g,0,-10,0,10,[[0,'#ffffff'],[.5,'#cfd6f0'],[1,'#5a6488']]);g.fill();
+ g.beginPath();g.ellipse(0,0,9.8,9.2,0,0,7);g.fillStyle=GR(g,-2,-3,0,11,[[0,'#ffffff'],[.3,col],[1,'#0c0a2a']]);g.fill();g.restore();
+ g.save();g.rotate(.32);g.scale(.9,.9);if(k==='S'){[-.85,0,.85].forEach(a=>{g.save();g.translate(0,6);g.rotate(a);const ar=()=>poly(g,[0,-12.5,3.3,-7.6,1,-7.6,1,-1,-1,-1,-1,-7.6,-3.3,-7.6]);ar();g.lineWidth=1.8;g.strokeStyle='#0a1430';g.stroke();g.restore();});[-.85,0,.85].forEach(a=>{g.save();g.translate(0,6);g.rotate(a);poly(g,[0,-12.5,3.3,-7.6,1,-7.6,1,-1,-1,-1,-1,-7.6,-3.3,-7.6]);g.fillStyle='#fff';g.fill();g.restore();});}else if(k==='U'){g.beginPath();g.moveTo(0,7);g.bezierCurveTo(-11,-1,-6,-10,0,-4);g.bezierCurveTo(6,-10,11,-1,0,7);g.closePath();g.lineWidth=2.4;g.strokeStyle='#0a1430';g.stroke();g.fillStyle='#fff';g.fill();}else{g.lineWidth=1.6;puIcon(g,k);}g.restore();
+ // specular gloss along the top
+ g.save();pill();g.clip();g.fillStyle=GL(g,0,-H,0,-H+6,[[0,'rgba(255,255,255,.85)'],[1,'rgba(255,255,255,0)']]);g.beginPath();g.ellipse(-2,-H+3,L-4,3.2,0,0,7);g.fill();g.restore();
+ g.fillStyle='#fff';poly(g,[-12,-9,-11.4,-7,-9.4,-6.4,-11.4,-5.8,-12,-3.8,-12.6,-5.8,-14.6,-6.4,-12.6,-7]);g.fill();},3);}
+const _ba15=buildArt;buildArt=function(){_ba15();const S=ART.spr;for(const k in PU_COL){if(k==='C')continue;S.pu[k]=capSpr(k);S.puGlow[k]=glowDot(hexA(PU_COL[k]),6);}};
