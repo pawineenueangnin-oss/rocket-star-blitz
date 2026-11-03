@@ -7,7 +7,7 @@ const UI={cur:null,
  hideAll(){this.el().style.display='none';this.el().innerHTML='';this.cur=null;$('pz').style.display='none';},
  hud(on){$('hudb').style.display=on?'flex':'none';if(on){this.el().style.display='none';Ads.banner(false);}},
  ttl(){return`<div class="logo"><div class="l1">ROCKET</div><div class="l2">STAR BLITZ</div></div>`;},
- menu(){G.mode='menu';VOICE.stop();this.hud(false);if(BGS.i!==4)setBG(4);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);
+ menu(){G.mode='menu';this.hud(false);if(BGS.i!==4)setBG(4);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);
   this.show(`${this.ttl()}<div class="tag">${T('tag')}</div><div class="sp"></div>
   <button class="b big" data-a="play">▶ ${T('play')}</button>
   <div class="row"><button class="b" data-a="map">${T('select')}</button><button class="b" data-a="hangar">${T('hangar')}</button></div>
@@ -49,7 +49,7 @@ const UI={cur:null,
    if(!inst)this.countUp(o);}
   else this.show(`<h2 class="big red">${T('gameover')}</h2>${sc}${!G.contUsed&&canR?`<button class="b pink" data-a="cont">▶ ${T('revive')}</button>`:''}
    <button class="b big" data-a="retry">${T('retry')}</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div>`,'result');
-  setTimeout(()=>{if(this.cur==='result')Ads.maybeInterstitial(G.endless?10:s);},700);},
+  },
  // score tally: each line pops in and counts up with ticks; tap skips to the end
  countUp(o){const rows=[...document.querySelectorAll('.tally .tr')],scr=this.el();let i=-1,t0=0,raf=0,dead=false;
   const fmt=(r,v)=>r.dataset.p+Math.round(v);
@@ -81,10 +81,17 @@ const UI={cur:null,
    case'equip':SAVE.ship=i;persist();P.ship=i;this.hangar();break;
    case'buyship':if(SAVE.cr>=this.SC[i]){SAVE.cr-=this.SC[i];SAVE.ships[i]=1;SAVE.ship=i;persist();AU.sfx('power');}else toast(T('needCr'));this.hangar();break;
    case'upg':{const k=b.dataset.k,c=this.UC[SAVE.upg[k]];if(SAVE.cr>=c){SAVE.cr-=c;SAVE.upg[k]++;persist();AU.sfx('power');}this.hangar();break;}
-      case'next':if(G.stage>=10){this.menu();toast(T('victory'));}else this.warpTo(G.stage+1);break;
+      case'next':if(G.stage>=10){this.menu();toast(T('victory'));}else{const n=G.stage+1;b.disabled=true;Ads.interThen(G.stage,()=>this.warpTo(n));}break;
    case'retry':G.sector=0;startStage(G.endless?0:G.stage,G.endless);break;
    case'dbl':b.disabled=true;Ads.rewarded().then(ok=>{if(ok){SAVE.cr+=G.credits;G.credits*=2;persist();AU.sfx('coin');toast('◆ x2');}else toast(T('noVideo'));this.result(true,{stars:SAVE.stars[G.stage-1]||1});});break;
    case'cont':b.disabled=true;Ads.rewarded().then(ok=>{if(ok)revive();else{toast(T('noVideo'));b.disabled=false;}});break;}}};
+// Back button (Android bridge calls window.onAndroidBack(); browsers: history trap + Escape). Returns true when handled.
+UI.back=function(){const m=G.mode,c=this.cur;if(document.querySelector('.adMock.adI'))return true;
+ if(m==='warp'){WARP.skip();return true;}if(m==='play'){this.pause();return true;}if(m==='paused'){$('pz').style.display='none';G.mode='play';last=performance.now();return true;}
+ if(c==='settings'){this.from==='map'?this.map():this.menu();return true;}if(c==='map'||c==='hangar'){this.menu();return true;}if(c==='result'){this.map();return true;}return false;};
+window.onAndroidBack=()=>UI.back();
+addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='GoBack'){UI.back();e.preventDefault();}});
+try{if(!window.AndroidAds||window.__adTest){history.pushState({rsb:1},'');addEventListener('popstate',()=>{if(UI.back())history.pushState({rsb:1},'');});}}catch(e){}
 function toast(s){const t=$('toast');t.textContent=s;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1800);}
 function applyLang(){document.documentElement.lang=LANG;document.documentElement.dir=LANG==='ar'?'rtl':'ltr';$('bombB').title=T('bomb');}
 // ---------- boot ----------

@@ -7,7 +7,6 @@ upgrades|Upgrades
 settings|Settings
 sound|Sound
 music|Music
-voice|Story voice
 vibration|Vibration
 quality|Graphics
 q_auto|Auto
@@ -55,7 +54,6 @@ victory|Victory!
 bomb|Bomb
 noVideo|Video not available right now
 needCr|Not enough credits
-storyT|Story
 sh1|Twin blasters · balanced
 sh2|Wide spread · very fast
 sh3|Heavy piercing cannon · extra shield
@@ -76,20 +74,6 @@ n7|Glass Comet Field
 n8|Ember Forge
 n9|Hive Hollow
 n10|Heart of the Swarm
-st0|Year 2190. The Zorbix Swarm is stealing the light of the stars! Only one rocket is ready to launch: yours.
-st1b|Pilot, the Swarm hides in the Violet Veil nebula. Launch now and push them back!
-st1|The Carrier is down! The Swarm flees into the Cinder asteroid belt. Watch out for rocks!
-st2|Belt cleared! Their trail leads to the frozen moon Rime.
-st3|The moon beacons shine again. Next stop: the Twin Suns.
-st4|Both suns burn bright once more! A pink nebula hides their fleet.
-st5|The Leviathan swims away. A storm rift opens ahead. Beware of laser beams!
-st6|Through the storm! Their crystal comets are next.
-st7|The comets are free. Now find the Forge where they build their ships!
-st8|The Forge is quiet. Their Hive is very close now.
-st9|The Matriarch fled to the Heart of the Swarm. This is the final mission. Good luck, pilot!
-st10|The Ark is beaten and the stars shine again! But more Swarm ships are coming. How far can you fly?
-st11|Sector clear! The Swarm sends a stronger fleet. Keep going!
-st12|Amazing flying! Even bigger motherships are on the radar!
 pMagnet|MAGNET!
 pScore2|SCORE x2!
 pPower|POWER UP!

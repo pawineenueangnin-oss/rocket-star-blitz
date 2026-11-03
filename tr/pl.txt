@@ -7,7 +7,6 @@ Ulepszenia
 Ustawienia
 Dźwięk
 Muzyka
-Głos narratora
 Wibracje
 Grafika
 Auto
@@ -55,7 +54,6 @@ Zwycięstwo!
 Bomba
 Wideo teraz niedostępne
 Za mało kredytów
-Historia
 Podwójne blastery · zbalansowany
 Szeroki rozrzut · bardzo szybki
 Ciężkie działo przebijające · dodatkowa tarcza
@@ -76,20 +74,6 @@ Pole Szklanych Komet
 Kuźnia Żaru
 Dziupla Roju
 Serce Roju
-Rok 2190. Rój Zorbix kradnie światło gwiazd! Tylko jedna rakieta jest gotowa do startu: twoja.
-Pilocie, Rój ukrywa się w mgławicy Fioletowa Zasłona. Startuj i odepchnij ich!
-Nosiciel zestrzelony! Rój ucieka w pas planetoid. Uważaj na skały!
-Pas pokonany! Ich ślad prowadzi do lodowego księżyca Rime.
-Latarnie księżyca znów świecą. Następny przystanek: Bliźniacze Słońca.
-Oba słońca znów jasno świecą! Różowa mgławica kryje ich flotę.
-Lewiatan odpłynął. Przed tobą szczelina burzy. Uważaj na lasery!
-Przez burzę! Teraz ich kryształowe komety.
-Komety są wolne. Znajdź Kuźnię, gdzie budują statki!
-Kuźnia ucichła. Ich Rój jest już bardzo blisko.
-Matka Roju uciekła do Serca Roju. To ostatnia misja. Powodzenia, pilocie!
-Arka pokonana, a gwiazdy znów świecą! Ale nadlatują kolejne statki. Jak daleko dolecisz?
-Sektor ukończony! Rój wysyła silniejszą flotę. Leć dalej!
-Świetny lot! Radar widzi jeszcze większe statki-matki!
 MAGNES!
 PUNKTY x2!
 WZMOCNIENIE!

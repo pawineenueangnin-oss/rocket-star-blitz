@@ -23,10 +23,10 @@ window.RSB_AD_UNITS=window.RSB_AD_UNITS||{
  window.AndroidAds={configure(){},
   showBanner(){lg('banner');if(fill!=='ok')return;if(!bn)bn=box('adB','AD TEST · Banner &nbsp;<b>rsb_banner_menu</b>&nbsp; 320×50');bn.style.display='flex';},
   hideBanner(){if(bn)bn.style.display='none';},
-  showInterstitial(){lg('inter');if(fill!=='ok'||document.querySelector('.adMock.adI'))return;const d=box('adI','<div><div class="adT">AD TEST · Interstitial</div><b>rsb_inter_stage_end</b><br><small>full screen · stage clear / game over (from stage 3, ≥90 s apart, ≤1 per 2 stages)</small></div><button class="adX">✕</button>');d.querySelector('button').onclick=()=>d.remove();},
+  showInterstitial(){lg('inter');if(fill!=='ok'||document.querySelector('.adMock.adI'))return;const d=box('adI','<div><div class="adT">AD TEST · Interstitial</div><b>rsb_inter_stage_end</b><br><small>full screen · after the stage-clear panel, before the warp (from stage 3, 90 s+ apart)</small></div><button class="adX">✕</button>');d.querySelector('button').onclick=()=>{d.remove();window.onInterstitialClosed&&window.onInterstitialClosed();};},
   isRewardedReady(){return fill!=='nofill';},
   showRewarded(){lg('reward');if(fill==='fail'){setTimeout(()=>window.onRewardedFailed&&window.onRewardedFailed(),200);return true;}
-   const d=box('adI','<div><div class="adT">AD TEST · Rewarded</div><b>rsb_reward_continue</b><br><small>continue · revive · x2 credits</small><br><br><span class="adW">▶ watching… 3</span><br><button class="adC" disabled>Claim reward</button><br><button class="adS">Skip (no reward)</button></div>');
+   const d=box('adI','<div><div class="adT">AD TEST · Rewarded</div><b>rsb_reward_continue</b><br><small>x2 coins (stage clear) · continue with shield (game over) · max 2 per stage</small><br><br><span class="adW">▶ watching… 3</span><br><button class="adC" disabled>Claim reward</button><br><button class="adS">Skip (no reward)</button></div>');
    let n=3;const w=d.querySelector('.adW'),c=d.querySelector('.adC');const iv=setInterval(()=>{n--;if(n>0)w.textContent='▶ watching… '+n;else{clearInterval(iv);w.textContent='✓ finished';c.disabled=false;}},1000);
    c.onclick=()=>{d.remove();window.onRewardEarned&&window.onRewardEarned();window.onRewardedClosed&&window.onRewardedClosed();};
    d.querySelector('.adS').onclick=()=>{clearInterval(iv);d.remove();window.onRewardedClosed&&window.onRewardedClosed();};return true;}};
@@ -47,14 +47,20 @@ try{window.AndroidAds&&AndroidAds.configure&&AndroidAds.configure(JSON.stringify
 const LOG=(...a)=>{try{console.log('[RocketStarBlitz]',...a);}catch(e){}};
 // ---------- Save ----------
 const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem('rsb_save')||'{}');}catch(e){}
- const d={reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{rate:0,dmg:0,shd:0,mag:0},snd:1,mus:1,voice:1,vib:1,shake:1,q:'auto',diff:1,endBest:0,introSeen:0,cleared:0};
+ const d={reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{rate:0,dmg:0,shd:0,mag:0},snd:1,mus:1,vib:1,shake:1,q:'auto',diff:1,endBest:0,cleared:0};
  for(const k in d)if(s[k]===undefined)s[k]=d[k];for(const k in d.upg)if(s.upg[k]===undefined)s.upg[k]=0;return s;})();
 function persist(){try{localStorage.setItem('rsb_save',JSON.stringify(SAVE));}catch(e){}}
 // ---------- Ads (AndroidAds bridge, same conventions as earlier P-Prece games; web stub grants rewards) ----------
 const Ads={lastInter:Date.now(),minGap:90000,cleared:0,stageRewards:0,
- banner(show){try{if(window.AndroidAds){show?AndroidAds.showBanner&&AndroidAds.showBanner():AndroidAds.hideBanner&&AndroidAds.hideBanner();}}catch(e){}},
- maybeInterstitial(stageNo){if(stageNo<3)return false;this.cleared++;const n=Date.now();
-  if(window.__adTest&&__adTest.fast&&n-this.lastInter<2500)return false;if(!(window.__adTest&&__adTest.fast)&&(this.cleared<2||n-this.lastInter<this.minGap))return false;this.cleared=0;this.lastInter=n;
+ // (a) banner: menus/map/hangar/settings/result only; hidden in gameplay & warp. Body class reserves a bottom strip so it never covers buttons.
+ banner(show){try{if(window.AndroidAds){show?AndroidAds.showBanner&&AndroidAds.showBanner():AndroidAds.hideBanner&&AndroidAds.hideBanner();document.body.classList.toggle('banner',!!show);}}catch(e){}},
+ // (b) interstitial: only between stages (after the score panel, before the warp), from stage 3, >=90 s apart and >=90 s after app start.
+ interThen(stageNo,cb){let done=false;const go=()=>{if(done)return;done=true;window.onInterstitialClosed=null;document.removeEventListener('visibilitychange',vis);clearTimeout(tm);cb();};
+  const vis=()=>{if(!document.hidden)setTimeout(go,300);};let tm=0;
+  if(!this.maybeInterstitial(stageNo)||!window.AndroidAds){go();return;}
+  window.onInterstitialClosed=go;document.addEventListener('visibilitychange',vis);tm=setTimeout(go,window.__adTest?600000:45000);},
+ maybeInterstitial(stageNo){if(stageNo<3||G.mode==='warp')return false;const n=Date.now();
+  if(window.__adTest&&__adTest.fast){if(n-this.lastInter<2500)return false;}else if(n-this.lastInter<this.minGap)return false;this.lastInter=n;
   try{if(window.AndroidAds&&AndroidAds.showInterstitial){AndroidAds.showInterstitial();}else LOG('AdsStub: interstitial (no ad on web)');}catch(e){}return true;},
  canReward(){return this.stageRewards<2;},
  rewarded(){this.stageRewards++;return new Promise(res=>{if(!(window.AndroidAds&&AndroidAds.showRewarded)){LOG('AdsStub: rewarded granted without ad');setTimeout(()=>res(true),300);return;}
@@ -143,10 +149,4 @@ const AU={ac:null,on:false,voices:0,maxVoices:40,next:0,step:0,song:null,songId:
   // lead
   if(sec!==0||S.boss){const n=S.lead[bar][s];if(n!==null&&Math.random()<S.dens+.25){this.tone(D,'square',this.nf(S,n,1),t,.008,spb*1.1,.06,.06,0,3200);this.tone(D,'sawtooth',this.nf(S,n,1)*1.005,t,.008,spb*1.1,.06,.025,0,1800);}}},
 };
-// ---------- Speech ----------
-const VOICE={say(txt){try{if(!SAVE.voice||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang=voiceLang();u.rate=1.02;u.pitch=1.05;
-  const vs=speechSynthesis.getVoices();const b=u.lang.split('-')[0];const v=vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith(b));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){}},
- stop(){try{window.speechSynthesis&&speechSynthesis.cancel();}catch(e){}}};
-function voiceLang(){const m={en:'en-US',th:'th-TH',zh:'zh-CN',hi:'hi-IN',es:'es-ES',ar:'ar-SA',fr:'fr-FR',pt:'pt-BR',ru:'ru-RU',ja:'ja-JP',de:'de-DE',id:'id-ID',ko:'ko-KR',tr:'tr-TR',vi:'vi-VN',it:'it-IT',pl:'pl-PL',nl:'nl-NL',fil:'fil-PH',ms:'ms-MY',bn:'bn-BD'};
- const dev=[...(navigator.languages||[]),navigator.language].filter(Boolean).find(d=>d.toLowerCase().split('-')[0]===LANG||(LANG==='fil'&&/^(tl|fil)/i.test(d)));return dev&&dev.includes('-')?dev:m[LANG]||'en-US';}
 function vib(ms){try{SAVE.vib&&navigator.vibrate&&navigator.vibrate(ms);}catch(e){}}

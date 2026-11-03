@@ -149,7 +149,7 @@ function bossHit(B,x,y,dmg){if(B.t<3||B.dead)return false;const hh=B.h/2;
  for(const t of B.tur){if(!t.alive)continue;const dx=x-(B.x+t.ox),dy=y-(B.y+t.oy);if(dx*dx+dy*dy<13*13){t.hp-=dmg;t.fl=.06;if(t.hp<=0){t.alive=false;boom(B.x+t.ox,B.y+t.oy,22,['o','y','w']);AU.sfx('boom');G.shake=7;damageBoss(B,B.mhp*.06);G.score+=2000;}return true;}}
  const cdx=x-B.x,cdy=y-(B.y+B.coreOy);if(cdx*cdx+cdy*cdy<18*18){damageBoss(B,dmg*1.6);return true;}
  const ex=(x-B.x)/(B.w*.48),ey=(y-B.y)/(hh*.78);if(ex*ex+ey*ey<1){damageBoss(B,dmg*.75);return true;}return false;}
-function damageBoss(B,d){B.hp-=d;B.fl=.05;G.score+=Math.round(d*5);if(B.hp<=0&&!B.dead){B.hp=0;B.dead=.01;B.beam=null;B.cur=null;B.cur2=null;EB.forEach(b=>{if(b.a){b.a=false;part(b.x,b.y,0,-20,.3,2,ART.glow.y);}});AU.play(-1);G.score+=20000*(G.endless?2:1)*(1+G.stage*.2|0);
+function damageBoss(B,d){G.score+=Math.round(Math.min(d,Math.max(0,B.hp))*5);B.hp-=d;B.fl=.05;if(B.hp<=0&&!B.dead){B.hp=0;B.dead=.01;B.beam=null;B.cur=null;B.cur2=null;EB.forEach(b=>{if(b.a){b.a=false;part(b.x,b.y,0,-20,.3,2,ART.glow.y);}});AU.play(-1);G.score+=20000*(G.endless?2:1)*(1+G.stage*.2|0);
   const n=30+G.stage*4;for(let i=0;i<n;i++)drop(B.x+rnd(-B.w/3,B.w/3),B.y+rnd(-30,30),'C');drop(B.x,B.y,'W');}}
 // ---------- player ----------
 const SHIPS=[{n:'Blaze Kite',fi:.11,hp:0},{n:'Zephyr Dart',fi:.085,hp:0},{n:'Ember Titan',fi:.16,hp:1}];
@@ -207,7 +207,7 @@ function stageClear(){G.mode='clear';G.clearT=0;AU.play(-1);AU.sfx('clear');cons
  SAVE.reached=Math.max(SAVE.reached,Math.min(10,s+1));if(s===10)SAVE.cleared=1;SAVE.cr+=G.credits;persist();
  setTimeout(()=>UI.result(true,{stars,nb}),1800);}
 function gameOver(){if(G.mode!=='play')return;G.mode='over';AU.play(-1);AU.sfx('over');SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;if(G.endless)SAVE.endBest=Math.max(SAVE.endBest,G.sector);persist();UI.result(false,{});}
-function revive(){G.mode='play';P.alive=true;P.lives=1;P.inv=3;P.bombs=Math.max(P.bombs,2);P.x=P.tx=GW/2;P.y=P.ty=GH-110;EB.forEach(b=>b.a=false);G.contUsed=true;SAVE.cr-=G.credits;G.credits=0;AU.play(G.boss?100+G.boss.i:G.endless?1+G.sector%10:G.stage);UI.hud(true);}
+function revive(){G.mode='play';P.alive=true;P.lives=1;P.inv=3;P.shield=Math.max(P.shield,1);P.bombs=Math.max(P.bombs,2);P.x=P.tx=GW/2;P.y=P.ty=GH-110;EB.forEach(b=>b.a=false);G.contUsed=true;SAVE.cr-=G.credits;G.credits=0;AU.play(G.boss?100+G.boss.i:G.endless?1+G.sector%10:G.stage);UI.hud(true);}
 // ---------- update ----------
 function update(dt){if(G.mode!=='play'&&G.mode!=='clear'&&G.mode!=='over'&&G.mode!=='menu')return;G.scroll+=dt;if(P.mf>0)P.mf-=dt;
  if(G.mode==='menu'){menuUpd(dt);return;}
@@ -265,9 +265,9 @@ cv.addEventListener('pointerdown',e=>{AU.init();if(G.mode!=='play')return;PTR.id
 cv.addEventListener('pointermove',e=>{if(PTR.id!==e.pointerId||G.mode!=='play')return;const[x,y]=toGame(e);P.tx+=(x-PTR.x)*1.2;P.ty+=(y-PTR.y)*1.2;PTR.x=x;PTR.y=y;});
 ['pointerup','pointercancel'].forEach(k=>cv.addEventListener(k,e=>{if(PTR.id===e.pointerId)PTR.id=null;}));
 const KM={ArrowLeft:'l',KeyA:'l',ArrowRight:'r',KeyD:'r',ArrowUp:'u',KeyW:'u',ArrowDown:'d',KeyS:'d'};
-addEventListener('keydown',e=>{AU.init();const k=KM[e.code];if(k){KEY[k]=1;e.preventDefault();}if(e.code==='Space'||e.code==='KeyX'||e.code==='KeyB'){useBomb();e.preventDefault();}if(e.code==='Escape'||e.code==='KeyP')UI.pauseToggle();});
+addEventListener('keydown',e=>{AU.init();const k=KM[e.code];if(k){KEY[k]=1;e.preventDefault();}if(e.code==='Space'||e.code==='KeyX'||e.code==='KeyB'){useBomb();e.preventDefault();}if(e.code==='KeyP')UI.pauseToggle();});
 addEventListener('keyup',e=>{const k=KM[e.code];if(k)KEY[k]=0;});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){if(G.mode==='play')UI.pause();if(AU.ac)AU.ac.suspend();VOICE.stop();}else if(AU.ac&&G.mode!=='paused')AU.ac.resume();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(G.mode==='play')UI.pause();if(AU.ac)AU.ac.suspend();}else if(AU.ac&&G.mode!=='paused')AU.ac.resume();});
 // ---------- layout ----------
 function layout(){const vv=window.visualViewport;const vw=vv?vv.width:innerWidth,vh=vv?vv.height:innerHeight;
  const pr=$('probe');const cs=getComputedStyle(pr);const st=parseFloat(cs.paddingTop)||0,sb=parseFloat(cs.paddingBottom)||0;

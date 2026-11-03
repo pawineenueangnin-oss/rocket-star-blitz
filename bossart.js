@@ -304,7 +304,7 @@ function bossArt(i){if(BA.c[i])return BA.c[i];const [nm,w,h,a1,a2]=BOSS_DEF[i];c
  A.hot=mk(W,H,g=>{g.drawImage(A.base.c,-W/2,-H/2,W,H);g.globalCompositeOperation='source-atop';g.fillStyle='#ff3a2a';g.fillRect(-W/2,-H/2,W,H);},2);
  A.wht=mk(W,H,g=>{g.drawImage(A.base.c,-W/2,-H/2,W,H);g.globalCompositeOperation='source-atop';g.fillStyle='#ffffff';g.fillRect(-W/2,-H/2,W,H);},2);
  return BA.c[i]=A;}
-// override the old generic hull generator: storyart & game reuse this
+// override the old generic hull generator (game reuses this)
 function bossSpr(i){return bossArt(i).base;}
 const CORE_C=[null,'#ffa030','#ff3a4a'];
 // draw boss i centred at current origin of context g. o={t,ph,la,fl,dead,coreOy}

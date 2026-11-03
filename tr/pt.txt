@@ -7,7 +7,6 @@ Melhorias
 Configurações
 Som
 Música
-Voz da história
 Vibração
 Gráficos
 Auto
@@ -55,7 +54,6 @@ Vitória!
 Bomba
 Vídeo indisponível agora
 Créditos insuficientes
-História
 Canhões duplos · equilibrada
 Tiro espalhado · muito rápida
 Canhão perfurante · escudo extra
@@ -76,20 +74,6 @@ Campo de Cometas de Vidro
 Forja das Brasas
 Oco da Colmeia
 Coração do Enxame
-Ano 2190. O Enxame Zorbix está roubando a luz das estrelas! Só um foguete está pronto para decolar: o seu.
-Piloto, o Enxame se esconde na nebulosa Véu Violeta. Decole agora e faça-os recuar!
-O Cargueiro caiu! O Enxame fugiu para o cinturão de asteroides. Cuidado com as rochas!
-Cinturão limpo! O rastro leva à lua gelada Rime.
-Os faróis da lua brilham de novo. Próxima parada: os Sóis Gêmeos.
-Os dois sóis brilham outra vez! Uma nebulosa rosa esconde a frota deles.
-O Leviatã nadou para longe. Uma fenda de tempestade se abre. Cuidado com os lasers!
-Você atravessou a tempestade! Agora vêm os cometas de cristal.
-Os cometas estão livres. Encontre a Forja onde eles constroem naves!
-A Forja silenciou. A Colmeia deles está bem perto.
-A Matriarca fugiu para o Coração do Enxame. É a missão final. Boa sorte, piloto!
-A Arca foi derrotada e as estrelas brilham de novo! Mas mais naves estão vindo. Até onde você vai?
-Setor concluído! O Enxame mandou uma frota mais forte. Continue!
-Voo incrível! O radar mostra naves-mãe ainda maiores!
 ÍMÃ!
 PONTOS x2!
 POTÊNCIA!

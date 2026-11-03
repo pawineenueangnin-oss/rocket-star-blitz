@@ -7,7 +7,6 @@ Geliştirmeler
 Ayarlar
 Ses
 Müzik
-Hikâye sesi
 Titreşim
 Grafik
 Otomatik
@@ -55,7 +54,6 @@ Zafer!
 Bomba
 Şu an video yok
 Yeterli kredi yok
-Hikâye
 Çift blaster · dengeli
 Geniş saçılım · çok hızlı
 Ağır delici top · ekstra kalkan
@@ -76,20 +74,6 @@ Cam Kuyrukluyıldız Alanı
 Kor Ocağı
 Kovan Oyuğu
 Sürünün Kalbi
-Yıl 2190. Zorbix Sürüsü yıldızların ışığını çalıyor! Kalkışa hazır tek bir roket var: seninki.
-Pilot, Sürü Mor Peçe bulutsusunda saklanıyor. Hemen kalk ve onları geri püskürt!
-Taşıyıcı düştü! Sürü kül kuşağındaki asteroitlere kaçıyor. Kayalara dikkat!
-Kuşak geçildi! İzleri buz ayı Rime'a gidiyor.
-Ayın fenerleri yeniden parlıyor. Sıradaki durak: İkiz Güneşler.
-İki güneş yine parlıyor! Pembe bir bulutsu filolarını saklıyor.
-Leviathan yüzüp gitti. Önünde bir fırtına yarığı açıldı. Lazerlere dikkat!
-Fırtınayı geçtin! Sırada kristal kuyrukluyıldızlar var.
-Kuyrukluyıldızlar özgür. Gemilerini yaptıkları Ocağı bul!
-Ocak sustu. Kovanları artık çok yakın.
-Kraliçe Sürünün Kalbine kaçtı. Bu son görev. Bol şans, pilot!
-Gemi yenildi ve yıldızlar yine parlıyor! Ama daha fazla gemi geliyor. Ne kadar uzağa uçabilirsin?
-Sektör geçildi! Sürü daha güçlü bir filo gönderdi. Devam!
-Harika uçuş! Radarda daha da büyük ana gemiler var!
 MIKNATIS!
 PUAN x2!
 GÜÇ ARTTI!

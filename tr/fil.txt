@@ -7,7 +7,6 @@ Upgrade
 Settings
 Tunog
 Musika
-Boses ng kuwento
 Vibration
 Graphics
 Auto
@@ -55,7 +54,6 @@ Panalo!
 Bomba
 Walang video ngayon
 Kulang ang credits
-Kuwento
 Dobleng blaster · balanse
 Malawak na putok · napakabilis
 Mabigat na kanyon · dagdag kalasag
@@ -76,20 +74,6 @@ Parang ng Salaming Kometa
 Pandayan ng Baga
 Butas ng Bahay-pukyutan
 Puso ng Kawan
-Taong 2190. Ninanakaw ng Kawang Zorbix ang liwanag ng mga bituin! Isang rocket lang ang handang lumipad: ang sa iyo.
-Piloto, nagtatago ang Kawan sa nebula ng Lilang Belo. Lumipad ka na at itaboy sila!
-Bagsak na ang Carrier! Tumakas ang Kawan sa sinturon ng asteroid. Ingat sa mga bato!
-Nalampasan ang sinturon! Papunta ang bakas nila sa buwang yelo Rime.
-Muling nagliliwanag ang mga ilaw ng buwan. Susunod: ang Kambal na Araw.
-Muling maliwanag ang dalawang araw! May pink na nebula na nagtatago ng kanilang hukbo.
-Lumangoy palayo ang Leviathan. May lamat ng bagyo sa unahan. Ingat sa laser!
-Nalampasan ang bagyo! Susunod ang kanilang kristal na kometa.
-Malaya na ang mga kometa. Hanapin ang Pandayan kung saan sila gumagawa ng barko!
-Tahimik na ang Pandayan. Malapit na ang kanilang pugad.
-Tumakas ang Reyna sa Puso ng Kawan. Ito ang huling misyon. Good luck, piloto!
-Talo na ang Ark at muling nagniningning ang mga bituin! Pero may darating pang mga barko. Gaano kalayo ka makakalipad?
-Tapos ang sektor! Mas malakas na hukbo ang padala ng Kawan. Tuloy lang!
-Galing ng lipad! May mas malalaking mothership sa radar!
 MAGNET!
 PUNTOS x2!
 DAGDAG LAKAS!
