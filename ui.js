@@ -1,5 +1,6 @@
 // Rocket Star Blitz — DOM menus / screens.
 'use strict';
+const MHUE=[275,20,195,40,320,215,165,8,95,300];function MSTAR(R,r){let p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,q=k%2?r:R;p.push((Math.cos(a)*q).toFixed(1)+','+(Math.sin(a)*q).toFixed(1));}return p.join(' ');}
 const UI={cur:null,
  el(){return $('scr');},
  show(html,cls){const s=this.el();s.className='scr '+(cls||'');s.innerHTML=html;s.style.display='flex';this.cur=cls;s.scrollTop=0;
@@ -15,11 +16,26 @@ const UI={cur:null,
   <div class="row"><button class="b sm" data-a="settings">⚙ ${T('settings')}</button></div>
   <div class="hi">${T('best')} <b>${SAVE.hi}</b> · ◆ ${SAVE.cr}</div>
   <div class="studio"><img src="studio-logo.png" alt=""><span>P-Prece Studio</span></div>`,'menu');},
- map(){G.mode='menu';this.hud(false);Ads.banner(true);let h=`<div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('select')}</h2><span class="cr">◆ ${SAVE.cr}</span></div>
-  <div class="diff">${['easy','normal','hard'].map((d,i)=>`<button class="chip ${SAVE.diff===i?'on':''}" data-a="diff" data-i="${i}">${T(d)}</button>`).join('')}</div><div class="nodes">`;
-  for(let i=1;i<=10;i++){const lock=i>SAVE.reached&&!DEBUG,st=SAVE.stars[i-1]||0;h+=`<button class="node ${lock?'lock':''} n${i}" data-a="stage" data-i="${i}" ${lock?'disabled':''}><span class="num">${i}</span><span class="nm">${T('n'+i)}</span><span class="st">${lock?'🔒':'★'.repeat(st)+'<i>'+'★'.repeat(3-st)+'</i>'}</span></button>`;}
-  h+=`<button class="node end ${SAVE.cleared||DEBUG?'':'lock'}" data-a="endless" ${SAVE.cleared||DEBUG?'':'disabled'}><span class="num">∞</span><span class="nm">${T('endless')}</span><span class="st">${SAVE.cleared?T('best')+' '+SAVE.endBest:'🔒'}</span></button></div>`;
-  this.show(h,'map');},
+ map(){G.mode='menu';this.hud(false);Ads.banner(true);
+  let h=`<div class="mtop"><div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('select')}</h2><span class="cr">◆ ${SAVE.cr}</span></div>
+  <div class="diff">${['easy','normal','hard'].map((d,i)=>`<button class="chip ${SAVE.diff===i?'on':''}" data-a="diff" data-i="${i}">${T(d)}</button>`).join('')}</div></div><div class="path" id="spath"><svg class="pl" id="spl"></svg>`;
+  const STAR=(c1,c2,id)=>`<svg viewBox="-50 -50 100 100" class="sv"><defs><radialGradient id="g${id}" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient></defs><polygon class="sp0" points="${MSTAR(46,21)}" fill="url(#g${id})"/><polygon class="sp1" points="${MSTAR(36,16)}" fill="none"/></svg>`;
+  const cur=Math.min(10,Math.max(1,SAVE.reached)),seen=SAVE.mapSeen||0,fresh=seen&&SAVE.reached>seen&&SAVE.reached<=10?SAVE.reached:0;
+  for(let i=1;i<=10;i++){const lock=i>SAVE.reached&&!DEBUG,st=SAVE.stars[i-1]||0,done=i<SAVE.reached,hu=MHUE[i-1];
+   const c1=lock?'#6a6a86':`hsl(${hu},100%,68%)`,c2=lock?'#23203a':`hsl(${hu+25},90%,38%)`;
+   h+=`<button class="snode ${lock?'lock':done?'done':'cur'}${i===fresh?' fresh':''}" data-a="stage" data-i="${i}" ${lock?'disabled':''} style="--hu:${hu}">${STAR(c1,c2,i)}<span class="num">${lock?'🔒':i}</span><span class="lbl"><span class="nm">${T('n'+i)}</span><span class="st">${[0,1,2].map(j=>`<i class="${j<st?'on':''}">★</i>`).join('')}</span></span></button>`;}
+  const eo=SAVE.cleared||DEBUG;
+  h+=`<button class="snode end ${eo?'':'lock'}" data-a="endless" ${eo?'':'disabled'}><span class="portal"><i></i><i></i><i></i></span><span class="num">${eo?'∞':'🔒'}</span><span class="lbl"><span class="nm">${T('endless')}</span><span class="st2">${SAVE.cleared?T('best')+' '+SAVE.endBest:''}</span></span></button></div>`;
+  this.show(h,'map');SAVE.mapSeen=SAVE.reached;persist();this.mapLayout(cur);},
+ mapLayout(cur){const pth=$('spath');if(!pth)return;const W=pth.clientWidth,step=Math.max(112,Math.min(150,innerHeight*.17)),top=200,H=top+10*step+70;pth.style.height=H+'px';
+  const X=[.3,.5,.7,.5],rtl=document.documentElement.dir==='rtl',pos=[];
+  for(let i=1;i<=10;i++){let x=X[(i-1)%4];if(rtl)x=1-x;pos[i]={x:Math.round(W*.5+(x-.5)*Math.min(W,520)),y:top+(10-i)*step+step*.5};}
+  pos[11]={x:Math.round(W/2),y:72};
+  const ns=pth.querySelectorAll('.snode');ns.forEach((n,k)=>{const p=pos[k+1];n.style.left=p.x+'px';n.style.top=p.y+'px';});
+  let s='';for(let i=1;i<=10;i++){const a=pos[i],b=pos[i+1],lit=i<SAVE.reached||(i===10&&SAVE.cleared),my=(a.y+b.y)/2,d=`M${a.x},${a.y} C${a.x},${my} ${b.x},${my} ${b.x},${b.y}`;
+   s+=`<path d="${d}" class="pg ${lit?'lit':''}" style="--hu:${MHUE[i-1]}"/><path d="${d}" class="pd ${lit?'lit':''}"/>`;}
+  const sv=$('spl');sv.setAttribute('width',W);sv.setAttribute('height',H);sv.innerHTML=s;
+  const sc=this.el();requestAnimationFrame(()=>{const p=pos[cur];sc.scrollTop=Math.max(0,pth.offsetTop+p.y-sc.clientHeight*.55);});},
  hangar(){G.mode='menu';this.hud(false);Ads.banner(true);const costs=[0,800,2000],req=[0,3,6];
   let h=`<div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('hangar')}</h2><span class="cr">◆ ${SAVE.cr}</span></div><h3>${T('ships')}</h3><div class="ships">`;
   SHIPS.forEach((s,i)=>{const own=SAVE.ships[i],can=SAVE.reached>=req[i]||DEBUG;h+=`<div class="ship ${SAVE.ship===i?'sel':''}"><img src="${ART.spr.ship[i].c.toDataURL()}" alt=""><b>${s.n}</b><small>${T('sh'+(i+1))}</small>
@@ -101,3 +117,4 @@ function boot(){applyLang();buildArt();setQuality();setBG(4,1);$('pauseB').oncli
  if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
  document.addEventListener('pointerdown',()=>AU.init(),{once:true});}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+addEventListener('resize',()=>{if(UI.cur==='map')UI.mapLayout(Math.min(10,Math.max(1,SAVE.reached)));});
