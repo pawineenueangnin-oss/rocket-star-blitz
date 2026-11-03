@@ -23,7 +23,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(ellips
 .studio{display:flex;align-items:center;gap:.5em;font-size:.8em;opacity:.85;margin-top:.4em}.studio img{width:2.2em;height:2.2em;border-radius:.5em}.studio.big img{width:3.4em;height:3.4em}
 .hd{display:flex;align-items:center;justify-content:space-between;width:100%;gap:.5em}.hd h2{margin:0;font-size:1.25em;flex:1;color:#ffcf5a;text-shadow:0 0 .4em #ff7a1a}.cr{font-family:PS2P;font-size:.7em;color:#ffe14a;white-space:nowrap}
 h3{margin:.4em 0 0;color:#7ae8ff;font-size:1em}
-.diff{display:flex;gap:.4em}.chip{pointer-events:auto;font:inherit;font-weight:700;border-radius:2em;padding:.35em .9em;border:2px solid #5a4a90;background:#140a30;color:#ccd}.chip.on{background:#ff3fa6;border-color:#ffb0e0;color:#fff;box-shadow:0 0 .7em #ff3fa6}
+.chip{pointer-events:auto;font:inherit;font-weight:700;border-radius:2em;padding:.35em .9em;border:2px solid #5a4a90;background:#140a30;color:#ccd}.chip.on{background:#ff3fa6;border-color:#ffb0e0;color:#fff;box-shadow:0 0 .7em #ff3fa6}
 .nodes{display:grid;grid-template-columns:1fr 1fr;gap:.5em;width:100%;max-width:26em}
 .node{pointer-events:auto;font:inherit;color:#fff;border:2px solid rgba(255,255,255,.25);border-radius:.9em;padding:.55em .4em;display:flex;flex-direction:column;align-items:center;gap:.15em;min-height:5.2em;cursor:pointer;box-shadow:0 0 .7em rgba(0,0,0,.5)}
 .node .num{font-family:PS2P;font-size:1.1em;text-shadow:0 2px 0 #000}.node .nm{font-size:.82em;font-weight:700;line-height:1.15;overflow-wrap:anywhere}.node .st{color:#ffe14a;font-size:.9em}.node .st i{color:rgba(255,255,255,.25);font-style:normal}

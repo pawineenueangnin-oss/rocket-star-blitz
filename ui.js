@@ -17,8 +17,7 @@ const UI={cur:null,
   <div class="hi">${T('best')} <b>${SAVE.hi}</b> · ◆ ${SAVE.cr}</div>
   <div class="studio"><img src="studio-logo.png" alt=""><span>P-Prece Studio</span></div>`,'menu');},
  map(){G.mode='menu';this.hud(false);Ads.banner(true);
-  let h=`<div class="mtop"><div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('select')}</h2><span class="cr">◆ ${SAVE.cr}</span></div>
-  <div class="diff">${['easy','normal','hard'].map((d,i)=>`<button class="chip ${SAVE.diff===i?'on':''}" data-a="diff" data-i="${i}">${T(d)}</button>`).join('')}</div></div><div class="path" id="spath"><svg class="pl" id="spl"></svg>`;
+  let h=`<div class="mtop"><div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('select')}</h2><span class="cr">◆ ${SAVE.cr}</span></div></div><div class="path" id="spath"><svg class="pl" id="spl"></svg>`;
   const STAR=(c1,c2,id)=>`<svg viewBox="-50 -50 100 100" class="sv"><defs><radialGradient id="g${id}" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient></defs><polygon class="sp0" points="${MSTAR(46,21)}" fill="url(#g${id})"/><polygon class="sp1" points="${MSTAR(36,16)}" fill="none"/></svg>`;
   const cur=Math.min(10,Math.max(1,SAVE.reached)),seen=SAVE.mapSeen||0,fresh=seen&&SAVE.reached>seen&&SAVE.reached<=10?SAVE.reached:0;
   for(let i=1;i<=10;i++){const lock=i>SAVE.reached&&!DEBUG,st=SAVE.stars[i-1]||0,done=i<SAVE.reached,hu=MHUE[i-1];
@@ -48,11 +47,10 @@ const UI={cur:null,
   this.show(`<div class="hd"><button class="b sm" data-a="back">◀</button><h2>${T('settings')}</h2><span></span></div><div class="sets">
   ${tg('snd','sound')}${tg('mus','music')}${tg('vib','vibration')}${tg('shake','shake')}
   <div class="set"><span>${T('quality')}</span><select id="sQ">${['auto','low','high'].map(q=>`<option value="${q}" ${SAVE.q===q?'selected':''}>${T('q_'+q)}</option>`).join('')}</select></div>
-  <div class="set"><span>${T('language')}</span><select id="sL"><option value="auto">${T('auto')}</option>${langs}</select></div>
-  <div class="set"><span>${T('difficulty')}</span><select id="sD">${['easy','normal','hard'].map((d,i)=>`<option value="${i}" ${SAVE.diff===i?'selected':''}>${T(d)}</option>`).join('')}</select></div></div>
+  <div class="set"><span>${T('language')}</span><select id="sL"><option value="auto">${T('auto')}</option>${langs}</select></div></div>
   <div class="howto">${T('howto')}</div>
   <div class="studio big"><img src="studio-logo.png" alt=""><span>${T('madeBy')} <b>P-Prece Studio</b><br>พีพีช Studio</span></div><a class="priv" href="privacy.html" target="_blank">${T('privacy')}</a>`,'settings');
-  $('sQ').onchange=e=>{SAVE.q=e.target.value;persist();setQuality();};$('sD').onchange=e=>{SAVE.diff=+e.target.value;persist();};
+  $('sQ').onchange=e=>{SAVE.q=e.target.value;persist();setQuality();};
   $('sL').onchange=e=>{const v=e.target.value;try{if(v==='auto')localStorage.removeItem('rsb_lang');else localStorage.setItem('rsb_lang',v);}catch(_){}LANG=v==='auto'?detectLang():v;applyLang();this.settings(this.from);};},
  result(win,o){Ads.banner(true);this.hud(false);const s=G.stage;const canR=Ads.canReward();
   const sc=`<div class="res"><div class="rs">${T('score')} <b>${G.score}</b></div><div class="rs">${T('credits')} <b>◆ ${G.credits}</b></div><div class="rs">${T('best')} <b>${G.endless?SAVE.endBest:SAVE.best[s-1]||0}</b></div></div>`;
@@ -91,7 +89,7 @@ const UI={cur:null,
   switch(a){
    case'play':this.begin(Math.min(SAVE.reached,10));break;case'map':this.map();break;case'hangar':this.hangar();break;case'menu':this.menu();break;
    case'settings':this.settings(this.cur);break;case'back':this.from==='map'?this.map():this.menu();break;
-   case'diff':SAVE.diff=i;persist();this.map();break;case'stage':this.begin(i);break;
+   case'stage':this.begin(i);break;
    case'endless':G.sector=0;this.hideAll();startStage(0,true);break;
    case'tog':{const k=b.dataset.k;SAVE[k]=SAVE[k]?0:1;persist();AU.setVol();if(k==='mus'&&SAVE.mus){AU.songId=-2;AU.play(50);}this.settings(this.from);break;}
    case'equip':SAVE.ship=i;persist();P.ship=i;this.hangar();break;

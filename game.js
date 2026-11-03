@@ -12,18 +12,23 @@ const PB=pool(260,()=>({x:0,y:0,vx:0,vy:0,dmg:1,s:null,pierce:0,hom:0,w:4,h:12,t
  PK=pool(80,()=>({x:0,y:0,vx:0,vy:0,k:'C',v:1,t:0})),HZ=pool(12,()=>({x:0,t:0,w:18,dur:.7,warn:1.3,sfx:0})),TX=pool(16,()=>({x:0,y:0,t:0,s:'',c:''}));
 function clearAll(){[PB,EB,EN,PT,PK,HZ,TX].forEach(p=>p.forEach(o=>o.a=false));}
 // ---------- world state ----------
-const DIFF=[{hp:.8,spd:.82,fire:.6,gap:1.25,lives:4,name:'easy'},{hp:1,spd:1,fire:1,gap:1,lives:3,name:'normal'},{hp:1.2,spd:1.15,fire:1.4,gap:.82,lives:2,name:'hard'}];
+// ===== AUTO DIFFICULTY (no player selector) =====
+// One factor per stage: dFactor(stage) = BASE * (1 + STEP*(stage-1)). Stage 1 = 0.80 of old 'normal' baseline,
+// each stage adds 5% of baseline -> stage 10 = 0.80*1.45 = 1.16. Endless keeps adding 5% per sector, capped at D_CAP.
+// sf() returns the relative growth (1.00 .. 1.45 .. cap/0.80) and scales enemy hp, speed, fire, bullet speed,
+// wave size/spawn spacing, boss + turret hp. DM_BASE holds the fixed easy baseline multipliers.
+const D_BASE=.80,D_STEP=.05,D_CAP=1.40;
+function dFactor(stage,endless,sector){const n=endless?10+1+(sector||0):stage;return Math.min(D_CAP,D_BASE*(1+D_STEP*(Math.max(1,n)-1)));}
+const DM_BASE={hp:.55,spd:.62,fire:.30,gap:1.9,lives:4,cap:5};
 const G={mode:'menu',stage:1,endless:false,sector:0,t:0,dur:80,boss:null,warnT:0,score:0,combo:0,comboT:0,deaths:0,credits:0,shake:0,flash:0,hs:0,bg:0,ev:[],evI:0,
- contUsed:false,clearT:0,pity:0,scroll:0,lvlSpeed:1,dm:DIFF[1],kills:0,stats:{t:0}};
+ contUsed:false,clearT:0,pity:0,scroll:0,lvlSpeed:1,dm:DM_BASE,kills:0,stats:{t:0}};
 const P={x:180,y:540,tx:180,ty:540,ship:0,lives:3,shield:0,inv:0,wt:'B',wl:1,bombs:1,spd:0,fcd:0,mcd:0,laser:false,alive:true,bank:0,hitR:3.5,bombT:0,evoT:0,magT:0,x2T:0,downT:0};
 const tierOf=()=>clamp(P.wl-1,0,4);const MAXWL=5;
 // early-game easing: stages 1-3 softer, stage 1 also warms up over its first 60 s; stage 4+ untouched
-// smooth difficulty curve: k=0 at stage 1 -> 1 at stage 10 (endless = stage-10 values, then endless sf() keeps growing)
-function curve(n,endless){const k=endless?1:Math.max(0,Math.min(1,(n-1)/9)),e=k*k*.35+k*.65;return{hp:.66+.3*e,spd:.72+.24*e,fire:.42+.4*e,gap:1.6-.55*e,cap:Math.round(5+5*e)};}
 function early(){return !G.endless&&G.stage<=3;}
 function warm(){return !G.endless&&G.stage===1&&!G.boss?.82+.18*Math.min(1,G.t/60):1;}
-function mkDM(b,n,endless){const e=curve(n,endless);return{name:b.name,lives:b.lives,cap:e.cap,hp:b.hp*e.hp,gap:b.gap*e.gap,get spd(){return b.spd*e.spd*warm();},get fire(){return b.fire*e.fire*warm();}};}
-function sf(){return G.endless?1.75+G.sector*.12:1+(G.stage-1)*.085;} // stage difficulty factor
+function mkDM(){const b=DM_BASE;return{name:'auto',lives:b.lives,get cap(){return Math.round(b.cap*sf());},hp:b.hp,gap:b.gap,get spd(){return b.spd*warm();},get fire(){return b.fire*warm();}};}
+function sf(){return dFactor(G.stage,G.endless,G.sector)/D_BASE;} // relative stage growth 1.00 (stage 1) .. 1.45 (stage 10) .. 1.75 cap (endless)
 // ---------- particles ----------
 function part(x,y,vx,vy,life,sz,g,k){if(PT.lim<=0)return null;const p=take(PT);if(!p)return null;p.x=x;p.y=y;p.vx=vx;p.vy=vy;p.l=life;p.m=life;p.sz=sz;p.g=g;p.k=k||0;p.c=null;return p;}
 const RINGS=[];function ring(x,y,r,c){RINGS.push({x,y,r,c,t:0});if(RINGS.length>8)RINGS.shift();}
@@ -108,7 +113,7 @@ function startBoss(){const i=G.endless?G.sector%10:G.stage-1;const D=BOSS_DEF[i]
  const nt=(!G.endless&&G.stage===1?1:2)+Math.min(2,Math.floor((G.endless?10:G.stage)/3));const tur=[];const hw=D[1]/2,hh=D[2]/2;
  for(let k=0;k<nt;k++){const fx=nt===1?0:(k/(nt-1)-.5)*1.5;tur.push({ox:fx*hw*.8,oy:hh*(.15+Math.abs(fx)*-.05)+(k%2?10:-6),hp:Math.round((30+f*18)*G.dm.hp),mhp:0,alive:true,ang:Math.PI/2,cd:rnd(.5,1.5),fl:0});}
  tur.forEach(t=>t.mhp=t.hp);
- const hp=Math.round((300+(G.endless?11:G.stage)*105)*G.dm.hp*(G.endless?1+G.sector*.1:1)*(!G.endless&&G.stage===1?.8:1));
+ const hp=Math.round(380*sf()*G.dm.hp);
  G.boss={i,D,x:GW/2,y:-hh-20,w:D[1],h:D[2],hp,mhp:hp,phase:0,t:0,pt:0,pi:0,pat:BOSS_PAT[i].slice(),cur:null,cur2:null,fl:0,spr:ART.bossSpr[i]||(ART.bossSpr[i]=bossSpr(i)),tur,dead:0,sa:0,beam:null,coreOy:hh*.25};
  if(G.endless&&G.sector>=10)G.boss.pat.push(BOSS_EXTRA[i]);
  AU.play(100+i);}
@@ -195,7 +200,7 @@ function pickup(k,x,y){AU.sfx(k==='C'?'coin':'power');
  else{if(k==='P')P.shield=Math.min(4,P.shield+1);if(k==='B')P.bombs=Math.min(5,P.bombs+1);if(k==='V')P.spd=Math.min(3,P.spd+1);if(k==='U')P.lives=Math.min(9,P.lives+1);if(k==='M')P.magT=12;if(k==='X')P.x2T=12;text(x,y-16,T(nm),PU_COL[k]);}
  G.score+=500;}
 // ---------- stage flow ----------
-function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector=endless?(G.sector||0):0;G.dm=mkDM(DIFF[SAVE.diff],n,endless);
+function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector=endless?(G.sector||0):0;G.dm=mkDM();
  clearAll();RINGS.length=0;LATER.length=0;G.t=0;G.boss=null;G.warnT=0;G.deaths=0;G.combo=0;G.contUsed=false;G.clearT=0;G.pity=0;G.kills=0;G.maxCombo=0;G.noIntro=false;G.credits=0;G.bg=endless?G.sector%10:n-1;
  if(!endless||G.sector===0){G.score=0;P.ship=SAVE.ship;P.lives=G.dm.lives-1+SHIPS[P.ship].hp+(early()?1:0);P.wt='B';P.wl=1;P.bombs=early()&&G.stage<=2?3:2;P.spd=0;}setTier();P.evoT=0;P.magT=0;P.x2T=0;P.downT=0;
  P.shield=[0,1,1,2,3][SAVE.upg.shd]+(P.ship===2?1:0);P.x=P.tx=GW/2;P.y=P.ty=GH-110;P.inv=early()?3:2;P.alive=true;P.bombT=0;
@@ -293,7 +298,7 @@ const DBG={god:false,fast:false,auto:false,
  sim(sec,step){step=step||1/60;const n=Math.round(sec/step);for(let i=0;i<n;i++){if(this.auto)this.pilot(step);update(step);if(G.mode!=='play'&&G.mode!=='clear')break;}return this.state();},
  pilot(dt){if(!P.alive)return;let tx=GW/2;const B=G.boss;if(B&&!B.dead){tx=B.x+(B.tur.find(t=>t.alive)||{ox:0}).ox;}else{let best=null,bd=1e9;EN.forEach(e=>{if(e.a&&e.y>0&&e.y<P.y){const d=Math.abs(e.x-P.x);if(d<bd){bd=d;best=e;}}});if(best)tx=best.x;}
   P.tx=clamp(tx,14,GW-14);P.ty=GH-110;},
- state(){return{mode:G.mode,stage:G.stage,endless:G.endless,sector:G.sector,t:+G.t.toFixed(1),boss:G.boss?{hp:Math.round(G.boss.hp),mhp:G.boss.mhp,ph:G.boss.phase,name:G.boss.D[0]}:null,score:G.score,lives:P.lives,en:EN.filter(e=>e.a).length,eb:EB.filter(e=>e.a).length,pt:PT.filter(e=>e.a).length,cr:SAVE.cr,reached:SAVE.reached};},
+ state(){return{dFactor:+dFactor(G.stage,G.endless,G.sector).toFixed(3),sf:+sf().toFixed(3),mode:G.mode,stage:G.stage,endless:G.endless,sector:G.sector,t:+G.t.toFixed(1),boss:G.boss?{hp:Math.round(G.boss.hp),mhp:G.boss.mhp,ph:G.boss.phase,name:G.boss.D[0]}:null,score:G.score,lives:P.lives,en:EN.filter(e=>e.a).length,eb:EB.filter(e=>e.a).length,pt:PT.filter(e=>e.a).length,cr:SAVE.cr,reached:SAVE.reached};},
  start(n,e){UI.hideAll();startStage(n,e);},killBoss(){if(G.boss)damageBoss(G.boss,1e9);},toBoss(){G.t=G.dur+2.4;G.evI=G.ev.length;LATER.length=0;EN.forEach(e=>e.a=false);},
  shot(stage,sec){this.start(stage);this.sim(sec);}};
 if(DEBUG)window.DBG=DBG;window.__G=G;window.__P=P;
