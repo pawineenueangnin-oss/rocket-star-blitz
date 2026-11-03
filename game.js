@@ -18,10 +18,11 @@ const G={mode:'menu',stage:1,endless:false,sector:0,t:0,dur:80,boss:null,warnT:0
 const P={x:180,y:540,tx:180,ty:540,ship:0,lives:3,shield:0,inv:0,wt:'B',wl:1,bombs:1,spd:0,fcd:0,mcd:0,laser:false,alive:true,bank:0,hitR:3.5,bombT:0,evoT:0,magT:0,x2T:0,downT:0};
 const tierOf=()=>clamp(P.wl-1,0,4);const MAXWL=5;
 // early-game easing: stages 1-3 softer, stage 1 also warms up over its first 60 s; stage 4+ untouched
-const EZ=[{hp:.68,spd:.74,fire:.48,gap:1.5},{hp:.8,spd:.82,fire:.62,gap:1.32},{hp:.86,spd:.86,fire:.7,gap:1.2}];
+// smooth difficulty curve: k=0 at stage 1 -> 1 at stage 10 (endless = stage-10 values, then endless sf() keeps growing)
+function curve(n,endless){const k=endless?1:Math.max(0,Math.min(1,(n-1)/9)),e=k*k*.35+k*.65;return{hp:.66+.3*e,spd:.72+.24*e,fire:.42+.4*e,gap:1.6-.55*e,cap:Math.round(5+5*e)};}
 function early(){return !G.endless&&G.stage<=3;}
 function warm(){return !G.endless&&G.stage===1&&!G.boss?.82+.18*Math.min(1,G.t/60):1;}
-function mkDM(b,n,endless){const e=endless?null:EZ[n-1];if(!e)return b;return{name:b.name,lives:b.lives,hp:b.hp*e.hp,gap:b.gap*e.gap,get spd(){return b.spd*e.spd*warm();},get fire(){return b.fire*e.fire*warm();}};}
+function mkDM(b,n,endless){const e=curve(n,endless);return{name:b.name,lives:b.lives,cap:e.cap,hp:b.hp*e.hp,gap:b.gap*e.gap,get spd(){return b.spd*e.spd*warm();},get fire(){return b.fire*e.fire*warm();}};}
 function sf(){return G.endless?1.75+G.sector*.12:1+(G.stage-1)*.085;} // stage difficulty factor
 // ---------- particles ----------
 function part(x,y,vx,vy,life,sz,g,k){if(PT.lim<=0)return null;const p=take(PT);if(!p)return null;p.x=x;p.y=y;p.vx=vx;p.vy=vy;p.l=life;p.m=life;p.sz=sz;p.g=g;p.k=k||0;p.c=null;return p;}
@@ -60,7 +61,7 @@ function updE(e,dt){e.t+=dt;if(e.fl>0)e.fl-=dt;const t=e.t,f=sf();
    default:if(G.stage>=2||G.endless||Math.random()<.4)eShoot(e,aim(e),130);e.fcd=rnd(2,3.6)/fr;}}}
  if(e.y>GH+40||e.y<-140||e.x<-80||e.x>GW+80)e.a=false;}
 function mineBurst(e,big){const n=big?12:8;for(let i=0;i<n;i++)eShoot(e,i/n*TAU+e.t,big?110:90,ART.spr.eb);boom(e.x,e.y,10,['p','v','w']);AU.sfx('pop');}
-function killE(e){e.a=false;G.kills++;G.combo++;G.comboT=1.7;const m=comboMul();const sc=e.sc*m*(P.x2T>0?2:1);G.score+=sc;AU.sfx(e.r>14?'boom':'pop');
+function killE(e){e.a=false;G.kills++;G.combo++;if(G.combo>(G.maxCombo||0))G.maxCombo=G.combo;G.comboT=1.7;const m=comboMul();const sc=e.sc*m*(P.x2T>0?2:1);G.score+=sc;AU.sfx(e.r>14?'boom':'pop');
  const cm={zig:['g','c','w'],sine:['v','p','w'],vwing:['p','y','w'],diver:['y','o','w'],kami:['r','o','y'],saucer:['c','b','w'],shield:['b','c','y'],split:['o','y','w'],mini:['o','y'],mine:['p','v']}[e.type]||['o','y','w'];
  boom(e.x,e.y,e.r,cm);if(e.r>14){shake(5);G.flash=Math.max(G.flash,.12+Math.min(.12,G.combo*.004));}
  if(e.type==='split')for(let s=-1;s<=1;s+=2)spawnE('mini',e.x+s*8,e.y,{vx:s*80});
@@ -89,15 +90,16 @@ function wave(kind){const f=sf(),cx2=rnd(60,GW-60);
   case'shield':{spawnE('shield',cx2,-20);for(let i=0;i<3;i++)later(.5+i*.3,()=>spawnE('zig',cx2,-20,{dir:i%2?1:-1}));break;}
   case'split':{for(let i=0;i<2+(f>1.5?1:0);i++)later(i*.6,()=>spawnE('split',rnd(70,GW-70),-20));break;}
   case'mines':{for(let i=0;i<3;i++)later(i*.5,()=>spawnE('mine',rnd(40,GW-40),-20));break;}
-  case'rocks':{const n=6+Math.min(6,(f*2)|0);for(let i=0;i<n;i++)later(i*.35,()=>spawnE(Math.random()<.45?'rock0':'rock1',rnd(10,GW-10),-30,{vx:rnd(-35,35),vy:rnd(60,110)*(G.bg===6?1.6:1)}));break;}
+  case'rocks':{const n=Math.round(3+Math.min(5,(f-1)*6));for(let i=0;i<n;i++)later(i*.35,()=>spawnE(Math.random()<.45?'rock0':'rock1',rnd(10,GW-10),-30,{vx:rnd(-35,35),vy:rnd(60,110)*(G.bg===6?1.6:1)}));break;}
   case'laser':{const n=f>1.7?2:1;for(let i=0;i<n;i++)later(i*.9,()=>laserHaz(clamp(P.x+rnd(-60,60),20,GW-20)));break;}
   case'swarm':{for(let i=0;i<10;i++)later(i*.18,()=>spawnE('mini',rnd(20,GW-20),-15,{vx:rnd(-60,60)}));break;}}}
 const LATER=[];function later(d,fn){LATER.push([G.t+d,fn]);}
-function stagePools(s){const p=['zigline','sine','vform'];if(s>=1)p.push('saucer');if(s>=2)p.push('rocks','divers');if(s>=3)p.push('kami','shield');if(s>=4)p.push('split','laser');if(s>=5)p.push('mines');if(s>=7)p.push('swarm');
- const extra={2:['rocks','rocks'],3:['rocks','kami'],4:['saucer','laser'],5:['split','mines'],6:['laser','laser','kami'],7:['rocks','rocks','swarm'],8:['rocks','saucer','shield'],9:['swarm','swarm','split','divers'],10:['laser','mines','shield','saucer']}[s]||[];return p.concat(extra);}
+// one new enemy type per stage; rocks rare (1 entry in a pool of 6-16)
+function stagePools(s){const p=['zigline','sine','vform','saucer'];if(s>=2)p.push('divers');if(s>=3)p.push('rocks','kami');if(s>=4)p.push('shield');if(s>=5)p.push('split');if(s>=6)p.push('laser');if(s>=7)p.push('mines');if(s>=8)p.push('swarm');
+ const extra={4:['zigline','sine'],6:['kami'],8:['saucer'],9:['swarm','divers'],10:['laser','shield','split']}[s]||[];return p.concat(extra);}
 function buildStage(){G.ev=[];const s=G.endless?1+((G.sector)%10):G.stage;const f=sf();G.dur=G.endless?62:(66+G.stage*4.5);
- const pools=stagePools(G.endless?10:s);let t=2.2;const gap=Math.max(1.35,3.3-f*.55)*G.dm.gap;
- G.ev.push([1.2,'zigline']);while(t<G.dur-3){const k=pools[(Math.random()*pools.length)|0];G.ev.push([t,k]);if(f>1.35&&Math.random()<(f-1.2)*.45)G.ev.push([t+.6,pools[(Math.random()*pools.length)|0]]);t+=gap*rnd(.8,1.25);}
+ const pools=stagePools(G.endless?10:s);let t=2.2;const gap=Math.max(1.5,3.3-f*.5)*G.dm.gap;
+ G.ev.push([1.2,'zigline']);while(t<G.dur-3){const k=pools[(Math.random()*pools.length)|0];G.ev.push([t,k]);if(f>1.4&&Math.random()<(f-1.3)*.35)G.ev.push([t+.6,pools[(Math.random()*pools.length)|0]]);t+=gap*rnd(.8,1.25);}
  if(s===1)G.ev=G.ev.filter(e=>e[0]>26||e[1]!=='saucer');G.ev.sort((a,b)=>a[0]-b[0]);G.evI=0;}
 // ---------- boss ----------
 const BOSS_PAT=[['aimFan','turrets','ring'],['rain','aimFan','minionsD'],['ring','wall','turrets'],['spiral','aimFan','beam'],['flower','minionsK','rain'],['beam','wall','spiral'],['spiral','flower','aimFan'],['wall','turrets','beam','rain'],['minionsK','flower','spiral','ring'],['spiral','beam','flower','wall','aimFan','turrets']];
@@ -194,12 +196,13 @@ function pickup(k,x,y){AU.sfx(k==='C'?'coin':'power');
  G.score+=500;}
 // ---------- stage flow ----------
 function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector=endless?(G.sector||0):0;G.dm=mkDM(DIFF[SAVE.diff],n,endless);
- clearAll();RINGS.length=0;LATER.length=0;G.t=0;G.boss=null;G.warnT=0;G.deaths=0;G.combo=0;G.contUsed=false;G.clearT=0;G.pity=0;G.kills=0;G.credits=0;G.bg=endless?G.sector%10:n-1;
+ clearAll();RINGS.length=0;LATER.length=0;G.t=0;G.boss=null;G.warnT=0;G.deaths=0;G.combo=0;G.contUsed=false;G.clearT=0;G.pity=0;G.kills=0;G.maxCombo=0;G.noIntro=false;G.credits=0;G.bg=endless?G.sector%10:n-1;
  if(!endless||G.sector===0){G.score=0;P.ship=SAVE.ship;P.lives=G.dm.lives-1+SHIPS[P.ship].hp+(early()?1:0);P.wt='B';P.wl=1;P.bombs=early()&&G.stage<=2?3:2;P.spd=0;}setTier();P.evoT=0;P.magT=0;P.x2T=0;P.downT=0;
  P.shield=[0,1,1,2,3][SAVE.upg.shd]+(P.ship===2?1:0);P.x=P.tx=GW/2;P.y=P.ty=GH-110;P.inv=early()?3:2;P.alive=true;P.bombT=0;
  Ads.stageRewards=0;buildStage();if(early()&&G.stage<=2){later(8,()=>drop(GW*.5,30,'W'));later(30,()=>drop(rnd(90,GW-90),30,G.stage===1?'S':'L'));later(52,()=>drop(rnd(90,GW-90),30,'P'));}setBG(G.bg);G.mode='play';AU.play(G.endless?1+(G.sector%10):G.stage);UI.hud(true);LOG('stage',G.stage,'endless',G.endless,G.sector);}
 function stageClear(){G.mode='clear';G.clearT=0;AU.play(-1);AU.sfx('clear');const s=G.stage;
  if(G.endless){G.sector++;SAVE.endBest=Math.max(SAVE.endBest,G.sector);SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();setTimeout(()=>UI.endlessNext(),1800);return;}
+ {const base=G.score,kb=G.kills*25,nd=G.deaths===0,bv=nd?3000+s*1000:Math.min(20000,(G.maxCombo||0)*60);G.score=base+kb+bv;G.tally={base,kb,cr:G.credits,bk:nd?'noDmg':'comboBonus',bv,tot:G.score};UI.tallyDone=false;}
  const stars=G.deaths===0?3:G.deaths===1?2:1;SAVE.stars[s-1]=Math.max(SAVE.stars[s-1]||0,stars);const nb=G.score>(SAVE.best[s-1]||0);if(nb)SAVE.best[s-1]=G.score;if(G.score>SAVE.hi)SAVE.hi=G.score;
  SAVE.reached=Math.max(SAVE.reached,Math.min(10,s+1));if(s===10)SAVE.cleared=1;SAVE.cr+=G.credits;persist();
  setTimeout(()=>UI.result(true,{stars,nb}),1800);}
@@ -210,7 +213,7 @@ function update(dt){if(G.mode!=='play'&&G.mode!=='clear'&&G.mode!=='over'&&G.mod
  if(G.mode==='menu'){menuUpd(dt);return;}
  G.t+=dt;G.stats.t+=dt;if(G.comboT>0){G.comboT-=dt;if(G.comboT<=0)G.combo=0;}if(G.shake>0)G.shake=Math.max(0,G.shake-dt*30);if(G.flash>0)G.flash-=dt*2.2;
  // timeline
- if(G.mode==='play'){while(G.evI<G.ev.length&&G.ev[G.evI][0]<=G.t){wave(G.ev[G.evI][1]);G.evI++;}
+ if(G.mode==='play'){while(G.evI<G.ev.length&&G.ev[G.evI][0]<=G.t){if(EN.reduce((n,e)=>n+(e.a&&e.type!=='mini'?1:0),0)<(G.dm.cap||99))wave(G.ev[G.evI][1]);G.evI++;}
   for(let i=LATER.length-1;i>=0;i--)if(LATER[i][0]<=G.t){const f=LATER[i][1];LATER.splice(i,1);f();}
   if(!G.boss&&G.warnT===0&&G.t>=G.dur+2.5){G.warnT=3;AU.play(-1);AU.sfx('warn');}
   if(G.warnT>0){G.warnT-=dt;if(G.warnT<=0){G.warnT=-1;startBoss();}}}
@@ -282,6 +285,7 @@ function perf(ms){PERF.ft.push(ms);if(PERF.ft.length>240)PERF.ft.shift();if(SAVE
 // ---------- loop ----------
 let last=performance.now();
 function frame(now){const raw=now-last;last=now;const dt=Math.min(.05,raw/1000);
+ if(G.mode==='warp')WARP.update(dt);
  if(!DBG.fast){if(G.hs>0){G.hs-=dt;if(BGS.i>=0)render(0);}else{update(dt);if(BGS.i>=0)render(dt);}}AU.tick();perf(raw);requestAnimationFrame(frame);}
 // ---------- debug hook (?debug=1) ----------
 const DBG={god:false,fast:false,auto:false,

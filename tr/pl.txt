@@ -96,3 +96,8 @@ WZMOCNIENIE!
 EWOLUCJA!
 POZIOM W DÓŁ
 Wstrząsy ekranu
+Premia za zestrzelenia
+Premia bez obrażeń
+Premia za combo
+Razem
+Dotknij, aby pominąć

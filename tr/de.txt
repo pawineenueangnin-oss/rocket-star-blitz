@@ -96,3 +96,8 @@ POWER-UP!
 EVOLUTION!
 STUFE VERLOREN
 Bildschirmwackeln
+Abschussbonus
+Kein-Schaden-Bonus
+Combo-Bonus
+Gesamt
+Tippen zum Überspringen

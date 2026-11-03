@@ -30,7 +30,7 @@ const UI={cur:null,
  settings(from){this.from=from||'menu';const tg=(k,n)=>`<div class="set"><span>${T(n)}</span><button class="tg ${SAVE[k]?'on':''}" data-a="tog" data-k="${k}">${SAVE[k]?'ON':'OFF'}</button></div>`;
   const langs=Object.keys(LANG_NAMES).map(l=>`<option value="${l}" ${l===LANG&&localStorage.getItem('rsb_lang')?'selected':''}>${LANG_NAMES[l]}</option>`).join('');
   this.show(`<div class="hd"><button class="b sm" data-a="back">◀</button><h2>${T('settings')}</h2><span></span></div><div class="sets">
-  ${tg('snd','sound')}${tg('mus','music')}${tg('voice','voice')}${tg('vib','vibration')}${tg('shake','shake')}
+  ${tg('snd','sound')}${tg('mus','music')}${tg('vib','vibration')}${tg('shake','shake')}
   <div class="set"><span>${T('quality')}</span><select id="sQ">${['auto','low','high'].map(q=>`<option value="${q}" ${SAVE.q===q?'selected':''}>${T('q_'+q)}</option>`).join('')}</select></div>
   <div class="set"><span>${T('language')}</span><select id="sL"><option value="auto">${T('auto')}</option>${langs}</select></div>
   <div class="set"><span>${T('difficulty')}</span><select id="sD">${['easy','normal','hard'].map((d,i)=>`<option value="${i}" ${SAVE.diff===i?'selected':''}>${T(d)}</option>`).join('')}</select></div></div>
@@ -38,30 +38,31 @@ const UI={cur:null,
   <div class="studio big"><img src="studio-logo.png" alt=""><span>${T('madeBy')} <b>P-Prece Studio</b><br>พีพีช Studio</span></div><a class="priv" href="privacy.html" target="_blank">${T('privacy')}</a>`,'settings');
   $('sQ').onchange=e=>{SAVE.q=e.target.value;persist();setQuality();};$('sD').onchange=e=>{SAVE.diff=+e.target.value;persist();};
   $('sL').onchange=e=>{const v=e.target.value;try{if(v==='auto')localStorage.removeItem('rsb_lang');else localStorage.setItem('rsb_lang',v);}catch(_){}LANG=v==='auto'?detectLang():v;applyLang();this.settings(this.from);};},
- story(key,then,n){G.mode='story';this.hud(false);Ads.banner(false);const txt=T(key);const sc=SART.scene(key,n),bn=SART.bossName(sc);
-  this.show(`<div class="story" data-a="snext"><canvas id="scv" class="scv"></canvas><div class="sv"></div><div class="sh"><span class="st">${n?T('stage')+' '+n:n===0?T('endless'):T('storyT')}</span>${bn?`<span class="bn">⚠ ${bn}</span>`:''}</div><div class="cap"><p id="stx"></p><div class="row"><button class="b sm" data-a="sskip">${T('skip')}</button><button class="b" data-a="snext">${T('next')} ▶</button></div><div class="pb"><i id="spb"></i></div></div></div>`,'storyS');
-  SART.start($('scv'),sc);this.then=then;const p=$('stx');clearInterval(this.ti);clearTimeout(this.ta);
-  // auto-fit caption: shrink font until the full text fits its box
-  p.textContent=txt;let fs=1.6;p.style.fontSize=fs+'em';for(let q=0;q<14&&p.scrollHeight>p.clientHeight+1&&fs>.8;q++){fs-=.07;p.style.fontSize=fs+'em';}
-  p.textContent='';const sp=document.createElement('span');sp.className='ghost';sp.textContent=txt;p.appendChild(sp);const vis=document.createElement('span');p.insertBefore(vis,sp);
-  let i=0;this.sfin=()=>{clearInterval(this.ti);vis.textContent=txt;sp.textContent='';i=txt.length;};
-  this.ti=setInterval(()=>{i+=2;vis.textContent=txt.slice(0,i);sp.textContent=txt.slice(i);if(i>=txt.length)clearInterval(this.ti);},30);VOICE.say(txt);
-  const dur=Math.max(7000,txt.length*30/2+txt.length*35+2500),k=this.then;let left=dur,ts=performance.now();const pb=$('spb');pb.style.animationDuration=dur+'ms';
-  const arm=()=>{clearTimeout(this.ta);ts=performance.now();this.ta=setTimeout(()=>{if(this.cur==='storyS'&&this.then===k)this.sgo(true);},left);};arm();
-  const st=document.querySelector('.story');st.onpointerdown=()=>{if(this.cur!=='storyS')return;clearTimeout(this.ta);left=Math.max(1500,left-(performance.now()-ts));pb.style.animationPlayState='paused';};
-  st.onpointerup=st.onpointercancel=()=>{if(this.cur!=='storyS'||this.then!==k)return;pb.style.animationPlayState='running';arm();};},
- sgo(force){if(!force&&this.ti&&this.sfin&&$('stx')&&$('stx').querySelector('.ghost')?.textContent){this.sfin();return;}
-  clearInterval(this.ti);clearTimeout(this.ta);VOICE.stop();const f=this.then;this.then=null;if(!f&&this.cur==='storyS')return;const st=document.querySelector('.story');if(st)st.classList.add('out');
-  setTimeout(()=>{SART.stop();f&&f();},220);},
  result(win,o){Ads.banner(true);this.hud(false);const s=G.stage;const canR=Ads.canReward();
   const sc=`<div class="res"><div class="rs">${T('score')} <b>${G.score}</b></div><div class="rs">${T('credits')} <b>◆ ${G.credits}</b></div><div class="rs">${T('best')} <b>${G.endless?SAVE.endBest:SAVE.best[s-1]||0}</b></div></div>`;
-  if(win){FX.fw=4;this.show(`<div class="burst"></div><h2 class="big gold">${T('clear')}</h2><div class="stars">${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div>${o.nb?`<div class="nb">${T('newBest')}</div>`:''}${sc}
-   ${canR&&G.credits>0?`<button class="b pink" data-a="dbl">▶ ${T('double')}</button>`:''}
-   <button class="b big" data-a="next">${s>=10?T('victory'):T('next')} ▶</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div>`,'result');}
+  if(win){FX.fw=4;const L=G.tally||{base:G.score,kb:0,cr:G.credits,bk:'comboBonus',bv:0,tot:G.score};const inst=!!this.tallyDone;
+   const row=(lab,v,pre,cls)=>`<div class="tr ${cls||''} ${inst?'in done':''}" data-v="${v}" data-p="${pre||''}"><span>${lab}</span><b>${inst?(pre||'')+v:''}</b></div>`;
+   this.show(`<div class="burst"></div><h2 class="big gold">${T('clear')}</h2><div class="tally">${row(T('score'),L.base)}${row(T('killBonus'),L.kb,'+')}${row(T('credits'),L.cr,'◆ ','crr')}${row(T(L.bk),L.bv,'+')}<i class="tl"></i>${row(T('total'),L.tot,'','tot')}</div>
+   <div class="stars ${inst?'':'hid'}">${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div><div class="nb ${o.nb&&inst?'':'hid'}">${T('newBest')}</div>
+   <div class="tsk ${inst?'hid':''}">${T('tapSkip')}</div><div class="after ${inst?'':'hid'}">${canR&&G.credits>0?`<button class="b pink" data-a="dbl">▶ ${T('double')}</button>`:''}
+   <button class="b big" data-a="next">${s>=10?T('victory'):T('next')} ▶</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div></div>`,'result');
+   if(!inst)this.countUp(o);}
   else this.show(`<h2 class="big red">${T('gameover')}</h2>${sc}${!G.contUsed&&canR?`<button class="b pink" data-a="cont">▶ ${T('revive')}</button>`:''}
    <button class="b big" data-a="retry">${T('retry')}</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div>`,'result');
   setTimeout(()=>{if(this.cur==='result')Ads.maybeInterstitial(G.endless?10:s);},700);},
- endlessNext(){this.story('st'+(11+((G.sector-1)%2)),()=>startStage(0,true),0);},
+ // score tally: each line pops in and counts up with ticks; tap skips to the end
+ countUp(o){const rows=[...document.querySelectorAll('.tally .tr')],scr=this.el();let i=-1,t0=0,raf=0,dead=false;
+  const fmt=(r,v)=>r.dataset.p+Math.round(v);
+  const end=()=>{if(dead)return;dead=true;cancelAnimationFrame(raf);rows.forEach(r=>{r.classList.add('in','done');r.querySelector('b').textContent=fmt(r,+r.dataset.v);});
+   this.tallyDone=true;scr.onpointerdown=null;const q=c=>scr.querySelector(c);q('.stars').classList.remove('hid');o.nb&&q('.nb').classList.remove('hid');q('.tsk').classList.add('hid');
+   setTimeout(()=>{const a=q('.after');a&&a.classList.remove('hid');},350);AU.sfx('power');};
+  const step=now=>{if(dead||this.cur!=='result')return;if(i<0||now-t0>(rows[i].classList.contains('tot')?900:640)){if(i>=0){rows[i].classList.add('done');rows[i].querySelector('b').textContent=fmt(rows[i],+rows[i].dataset.v);AU.sfx('coin');}
+    i++;if(i>=rows.length){end();return;}rows[i].classList.add('in');t0=now;}
+   const r=rows[i],d=r.classList.contains('tot')?750:480,k=Math.min(1,(now-t0)/d),v=+r.dataset.v*(1-Math.pow(1-k,3));r.querySelector('b').textContent=fmt(r,v);if(k<1&&+r.dataset.v>0)AU.sfx('tick');raf=requestAnimationFrame(step);};
+  setTimeout(()=>{raf=requestAnimationFrame(step);},350);
+  setTimeout(()=>{scr.onpointerdown=e=>{if(!e.target.closest('button'))end();};},150);},
+ warpTo(n){WARP.start(n,false,()=>startStage(n));},
+ endlessNext(){WARP.start(0,true,()=>startStage(0,true));},
  pause(){if(G.mode!=='play')return;G.mode='paused';$('pz').style.display='flex';$('pz').innerHTML=`<h2>${T('paused')}</h2><button class="b big" data-pa="resume">▶ ${T('resume')}</button><button class="b" data-pa="restart">${T('restart')}</button><button class="b" data-pa="quit">${T('quit')}</button>
   <div class="row"><button class="tg ${SAVE.snd?'on':''}" data-pa="snd">♪ ${T('sound')}</button><button class="tg ${SAVE.mus?'on':''}" data-pa="mus">♫ ${T('music')}</button></div>`;
   $('pz').querySelectorAll('[data-pa]').forEach(b=>b.onclick=()=>{AU.sfx('ui');const k=b.dataset.pa;if(k==='resume'){$('pz').style.display='none';G.mode='play';last=performance.now();}
@@ -69,20 +70,18 @@ const UI={cur:null,
    else{SAVE[k]=SAVE[k]?0:1;persist();AU.setVol();this.pause2();}});},
  pause2(){G.mode='play';this.pause();},
  pauseToggle(){if(G.mode==='play')this.pause();else if(G.mode==='paused'){$('pz').style.display='none';G.mode='play';}},
- begin(n){if(n===1&&!SAVE.introSeen){SAVE.introSeen=1;persist();this.story('st0',()=>this.story('st1b',()=>startStage(1),1));return;}
-  this.story(n===1?'st1b':'st'+(n-1),()=>startStage(n),n);},
+ begin(n){this.hideAll();startStage(n);},
  act(a,b){const i=+b.dataset.i;
   switch(a){
    case'play':this.begin(Math.min(SAVE.reached,10));break;case'map':this.map();break;case'hangar':this.hangar();break;case'menu':this.menu();break;
    case'settings':this.settings(this.cur);break;case'back':this.from==='map'?this.map():this.menu();break;
    case'diff':SAVE.diff=i;persist();this.map();break;case'stage':this.begin(i);break;
-   case'endless':G.sector=0;this.story('st10',()=>startStage(0,true),0);break;
-   case'tog':{const k=b.dataset.k;SAVE[k]=SAVE[k]?0:1;persist();AU.setVol();if(k==='mus'&&SAVE.mus){AU.songId=-2;AU.play(50);}if(k==='voice'&&!SAVE.voice)VOICE.stop();this.settings(this.from);break;}
+   case'endless':G.sector=0;this.hideAll();startStage(0,true);break;
+   case'tog':{const k=b.dataset.k;SAVE[k]=SAVE[k]?0:1;persist();AU.setVol();if(k==='mus'&&SAVE.mus){AU.songId=-2;AU.play(50);}this.settings(this.from);break;}
    case'equip':SAVE.ship=i;persist();P.ship=i;this.hangar();break;
    case'buyship':if(SAVE.cr>=this.SC[i]){SAVE.cr-=this.SC[i];SAVE.ships[i]=1;SAVE.ship=i;persist();AU.sfx('power');}else toast(T('needCr'));this.hangar();break;
    case'upg':{const k=b.dataset.k,c=this.UC[SAVE.upg[k]];if(SAVE.cr>=c){SAVE.cr-=c;SAVE.upg[k]++;persist();AU.sfx('power');}this.hangar();break;}
-   case'snext':case'sskip':this.sgo(a==='sskip');break;
-   case'next':if(G.stage>=10){this.story('st10',()=>this.menu());}else this.begin(G.stage+1);break;
+      case'next':if(G.stage>=10){this.menu();toast(T('victory'));}else this.warpTo(G.stage+1);break;
    case'retry':G.sector=0;startStage(G.endless?0:G.stage,G.endless);break;
    case'dbl':b.disabled=true;Ads.rewarded().then(ok=>{if(ok){SAVE.cr+=G.credits;G.credits*=2;persist();AU.sfx('coin');toast('◆ x2');}else toast(T('noVideo'));this.result(true,{stars:SAVE.stars[G.stage-1]||1});});break;
    case'cont':b.disabled=true;Ads.rewarded().then(ok=>{if(ok)revive();else{toast(T('noVideo'));b.disabled=false;}});break;}}};

@@ -96,3 +96,8 @@ POWER-UP!
 EVOLUTIE!
 NIVEAU OMLAAG
 Schermschudden
+Vernietigingsbonus
+Geen-schade-bonus
+Combobonus
+Totaal
+Tik om over te slaan

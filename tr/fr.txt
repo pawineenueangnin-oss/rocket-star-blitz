@@ -96,3 +96,8 @@ PUISSANCE !
 ÉVOLUTION !
 NIVEAU PERDU
 Tremblement de l'écran
+Bonus destructions
+Bonus sans dégâts
+Bonus combo
+Total
+Touchez pour passer

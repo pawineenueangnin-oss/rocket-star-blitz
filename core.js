@@ -99,6 +99,10 @@ const AU={ac:null,on:false,voices:0,maxVoices:40,next:0,step:0,song:null,songId:
    case'pop':this.xp(D,t,0);break;
    case'boom':this.xp(D,t,1);break;
    case'bigboom':this.xp(D,t,2);break;case'bossboom':this.xp(D,t,3);break;
+   case'tick':this.tone(D,'square',1400+Math.random()*200,t,.004,.004,.025,.035,0,4500);break;
+   case'warp':this.noise(D,t+.5,.9,.4,.6,.22,'bandpass',220,5200);this.tone(D,'sawtooth',55,t+.4,1.2,.5,.5,.06,880,1600);this.tone(D,'sine',110,t+.6,1,.4,.6,.12,520);break;
+   case'warpflash':this.noise(D,t,.006,.06,.7,.3,'lowpass',7000,180);this.tone(D,'sine',160,t,.006,.08,.6,.3,40);this.tone(D,'triangle',1760,t,.006,.05,.5,.05,880);break;
+   case'warpin':this.noise(D,t,.02,.25,1.4,.2,'bandpass',4200,160);this.tone(D,'sine',700,t,.02,.3,1.3,.08,90);break;
    case'coin':this.tone(D,'square',1320,t,.006,.02,.05,.05);this.tone(D,'square',1760,t+.05,.006,.02,.08,.05);break;
    case'evolve':[392,523,659,784,1047,1319].forEach((f,i)=>this.tone(D,'square',f,t+i*.05,.006,.04,.08,.07,0,5000));this.tone(D,'sine',180,t,.02,.25,.4,.2,520);break;
    case'tierdown':[784,587,440].forEach((f,i)=>this.tone(D,'triangle',f,t+i*.07,.006,.04,.1,.12,0,3000));break;

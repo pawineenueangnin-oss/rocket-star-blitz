@@ -379,7 +379,7 @@ function render(dt){cx.globalAlpha=1;cx.globalCompositeOperation='source-over';c
   cx.fillStyle='rgba(255,255,255,.55)';for(let y=P.y-22-((G.t*900)%40);y>top;y-=40)cx.fillRect(P.x-ww*.3,y,ww*.6,10);
   spr(ART.glow.c,P.x,P.y-22,2.6*fl);spr(ART.glow.w,P.x,P.y-22,1.2);spr(ART.glow.w,P.x,top+4,2.2*fl);spr(ART.glow.c,P.x,top+4,3*fl);}
  cx.globalCompositeOperation='source-over';
- drawPlayer();
+ if(G.mode!=='warp')drawPlayer();
  // enemy bullets (warm, unchanged sprites)
  const ROT1=S.eb4,ROT2=S.ebN,SPN=S.eb2,PLS=S.eb3;for(const b of EB){if(!b.a)continue;const s=b.s;if(s===ROT1||s===ROT2){spr(s,b.x,b.y,1,Math.atan2(b.vy,b.vx));}else if(s===SPN){spr(s,b.x,b.y,1,b.t*7);}else if(s===PLS){spr(s,b.x,b.y,1+Math.sin(b.t*14)*.08,b.t*3);}else{const sz=s.w*(1+Math.sin(b.t*18)*.06);cx.drawImage(s.c,b.x-sz/2,b.y-sz/2,sz,sz);}}
  // particles: 0 glow, 1 streak spark, 2 ring, 3 tumbling shard
@@ -396,7 +396,8 @@ function render(dt){cx.globalAlpha=1;cx.globalCompositeOperation='source-over';c
  cx.setTransform(SC*DPR,0,0,SC*DPR,0,0);
  if(G.flash>0){cx.fillStyle='rgba(255,244,230,'+Math.min(.55,G.flash*.7)+')';cx.fillRect(0,0,GW,GH);}
  if(G.mode==='clear'||FX.fw>0)drawFireworks(dt);
- if(G.mode!=='menu')drawHUD();}
+ if(G.mode==='warp')WARP.draw(dt);
+ else if(G.mode!=='menu')drawHUD();}
 function drawPlayer(){const S=ART.spr;if(!(P.alive&&(G.mode!=='over')&&(P.inv<=0||P.evoT>0||((G.t*14)|0)%2===0||G.mode==='menu')))return;
  const tr=G.mode==='menu'?0:tierOf(),s=S.shipT[P.ship][tr],tc=TIER_COL[tr];const menu=G.mode==='menu',hs=menu?1.45:1;const bank=clamp(P.bank||0,-1,1);
  let pop=1;if(P.evoT>0){const k=P.evoT/.9;pop=1+Math.sin(k*Math.PI)*.25;}if(P.downT>0)pop*=1-P.downT*.15;
@@ -480,6 +481,6 @@ function drawHUD(){const top=SAFE_T+6,S=ART.spr;cx.textBaseline='middle';
  if(G.mode==='clear'&&G.clearT>.3){const k=Math.min(1,(G.clearT-.3)*3),y=GH*.4;cx.save();cx.translate(GW/2,y);cx.globalCompositeOperation='lighter';cx.globalAlpha=.35*k;cx.rotate(G.clearT*.3);for(let i=0;i<10;i++){cx.rotate(TAU/10);cx.fillStyle=GL(cx,0,0,170,0,[[0,'rgba(255,230,120,.9)'],[1,'rgba(255,230,120,0)']]);cx.beginPath();cx.moveTo(0,0);cx.lineTo(170,-14);cx.lineTo(170,14);cx.fill();}cx.restore();cx.globalAlpha=1;
   cx.save();cx.translate(GW/2,y);const s=.6+.4*k+Math.sin(G.clearT*4)*.02;cx.scale(s,s);cx.textAlign='center';cx.font='16px PS2P, system-ui';hs(T(G.endless?'sectorClear':'clear'),0,0,'#ffe14a','#ff8a2a');cx.restore();}
  // stage intro card
- if(G.t<2.6&&G.mode==='play'){const a=Math.min(1,(2.6-G.t)*1.5,G.t*4),y=GH*.36;cx.globalAlpha=a;const w=Math.min(GW-40,260);cx.save();cx.translate(GW/2,y+12);cx.scale(1,Math.min(1,G.t*5));glass(-w/2,-26,w,52,12,'#7ae8ff');cx.restore();
+ if(G.t<2.6&&G.mode==='play'&&!G.noIntro){const a=Math.min(1,(2.6-G.t)*1.5,G.t*4),y=GH*.36;cx.globalAlpha=a;const w=Math.min(GW-40,260);cx.save();cx.translate(GW/2,y+12);cx.scale(1,Math.min(1,G.t*5));glass(-w/2,-26,w,52,12,'#7ae8ff');cx.restore();
   cx.textAlign='center';cx.font='8px PS2P, system-ui';hs((G.endless?T('endless')+' '+(G.sector+1):T('stage')+' '+G.stage),GW/2,y,'#7ae8ff');cx.font='13px PS2P, system-ui';hs(T(STAGE_NAMES[G.bg]),GW/2,y+20,'#fff','#ff6ad0');cx.globalAlpha=1;}
  cx.textBaseline='alphabetic';}

@@ -96,3 +96,8 @@ pPower|POWER UP!
 evolve|EVOLVE!
 tierDown|TIER DOWN
 shake|Screen shake
+killBonus|Kill bonus
+noDmg|No-damage bonus
+comboBonus|Combo bonus
+total|Total
+tapSkip|Tap to skip

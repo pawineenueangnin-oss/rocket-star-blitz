@@ -129,3 +129,18 @@ h2.big.red{filter:drop-shadow(0 0 .3em rgba(255,40,90,.6))}
 .chip{color:#f0eaff}
 select{color:#fff}
 .studio{opacity:1}
+/* v8 stage-clear tally */
+.tally{width:min(21em,88%);background:linear-gradient(160deg,rgba(60,40,140,.66),rgba(16,8,46,.86));border:1px solid rgba(255,210,100,.4);border-radius:.9em;padding:.7em 1.1em;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 .4em 1.2em rgba(0,0,0,.45);display:flex;flex-direction:column;gap:.15em}
+.tally .tr{display:flex;justify-content:space-between;align-items:center;gap:1em;padding:.28em 0;opacity:0;transform:translateX(-1.2em) scale(.9);transition:opacity .2s,transform .28s cubic-bezier(.2,1.6,.4,1)}
+.tally .tr.in{opacity:1;transform:none}
+.tally .tr span{color:#cfc6ff;font-weight:700;font-size:.92em}
+.tally .tr b{direction:ltr;unicode-bidi:isolate;font-family:PS2P,monospace;font-size:.82em;color:#fff;min-width:5em;text-align:right;text-shadow:0 0 .4em rgba(120,220,255,.6)}
+.tally .tr.done b{animation:v8pop .32s cubic-bezier(.2,1.8,.4,1)}
+.tally .tr.crr b{color:#ffd860}
+.tally .tl{display:block;height:2px;margin:.3em 0;background:linear-gradient(90deg,transparent,rgba(255,215,100,.8),transparent)}
+.tally .tr.tot span{color:#ffe14a;font-size:1.05em}.tally .tr.tot b{font-size:1.15em;color:#ffe14a;text-shadow:0 0 .5em #ffb030,0 .08em 0 #8a4a00}
+.hid{visibility:hidden}.after.hid{opacity:0;pointer-events:none}.after{display:flex;flex-direction:column;align-items:center;gap:.5em;transition:opacity .35s;width:100%}
+.stars.hid{visibility:hidden}.stars{margin:.25em 0 0}
+.tsk{color:rgba(255,255,255,.6);font-size:.8em;animation:v8bl 1.2s ease-in-out infinite}.tsk.hid{display:none}
+@keyframes v8pop{0%{transform:scale(1.6);color:#fff}100%{transform:scale(1)}}
+@keyframes v8bl{50%{opacity:.35}}
