@@ -27,13 +27,13 @@ const UI={cur:null,
   const eo=SAVE.cleared||DEBUG;
   h+=`<button class="snode end ${eo?'':'lock'}" data-a="endless" ${eo?'':'disabled'}><span class="portal"><i></i><i></i><i></i></span><span class="num">${eo?'∞':'🔒'}</span><span class="lbl"><span class="nm">${T('endless')}</span><span class="st2">${SAVE.cleared?T('best')+' '+SAVE.endBest:''}</span></span></button></div>`;
   this.show(h,'map');SAVE.mapSeen=SAVE.reached;persist();this.mapLayout(cur);},
- mapLayout(cur){const pth=$('spath');if(!pth)return;const W=pth.clientWidth,step=Math.max(112,Math.min(150,innerHeight*.17)),top=200,H=top+10*step+70;pth.style.height=H+'px';
+ mapLayout(cur){const pth=$('spath');if(!pth)return;document.body.classList.toggle('lowq',QUAL===0);const W=pth.clientWidth,step=Math.max(112,Math.min(150,innerHeight*.17)),top=200,H=top+10*step+70;pth.style.height=H+'px';
   const X=[.3,.5,.7,.5],rtl=document.documentElement.dir==='rtl',pos=[];
   for(let i=1;i<=10;i++){let x=X[(i-1)%4];if(rtl)x=1-x;pos[i]={x:Math.round(W*.5+(x-.5)*Math.min(W,520)),y:top+(10-i)*step+step*.5};}
   pos[11]={x:Math.round(W/2),y:72};
   const ns=pth.querySelectorAll('.snode');ns.forEach((n,k)=>{const p=pos[k+1];n.style.left=p.x+'px';n.style.top=p.y+'px';});
   let s='';for(let i=1;i<=10;i++){const a=pos[i],b=pos[i+1],lit=i<SAVE.reached||(i===10&&SAVE.cleared),my=(a.y+b.y)/2,d=`M${a.x},${a.y} C${a.x},${my} ${b.x},${my} ${b.x},${b.y}`;
-   s+=`<path d="${d}" class="pg ${lit?'lit':''}" style="--hu:${MHUE[i-1]}"/><path d="${d}" class="pd ${lit?'lit':''}"/>`;}
+   s+=`${lit?`<path d="${d}" class="pgw" style="--hu:${MHUE[i-1]}"/>`:''}<path d="${d}" class="pg ${lit?'lit':''}" style="--hu:${MHUE[i-1]}"/><path d="${d}" class="pd ${lit?'lit':''}"/>`;}
   const sv=$('spl');sv.setAttribute('width',W);sv.setAttribute('height',H);sv.innerHTML=s;
   const sc=this.el();requestAnimationFrame(()=>{const p=pos[cur];sc.scrollTop=Math.max(0,pth.offsetTop+p.y-sc.clientHeight*.55);});},
  hangar(){G.mode='menu';this.hud(false);Ads.banner(true);const costs=[0,800,2000],req=[0,3,6];

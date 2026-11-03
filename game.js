@@ -286,7 +286,8 @@ function perf(ms){PERF.ft.push(ms);if(PERF.ft.length>240)PERF.ft.shift();if(SAVE
 let last=performance.now();
 function frame(now){const raw=now-last;last=now;const dt=Math.min(.05,raw/1000);
  if(G.mode==='warp')WARP.update(dt);
- if(!DBG.fast){if(G.hs>0){G.hs-=dt;if(BGS.i>=0)render(0);}else{update(dt);if(BGS.i>=0)render(dt);}}AU.tick();perf(raw);requestAnimationFrame(frame);}
+ const opq=G.mode==='menu'&&(UI.cur==='map'||UI.cur==='hangar'||UI.cur==='settings')&&UI.el().style.display!=='none';
+ if(!DBG.fast&&!opq){if(G.hs>0){G.hs-=dt;if(BGS.i>=0)render(0);}else{update(dt);if(BGS.i>=0)render(dt);}}AU.tick();perf(raw);requestAnimationFrame(frame);}
 // ---------- debug hook (?debug=1) ----------
 const DBG={god:false,fast:false,auto:false,
  sim(sec,step){step=step||1/60;const n=Math.round(sec/step);for(let i=0;i<n;i++){if(this.auto)this.pilot(step);update(step);if(G.mode!=='play'&&G.mode!=='clear')break;}return this.state();},

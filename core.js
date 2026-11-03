@@ -132,8 +132,8 @@ const AU={ac:null,on:false,voices:0,maxVoices:40,next:0,step:0,song:null,songId:
   const bpm=menu?112:boss?168:136+((id*7)%5)*6;const lead=[];for(let b=0;b<4;b++){const bar=[];for(let s=0;s<16;s++){const on=s%4===0?R()<.85:s%2===0?R()<.55:R()<.25;bar.push(on?(pr[b]+[0,2,4,7][Math.floor(R()*4)]):null);}lead.push(bar);}
   return{root,sc,pr,bpm,lead,boss,menu,arp:R()<.5,dens:boss?1:menu?.4:.75};},
  play(id){if(this.songId===id)return;this.songId=id;this.song=id<0?null:this.makeSong(id);this.step=0;if(this.ac)this.next=this.ac.currentTime+.08;},
- tick(){const ac=this.ac;if(!ac||!this.song||ac.state!=='running'||!SAVE.mus)return;const S=this.song,spb=60/S.bpm/4;if(this.next<ac.currentTime-.2)this.next=ac.currentTime+.05;
-  while(this.next<ac.currentTime+.12){this.note(S,this.step,this.next,spb,this.mg);this.next+=spb;this.step++;}},
+ tick(){const ac=this.ac;if(!ac||!this.song||ac.state!=='running'||!SAVE.mus)return;const S=this.song,spb=60/S.bpm/4;if(this.next<ac.currentTime-.25)this.next=ac.currentTime+.05;
+  while(this.next<ac.currentTime+.4){this.note(S,this.step,this.next,spb,this.mg);this.next+=spb;this.step++;}},
  nf(S,deg,oct){const d=((deg%7)+7)%7,o=Math.floor(deg/7);return 440*Math.pow(2,(S.root+S.sc[d]+12*(o+oct)-69)/12);},
  note(S,st,t,spb,D){const s=st%16,bar=Math.floor(st/16)%4,sec=Math.floor(st/64)%4,ch=S.pr[bar];
   // drums
@@ -150,3 +150,7 @@ const AU={ac:null,on:false,voices:0,maxVoices:40,next:0,step:0,song:null,songId:
   if(sec!==0||S.boss){const n=S.lead[bar][s];if(n!==null&&Math.random()<S.dens+.25){this.tone(D,'square',this.nf(S,n,1),t,.008,spb*1.1,.06,.06,0,3200);this.tone(D,'sawtooth',this.nf(S,n,1)*1.005,t,.008,spb*1.1,.06,.025,0,1800);}}},
 };
 function vib(ms){try{SAVE.vib&&navigator.vibrate&&navigator.vibrate(ms);}catch(e){}}
+
+// v11: music scheduler driven by a Worker timer (keeps ticking when rAF is starved by scrolling/jank)
+(function(){let w=null;try{const src='setInterval(()=>postMessage(0),40)';w=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));w.onmessage=()=>{try{AU.tick();}catch(e){}};w.onerror=()=>{setInterval(()=>{try{AU.tick();}catch(e){}},50);};}catch(e){w=null;}
+ if(!w)setInterval(()=>{try{AU.tick();}catch(e){}},50);})();
