@@ -67,10 +67,10 @@ const UI={cur:null,
   const sc=`<div class="res"><div class="rs">${T('score')} <b>${G.score}</b></div><div class="rs">${T('credits')} <b>◆ ${G.credits}</b></div><div class="rs">${T('best')} <b>${G.endless?SAVE.endBest:SAVE.best[s-1]||0}</b></div></div>`;
   if(win){FX.fw=4;const L=G.tally||{base:G.score,kb:0,cr:G.credits,bk:'comboBonus',bv:0,tot:G.score};const inst=!!this.tallyDone;
    const row=(lab,v,pre,cls)=>`<div class="tr ${cls||''} ${inst?'in done':''}" data-v="${v}" data-p="${pre||''}"><span>${lab}</span><b>${inst?(pre||'')+v:''}</b></div>`;
-   this.show(`<div class="burst"></div><h2 class="big gold">${T('clear')}</h2><div class="tally">${row(T('score'),L.base)}${row(T('killBonus'),L.kb,'+')}${row(T('credits'),L.cr,'◆ ','crr')}${row(T(L.bk),L.bv,'+')}<i class="tl"></i>${row(T('total'),L.tot,'','tot')}</div>
-   <div class="stars ${inst?'':'hid'}">${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div>${o.sb||G.starBonus?`<div class="sbn ${inst?'':'hid'}">${T('starBonus')} <b>+◆ ${o.sb||G.starBonus}</b></div>`:''}<div class="nb ${o.nb&&inst?'':'hid'}">${T('newBest')}</div>
+   this.show(`<div class="burst"></div><h2 class="big gold">${T(G.endless?'sectorClear':'clear')}</h2><div class="tally">${row(T('score'),L.base)}${row(T('killBonus'),L.kb,'+')}${row(T('credits'),L.cr,'◆ ','crr')}${row(T(L.bk),L.bv,'+')}<i class="tl"></i>${row(T('total'),L.tot,'','tot')}</div>
+   <div class="stars ${inst?'':'hid'}"${G.endless?' style="display:none"':''}>${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div>${o.sb||G.starBonus?`<div class="sbn ${inst?'':'hid'}">${T('starBonus')} <b>+◆ ${o.sb||G.starBonus}</b></div>`:''}<div class="nb ${o.nb&&inst?'':'hid'}">${T('newBest')}</div>
    <div class="tsk ${inst?'hid':''}">${T('tapSkip')}</div><div class="after ${inst?'':'hid'}">${canR&&G.credits>0?`<button class="b pink" data-a="dbl">▶ ${T('double')}</button>`:''}
-   <button class="b big" data-a="next">${s>=10?T('victory'):T('next')} ▶</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div></div>`,'result');
+   <button class="b big" data-a="next">${s>=10&&!G.endless?T('victory'):T('next')} ▶</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div></div>`,'result');
    if(!inst)this.countUp(o);}
   else this.show(`<h2 class="big red">${T('gameover')}</h2>${sc}${!G.contUsed&&canR?`<button class="b pink" data-a="cont">▶ ${T('revive')}</button>`:''}
    <button class="b big" data-a="retry">${T('retry')}</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div>`,'result');
@@ -109,9 +109,9 @@ const UI={cur:null,
    case'missions':this.missions();break;
    case'login':{const v=DAILY.claimLogin();if(v)this.reward(v);this.missions();break;}
    case'mclaim':{const v=DAILY.claim(i);if(v)this.reward(v);this.missions();break;}
-      case'next':if(G.stage>=10){this.menu();toast(T('victory'));}else{const n=G.stage+1;b.disabled=true;Ads.interThen(G.stage,()=>this.warpTo(n));}break;
+      case'next':if(G.endless){b.disabled=true;Ads.interThen(G.sector,()=>this.endlessNext());}else if(G.stage>=10){this.menu();toast(T('victory'));}else{const n=G.stage+1;b.disabled=true;Ads.interThen(G.stage,()=>this.warpTo(n));}break;
    case'retry':G.sector=0;startStage(G.endless?0:G.stage,G.endless);break;
-   case'dbl':b.disabled=true;Ads.rewarded().then(ok=>{if(ok){SAVE.cr+=G.credits;G.credits*=2;persist();AU.sfx('coin');toast('◆ x2');}else toast(T('noVideo'));this.result(true,{stars:SAVE.stars[G.stage-1]||1});});break;
+   case'dbl':b.disabled=true;Ads.rewarded().then(ok=>{if(ok){SAVE.cr+=G.credits;G.credits*=2;persist();AU.sfx('coin');toast('◆ x2');}else toast(T('noVideo'));this.result(true,{stars:G.endless?0:SAVE.stars[G.stage-1]||1});});break;
    case'cont':b.disabled=true;Ads.rewarded().then(ok=>{if(ok)revive();else{toast(T('noVideo'));b.disabled=false;}});break;}}};
 // Back button (Android bridge calls window.onAndroidBack(); browsers: history trap + Escape). Returns true when handled.
 UI.back=function(){const m=G.mode,c=this.cur;if(document.querySelector('.adMock.adI'))return true;

@@ -7,7 +7,8 @@ const WARP={on:null,st:[],D:5.9,
   clearAll();P.alive=true;P.inv=0;P.evoT=0;UI.hideAll();UI.hud(false);Ads.banner(false);AU.play(-1);
   const m=QUAL>1?150:QUAL?110:70;this.st.length=0;for(let i=0;i<m;i++)this.st.push(this.mk(true));AU.sfx('warp');},
  mk(any){return{a:Math.random()*TAU,d:any?Math.random()*GH*.8:rnd(4,40),z:rnd(.6,1.4),c:(Math.random()*3)|0};},
- skip(){const o=this.on;if(!o||o.t<.35)return;this.finish();},
+ // v23: a tap only skips after the jump (2.8 s); before, a stray touch from steering (endless starts the warp mid-play) wiped the whole warp.
+ skip(){const o=this.on;if(!o||o.t<2.8)return;this.finish();},
  finish(){const o=this.on;if(!o)return;this.on=null;o.then();G.noIntro=true;G.flash=Math.max(G.flash,.25);},
  // speed profile: 0..1 = cruising stars, large = hyperspace
  spd(t){if(t<1)return .25+t*.5;if(t<2.75){const k=(t-1)/1.75;return .75+k*k*k*14;}if(t<5.2){const k=(t-2.75)/2.45;return .3+14.75*Math.pow(1-k,3);}return .3;},

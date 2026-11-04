@@ -218,7 +218,10 @@ function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector
 // stars: 3 = no life lost, 2 = one life lost, 1 = cleared; each newly earned star pays STAR_BONUS coins once
 const STAR_BONUS=20;
 function stageClear(){G.mode='clear';G.clearT=0;AU.play(-1);AU.sfx('clear');const s=G.stage;DAILY.track('stage');if(G.deaths===0)DAILY.track('nodmg');
- if(G.endless){G.sector++;SAVE.endBest=Math.max(SAVE.endBest,G.sector);SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();setTimeout(()=>UI.endlessNext(),1800);return;}
+ if(G.endless){G.sector++;SAVE.endBest=Math.max(SAVE.endBest,G.sector);SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();
+  // v23: endless shows a short sector-clear panel (banner + double-coins rewarded), then Next -> interstitial (sector>=3, 90 s gap) -> warp
+  {const base=G.score,kb=G.kills*25;G.score=base+kb;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();G.tally={base,kb,cr:G.credits,bk:'comboBonus',bv:0,tot:G.score};UI.tallyDone=false;}
+  setTimeout(()=>UI.result(true,{stars:0,nb:false,sb:0}),1800);return;}
  {const base=G.score,kb=G.kills*25,nd=G.deaths===0,bv=nd?3000+s*1000:Math.min(20000,(G.maxCombo||0)*60);G.score=base+kb+bv;G.tally={base,kb,cr:G.credits,bk:nd?'noDmg':'comboBonus',bv,tot:G.score};UI.tallyDone=false;}
  const stars=G.deaths===0?3:G.deaths===1?2:1,os=SAVE.stars[s-1]||0;G.newStars=Math.max(0,stars-os);G.starBonus=G.newStars*STAR_BONUS;SAVE.cr+=G.starBonus;SAVE.stars[s-1]=Math.max(os,stars);const nb=G.score>(SAVE.best[s-1]||0);if(nb)SAVE.best[s-1]=G.score;if(G.score>SAVE.hi)SAVE.hi=G.score;
  SAVE.reached=Math.max(SAVE.reached,Math.min(10,s+1));if(s===10)SAVE.cleared=1;SAVE.cr+=G.credits;persist();
