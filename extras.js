@@ -60,7 +60,6 @@ const _ke18=killE;killE=function(e){_ke18(e);if(e.type==='gold'){for(let i=0;i<1
 // ---------- helper drones ----------
 PU_COL.D='#ff7ad8';const DR=[{x:0,y:0,cd:0},{x:0,y:0,cd:.15}];const DRONE={dur:15,dmg:.5,iv:.3};
 function droneMax(){return DRONE.dur*UPF.pwr();}
-const _pp18=pickPU;pickPU=function(){return Math.random()<.07?'D':_pp18();};
 const _pk18=pickup;pickup=function(k,x,y){if(k!=='D')return _pk18(k,x,y);AU.sfx('power');DAILY.track('pu');FX.pickup(k,x,y);if(!(P.droneT>0))DR.forEach((d,i)=>{d.x=P.x+(i?16:-16);d.y=P.y+8;d.cd=i*.15;});
  P.droneT=droneMax();text(x,y-16,T('pDrone'),PU_COL.D);G.score+=500;};
 function droneSpr(){return mk(22,22,g=>{g.save();g.shadowColor='#ff7ad8';g.shadowBlur=5;g.fillStyle=GL(g,0,-2,0,6,[[0,'#ff9ae0'],[1,'#8a1a6a']]);

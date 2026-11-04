@@ -120,3 +120,4 @@ evSupply|Supply drop!
 pDrone|DRONES!
 helper|Helper
 helperD|+1 shield and slower enemy shots
+levelUp|LEVEL UP!
