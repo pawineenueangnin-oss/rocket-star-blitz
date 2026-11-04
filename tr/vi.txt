@@ -99,3 +99,24 @@ Nhặt {n} vật phẩm tăng sức
 Vượt {n} màn
 Hạ một trùm
 Vượt màn mà không mất mạng
+Màu sơn
+Lửa động cơ
+Cổ điển
+Đại dương
+Kẹo ngọt
+Rừng xanh
+Vàng
+Ba chiều
+Lửa
+Băng
+Thiên hà
+Chanh
+Cầu vồng
+{n} ★
+Sao mới!
+Mưa xu!
+Người ngoài hành tinh vàng! Bắn đi!
+Tiếp tế rơi xuống!
+DRONE!
+Trợ thủ
++1 khiên và đạn địch chậm hơn

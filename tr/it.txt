@@ -99,3 +99,24 @@ Raccogli {n} potenziamenti
 Supera {n} livello/i
 Sconfiggi un boss
 Supera un livello senza perdere vite
+Vernice
+Fiamma del motore
+Classico
+Oceano
+Caramella
+Giungla
+Oro
+Ologramma
+Fuoco
+Ghiaccio
+Galassia
+Lime
+Arcobaleno
+{n} ★
+Nuove stelle!
+Pioggia di monete!
+Alieno d'oro! Colpiscilo!
+Rifornimenti!
+DRONI!
+Aiutante
++1 scudo e colpi nemici più lenti

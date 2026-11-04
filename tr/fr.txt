@@ -99,3 +99,24 @@ Ramasse {n} bonus
 Termine {n} niveau(x)
 Bats un boss
 Termine un niveau sans perdre de vie
+Peinture
+Flamme du moteur
+Classique
+Océan
+Bonbon
+Jungle
+Or
+Hologramme
+Feu
+Glace
+Galaxie
+Citron vert
+Arc-en-ciel
+{n} ★
+Nouvelles étoiles !
+Pluie de pièces !
+Alien doré ! Tire dessus !
+Ravitaillement !
+DRONES !
+Assistant
++1 bouclier et tirs ennemis plus lents

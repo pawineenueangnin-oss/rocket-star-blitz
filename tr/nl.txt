@@ -99,3 +99,24 @@ Verzamel {n} power-ups
 Haal {n} level(s)
 Versla een baas
 Haal een level zonder een leven te verliezen
+Verf
+Motorvlam
+Klassiek
+Oceaan
+Snoep
+Jungle
+Goud
+Hologram
+Vuur
+IJs
+Melkweg
+Limoen
+Regenboog
+{n} ★
+Nieuwe sterren!
+Muntenregen!
+Gouden alien! Schiet hem!
+Voorraad valt!
+DRONES!
+Helper
++1 schild en tragere vijandelijke kogels

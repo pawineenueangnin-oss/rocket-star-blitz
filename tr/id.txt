@@ -99,3 +99,24 @@ Kumpulkan {n} power-up
 Selesaikan {n} level
 Kalahkan satu bos
 Selesaikan level tanpa kehilangan nyawa
+Cat
+Api mesin
+Klasik
+Samudra
+Permen
+Hutan
+Emas
+Hologram
+Api
+Es
+Galaksi
+Jeruk nipis
+Pelangi
+{n} ★
+Bintang baru!
+Hujan koin!
+Alien emas! Tembak!
+Kiriman bantuan!
+DRONE!
+Penolong
++1 perisai dan peluru musuh lebih lambat

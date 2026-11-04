@@ -58,7 +58,7 @@ function updE(e,dt){e.t+=dt;if(e.fl>0)e.fl-=dt;const t=e.t,f=sf();
   case'mine':e.y+=40*dt;e.x+=Math.sin(t*2)*15*dt;if(t>6.5){mineBurst(e,1);e.a=false;return;}break;
   default:e.x+=e.vx*dt;e.y+=e.vy*dt;e.rot+=e.vr*dt;}
  // firing
- if(e.y>20&&e.y<GH*.7&&!e.type.startsWith('rock')&&e.type!=='kami'&&e.type!=='mine'){e.fcd-=dt;if(e.fcd<=0){const fr=G.dm.fire*(.6+f*.4);
+ if(e.y>20&&e.y<GH*.7&&!e.type.startsWith('rock')&&e.type!=='kami'&&e.type!=='mine'&&e.type!=='gold'){e.fcd-=dt;if(e.fcd<=0){const fr=G.dm.fire*(.6+f*.4);
   switch(e.type){
    case'saucer':{const a=aim(e);const n=G.stage>=5||G.endless?5:3;for(let i=0;i<n;i++)eShoot(e,a+(i-(n-1)/2)*.2,150,ART.spr.eb2);e.fcd=1.3/fr;break;}
    case'shield':{for(let i=-1;i<=1;i++)eShoot(e,Math.PI/2+i*.35,120,ART.spr.eb3,4);e.fcd=1.5/fr;break;}
@@ -201,16 +201,18 @@ function pickup(k,x,y){AU.sfx(k==='C'?'coin':'power');
  G.score+=500;}
 // ---------- stage flow ----------
 function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector=endless?(G.sector||0):0;G.dm=mkDM();
- clearAll();RINGS.length=0;LATER.length=0;G.t=0;G.boss=null;G.warnT=0;G.deaths=0;G.combo=0;G.contUsed=false;G.clearT=0;G.pity=0;G.kills=0;G.maxCombo=0;G.noIntro=false;G.credits=0;G.bg=endless?G.sector%10:n-1;
+ clearAll();RINGS.length=0;LATER.length=0;G.t=0;G.boss=null;G.warnT=0;G.deaths=0;G.combo=0;G.contUsed=false;G.clearT=0;G.pity=0;G.kills=0;G.maxCombo=0;G.noIntro=false;G.credits=0;G.starBonus=0;G.newStars=0;G.bg=endless?G.sector%10:n-1;
  if(!endless||G.sector===0){G.score=0;P.ship=SAVE.ship;P.lives=G.dm.lives-1+SHIPS[P.ship].hp+(early()?1:0)+UPF.life();P.wt='B';P.wl=1;P.bombs=early()&&G.stage<=2?3:2;P.spd=0;}setTier();P.evoT=0;P.magT=0;P.x2T=0;P.downT=0;
  P.shield=UPF.shd()+(P.ship===2?1:0);P.x=P.tx=GW/2;P.y=P.ty=GH-110;P.inv=early()?3:2;P.alive=true;P.bombT=0;
  Ads.stageRewards=0;buildStage();if(early()&&G.stage<=2){later(8,()=>drop(GW*.5,30,'W'));later(30,()=>drop(rnd(90,GW-90),30,G.stage===1?'S':'L'));later(52,()=>drop(rnd(90,GW-90),30,'P'));}setBG(G.bg);G.mode='play';AU.play(G.endless?1+(G.sector%10):G.stage);UI.hud(true);LOG('stage',G.stage,'endless',G.endless,G.sector);}
+// stars: 3 = no life lost, 2 = one life lost, 1 = cleared; each newly earned star pays STAR_BONUS coins once
+const STAR_BONUS=20;
 function stageClear(){G.mode='clear';G.clearT=0;AU.play(-1);AU.sfx('clear');const s=G.stage;DAILY.track('stage');if(G.deaths===0)DAILY.track('nodmg');
  if(G.endless){G.sector++;SAVE.endBest=Math.max(SAVE.endBest,G.sector);SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();setTimeout(()=>UI.endlessNext(),1800);return;}
  {const base=G.score,kb=G.kills*25,nd=G.deaths===0,bv=nd?3000+s*1000:Math.min(20000,(G.maxCombo||0)*60);G.score=base+kb+bv;G.tally={base,kb,cr:G.credits,bk:nd?'noDmg':'comboBonus',bv,tot:G.score};UI.tallyDone=false;}
- const stars=G.deaths===0?3:G.deaths===1?2:1;SAVE.stars[s-1]=Math.max(SAVE.stars[s-1]||0,stars);const nb=G.score>(SAVE.best[s-1]||0);if(nb)SAVE.best[s-1]=G.score;if(G.score>SAVE.hi)SAVE.hi=G.score;
+ const stars=G.deaths===0?3:G.deaths===1?2:1,os=SAVE.stars[s-1]||0;G.newStars=Math.max(0,stars-os);G.starBonus=G.newStars*STAR_BONUS;SAVE.cr+=G.starBonus;SAVE.stars[s-1]=Math.max(os,stars);const nb=G.score>(SAVE.best[s-1]||0);if(nb)SAVE.best[s-1]=G.score;if(G.score>SAVE.hi)SAVE.hi=G.score;
  SAVE.reached=Math.max(SAVE.reached,Math.min(10,s+1));if(s===10)SAVE.cleared=1;SAVE.cr+=G.credits;persist();
- setTimeout(()=>UI.result(true,{stars,nb}),1800);}
+ setTimeout(()=>UI.result(true,{stars,nb,sb:G.starBonus}),1800);}
 function gameOver(){if(G.mode!=='play')return;G.mode='over';AU.play(-1);AU.sfx('over');SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;if(G.endless)SAVE.endBest=Math.max(SAVE.endBest,G.sector);persist();UI.result(false,{});}
 function revive(){G.mode='play';P.alive=true;P.lives=1;P.inv=3;P.shield=Math.max(P.shield,1);P.bombs=Math.max(P.bombs,2);P.x=P.tx=GW/2;P.y=P.ty=GH-110;EB.forEach(b=>b.a=false);G.contUsed=true;SAVE.cr-=G.credits;G.credits=0;AU.play(G.boss?100+G.boss.i:G.endless?1+G.sector%10:G.stage);UI.hud(true);}
 // ---------- update ----------
@@ -227,7 +229,7 @@ function update(dt){if(G.mode!=='play'&&G.mode!=='clear'&&G.mode!=='over'&&G.mod
   P.tx=clamp(P.tx,14,GW-14);P.ty=clamp(P.ty,60+SAFE_T,GH-24-SAFE_B);const dx=P.tx-P.x,dy=P.ty-P.y,d=Math.hypot(dx,dy),mx=(560+P.spd*130)*dt;
   if(d>mx){P.x+=dx/d*mx;P.y+=dy/d*mx;}else{P.x=P.tx;P.y=P.ty;}P.bank+=((clamp(dx*.08,-1,1))-P.bank)*Math.min(1,dt*10);
   if(P.inv>0)P.inv-=dt;if(P.bombT>0)P.bombT-=dt;if(P.evoT>0)P.evoT-=dt;if(P.downT>0)P.downT-=dt;if(P.magT>0)P.magT-=dt;if(P.x2T>0)P.x2T-=dt;fire(dt);if(P.laser)laserDmg(dt);
-  if(QUAL>0&&Math.random()<.8){const tr=tierOf(),gc=ART.glow[['b','c','g','y','w'][tr]],ey=P.y+18+tr*1.5;part(P.x-5+rnd(-1,1),ey,rnd(-10,10),rnd(120,200),.22,3+tr*.3,gc);part(P.x+5+rnd(-1,1),ey,rnd(-10,10),rnd(120,200),.22,3+tr*.3,ART.glow.c);}}
+  if(QUAL>0&&Math.random()<.8){const tr=tierOf(),gc=flameGlow(tr,0),ey=P.y+18+tr*1.5;part(P.x-5+rnd(-1,1),ey,rnd(-10,10),rnd(120,200),.22,3+tr*.3,gc);part(P.x+5+rnd(-1,1),ey,rnd(-10,10),rnd(120,200),.22,3+tr*.3,flameGlow(tr,1));}}
  // player bullets
  for(const b of PB){if(!b.a)continue;b.t+=dt;
   if(b.hom){let best=null,bd=1e9;EN.forEach(e=>{if(e.a&&e.y>0){const dd=(e.x-b.x)**2+(e.y-b.y)**2;if(dd<bd){bd=dd;best=e;}}});let tx,ty;if(best){tx=best.x;ty=best.y;}else if(G.boss&&G.boss.t>3){tx=G.boss.x;ty=G.boss.y+G.boss.coreOy;}
@@ -237,11 +239,11 @@ function update(dt){if(G.mode!=='play'&&G.mode!=='clear'&&G.mode!=='over'&&G.mod
   for(const e of EN){if(!e.a)continue;const dx=e.x-b.x,dy=e.y-b.y,r=e.r+3;if(dx*dx+dy*dy<r*r){const hit=hitE(e,b.dmg);if(!hit){b.vy=-b.vy*.5;b.vx=rnd(-150,150);b.dmg=0;b.hom=0;}spark(b.x,b.y,'c');if(b.pierce>0&&hit){b.pierce--;b.dmg*=.7;}else{b.a=false;}break;}}
   if(b.a&&b.dmg>0&&G.boss&&bossHit(G.boss,b.x,b.y,b.dmg)){b.a=false;part(b.x,b.y,rnd(-60,60),rnd(10,60),.2,2.5,ART.glow.y);}}
  // enemies
- for(const e of EN){if(!e.a)continue;updE(e,dt);if(e.a&&P.alive&&G.mode==='play'){const dx=e.x-P.x,dy=e.y-P.y,r=e.r*.8+P.hitR;if(dx*dx+dy*dy<r*r){hurt();if(!e.type.startsWith('rock')||e.si>0)hitE(e,8,true);}}}
+ for(const e of EN){if(!e.a)continue;updE(e,dt);if(e.a&&P.alive&&G.mode==='play'&&e.type!=='gold'){const dx=e.x-P.x,dy=e.y-P.y,r=e.r*.8+P.hitR;if(dx*dx+dy*dy<r*r){hurt();if(!e.type.startsWith('rock')||e.si>0)hitE(e,8,true);}}}
  if(G.boss){bossUpd(G.boss,dt);const B=G.boss;if(B&&!B.dead&&P.alive){const ex=(P.x-B.x)/(B.w*.42),ey=(P.y-B.y)/(B.h*.38);if(ex*ex+ey*ey<1)hurt();
    if(B.beam&&B.beam.t>1.6&&B.beam.t<2.8&&Math.abs(P.x-B.beam.x)<10&&P.y>B.y)hurt();}}
  // enemy bullets
- const hr=P.hitR;for(const b of EB){if(!b.a)continue;b.t+=dt;b.vx+=b.ax*dt;b.vy+=b.ay*dt;b.x+=b.vx*dt;b.y+=b.vy*dt;
+ const hr=P.hitR,ek=SAVE.helper?dt*.85:dt;for(const b of EB){if(!b.a)continue;b.t+=dt;b.vx+=b.ax*dt;b.vy+=b.ay*dt;b.x+=b.vx*ek;b.y+=b.vy*ek;
   if(b.y<-30||b.y>GH+30||b.x<-30||b.x>GW+30){b.a=false;continue;}
   if(P.alive&&G.mode==='play'){const dx=b.x-P.x,dy=b.y-P.y,r=b.r*.7+hr;if(dx*dx+dy*dy<r*r){b.a=false;hurt();}}}
  // hazards
@@ -258,7 +260,7 @@ function update(dt){if(G.mode!=='play'&&G.mode!=='clear'&&G.mode!=='over'&&G.mod
  if(G.mode==='clear'){G.clearT+=dt;P.ty-=dt*(G.clearT>1?400:0);P.y+=(P.ty-P.y)*dt*3;}}
 // ---------- menu attract ----------
 const MENU={t:0};function menuUpd(dt){MENU.t+=dt;P.x=GW/2+Math.sin(MENU.t*.7)*40;P.y=GH*.62+Math.sin(MENU.t*1.3)*10;P.bank=Math.cos(MENU.t*.7)*.5;
- if(QUAL>0){part(P.x-5,P.y+18,rnd(-10,10),rnd(120,200),.25,3,ART.glow.b);part(P.x+5,P.y+18,rnd(-10,10),rnd(120,200),.25,3,ART.glow.c);}
+ if(QUAL>0){part(P.x-5,P.y+18,rnd(-10,10),rnd(120,200),.25,3,flameGlow(0,0));part(P.x+5,P.y+18,rnd(-10,10),rnd(120,200),.25,3,flameGlow(0,1));}
  for(const p of PT){if(!p.a)continue;p.l-=dt;if(p.l<=0){p.a=false;continue;}p.x+=p.vx*dt;p.y+=p.vy*dt;}}
 // background (BGS, setBG, drawBG) lives in gfx.js
 function spr(s,x,y,sc,rot){const w=s.w*(sc||1),h=s.h*(sc||1);if(rot){cx.save();cx.translate(x,y);cx.rotate(rot);cx.drawImage(s.c,-w/2,-h/2,w,h);cx.restore();}else cx.drawImage(s.c,x-w/2,y-h/2,w,h);}

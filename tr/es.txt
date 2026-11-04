@@ -99,3 +99,24 @@ Junta {n} poderes
 Supera {n} nivel(es)
 Derrota a un jefe
 Supera un nivel sin perder vidas
+Pintura
+Llama del motor
+Clásico
+Océano
+Caramelo
+Jungla
+Oro
+Holograma
+Fuego
+Hielo
+Galaxia
+Lima
+Arcoíris
+{n} ★
+¡Estrellas nuevas!
+¡Lluvia de monedas!
+¡Alien dorado! ¡Dispárale!
+¡Suministros!
+¡DRONES!
+Ayudante
++1 escudo y disparos enemigos más lentos

@@ -99,3 +99,24 @@ Yarın yeni görevler
 {n} bölüm geç
 Bir boss yen
 Can kaybetmeden bölüm geç
+Boya
+Motor alevi
+Klasik
+Okyanus
+Şeker
+Orman
+Altın
+Hologram
+Ateş
+Buz
+Galaksi
+Limon
+Gökkuşağı
+{n} ★
+Yeni yıldızlar!
+Altın yağmuru!
+Altın uzaylı! Vur onu!
+Malzeme yağmuru!
+DRONLAR!
+Yardımcı
++1 kalkan ve daha yavaş düşman atışları

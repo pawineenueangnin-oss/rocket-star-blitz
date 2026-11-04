@@ -99,3 +99,24 @@ Mangolekta ng {n} power-up
 Tapusin ang {n} stage
 Talunin ang isang boss
 Tapusin ang stage nang walang nawalang buhay
+Pintura
+Apoy ng makina
+Klasiko
+Karagatan
+Kendi
+Gubat
+Ginto
+Hologram
+Apoy
+Yelo
+Galaksiya
+Dayap
+Bahaghari
+{n} ★
+Bagong bituin!
+Ulan ng barya!
+Gintong alien! Barilin mo!
+May padalang tulong!
+MGA DRONE!
+Katulong
++1 panangga at mas mabagal na bala ng kaaway

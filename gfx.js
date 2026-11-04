@@ -400,7 +400,7 @@ function render(dt){cx.globalAlpha=1;cx.globalCompositeOperation='source-over';c
  if(G.mode==='warp')WARP.draw(dt);
  else if(G.mode!=='menu')drawHUD();}
 function drawPlayer(){const S=ART.spr;if(!(P.alive&&(G.mode!=='over')&&(P.inv<=0||P.evoT>0||((G.t*14)|0)%2===0||G.mode==='menu')))return;
- const tr=G.mode==='menu'?0:tierOf(),s=S.shipT[P.ship][tr],tc=TIER_COL[tr];const menu=G.mode==='menu',hs=menu?1.45:1;const bank=clamp(P.bank||0,-1,1);
+ const tr=G.mode==='menu'?0:tierOf(),s=skinT(P.ship,tr),tc=TIER_COL[tr];const menu=G.mode==='menu',hs=menu?1.45:1;const bank=clamp(P.bank||0,-1,1);
  let pop=1;if(P.evoT>0){const k=P.evoT/.9;pop=1+Math.sin(k*Math.PI)*.25;}if(P.downT>0)pop*=1-P.downT*.15;
  cx.save();cx.translate(P.x,P.y);cx.scale(hs,hs);
  // soft drop shadow far below (depth)
@@ -408,7 +408,7 @@ function drawPlayer(){const S=ART.spr;if(!(P.alive&&(G.mode!=='over')&&(P.inv<=0
  // engine plumes
  cx.globalCompositeOperation='lighter';const sc=1+tr*.09,fl=.85+Math.random()*.25+(P.vy<-40?.25:0);const pl=S.plume[tr],pw=S.plumeW[P.ship];
  const nz=NOZ[P.ship].map(n=>[n[0]*sc,n[1]*sc]);if(tr>=1)nz.push([-13*sc,6],[13*sc,6]);if(tr>=3)nz.push([-21*sc,14],[21*sc,14]);
- cx.save();cx.rotate(bank*.18);for(const [x,y] of nz){const big=Math.abs(x)<10*sc;const L=(big?30:18)*fl*(1+tr*.06),W=big?11:7;cx.drawImage(pw.c,x-W/2,y-2,W,L);cx.drawImage(pl.c,x-W*.35,y-1,W*.7,L*.75);}
+ cx.save();cx.rotate(bank*.18);let ni=0;for(const [x,y] of nz){const big=Math.abs(x)<10*sc;const L=(big?30:18)*fl*(1+tr*.06),W=big?11:7;const [pl,pw]=flameSpr(tr,P.ship,ni++);cx.drawImage(pw.c,x-W/2,y-2,W,L);cx.drawImage(pl.c,x-W*.35,y-1,W*.7,L*.75);}
  if(tr>=3){const pr=.3+Math.sin(G.scroll*5)*.1;cx.globalAlpha=pr;cx.drawImage(S.puGlow[tr>=4?'M':'X'].c,-40,-40,80,80);cx.globalAlpha=1;}
  // muzzle flash
  if(P.mf>0&&G.mode==='play'){cx.globalAlpha=Math.min(1,P.mf*14);const z=14+Math.random()*6;cx.drawImage(ART.glow.c.c,-z/2,-24-z/2,z,z);cx.drawImage(ART.glow.w.c,-z/4,-24-z/4,z/2,z/2);cx.globalAlpha=1;}
@@ -468,12 +468,12 @@ function drawHUD(){const top=SAFE_T+6,S=ART.spr;cx.textBaseline='middle';
  else FX.hpLag=1;
  // bottom-left status panel
  const by=GH-SAFE_B-46;glass(6,by,132,40,10,'#7ae8ff');
- const nl=Math.min(P.lives,5);for(let i=0;i<nl;i++)spr(S.ship[P.ship],20+i*15,by+12,.27);cx.font='7px PS2P';cx.textAlign='left';if(P.lives>5)hs('x'+P.lives,92,by+12,'#fff');
+ const nl=Math.min(P.lives,5);for(let i=0;i<nl;i++)spr(skinB(P.ship),20+i*15,by+12,.27);cx.font='7px PS2P';cx.textAlign='left';if(P.lives>5)hs('x'+P.lives,92,by+12,'#fff');
  for(let i=0;i<P.shield;i++){cx.strokeStyle='#7ab8ff';cx.lineWidth=1.4;cx.beginPath();cx.arc(112+i*7-(P.shield-1)*3.5,by+12,3,0,TAU);cx.stroke();}
  const wc=P.wt==='B'?'#ffb35a':PU_COL[P.wt];spr(S.pu[P.wt==='B'?'W':P.wt],19,by+29,.36);const wn={B:'BLT',S:'SPR',L:'LSR',H:'MSL'}[P.wt];cx.font='6px PS2P';hs(wn+' '+(P.wl>=MAXWL?'MAX':'L'+P.wl),29,by+29,wc);
  for(let i=0;i<5;i++){const on=i<=tierOf();cx.fillStyle=on?TIER_COL[i]:'rgba(255,255,255,.14)';rrect(88+i*9,by+26,7,6,2);cx.fill();if(on&&i===tierOf()&&QUAL>0){cx.globalCompositeOperation='lighter';spr(ART.glow[['b','c','g','y','w'][i]],91.5+i*9,by+29,.35);cx.globalCompositeOperation='source-over';}}
  // timed power-up gauges
- let ix=GW-22;for(const [k,v] of [['M',P.magT],['X',P.x2T]]){if(v>0){gauge(ix,by-62,11,Math.min(1,v/(12*UPF.pwr())),PU_COL[k],k);ix-=30;}}
+ let ix=GW-22;for(const [k,v] of [['M',P.magT],['X',P.x2T],['D',P.droneT]]){if(v>0){gauge(ix,by-62,11,Math.min(1,v/((k==='D'?DRONE.dur:12)*UPF.pwr())),PU_COL[k],k);ix-=30;}}
  const bb=$('bombB');if(bb&&FX.lastBombs!==P.bombs){FX.lastBombs=P.bombs;bb.dataset.n=P.bombs;bb.classList.toggle('empty',P.bombs<=0);}
  // boss warning: hazard-striped banner
  if(G.warnT>0){const a=Math.abs(Math.sin(G.warnT*5)),y=GH*.38;cx.fillStyle='rgba(60,0,20,'+(.55*a+.2)+')';cx.fillRect(0,y,GW,72);

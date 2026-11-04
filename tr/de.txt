@@ -99,3 +99,24 @@ Sammle {n} Power-ups
 Schaffe {n} Level
 Besiege einen Boss
 Schaffe ein Level ohne Lebensverlust
+Lackierung
+Triebwerksflamme
+Klassik
+Ozean
+Bonbon
+Dschungel
+Gold
+Hologramm
+Feuer
+Eis
+Galaxie
+Limette
+Regenbogen
+{n} ★
+Neue Sterne!
+Münzregen!
+Goldener Alien! Schieß!
+Nachschub!
+DROHNEN!
+Helfer
++1 Schild und langsamere Gegnerschüsse

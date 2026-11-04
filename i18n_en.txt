@@ -99,3 +99,24 @@ m_pu|Collect {n} power-ups
 m_stage|Clear {n} stage(s)
 m_boss|Defeat a boss
 m_nodmg|Clear a stage without losing a life
+skins|Paint
+flames|Engine Flame
+sk1|Classic
+sk2|Ocean
+sk3|Candy
+sk4|Jungle
+sk5|Gold
+sk6|Hologram
+fl1|Fire
+fl2|Ice
+fl3|Galaxy
+fl4|Lime
+fl5|Rainbow
+needStars|{n} ★
+starBonus|New stars!
+evCoins|Coin shower!
+evGold|Golden alien! Shoot it!
+evSupply|Supply drop!
+pDrone|DRONES!
+helper|Helper
+helperD|+1 shield and slower enemy shots

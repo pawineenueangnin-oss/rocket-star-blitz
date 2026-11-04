@@ -99,3 +99,24 @@ Zbierz wzmocnienia: {n}
 Ukończ poziomy: {n}
 Pokonaj bossa
 Ukończ poziom bez utraty życia
+Malowanie
+Płomień silnika
+Klasyczny
+Ocean
+Cukierek
+Dżungla
+Złoty
+Hologram
+Ogień
+Lód
+Galaktyka
+Limonka
+Tęcza
+{n} ★
+Nowe gwiazdki!
+Deszcz monet!
+Złoty kosmita! Strzelaj!
+Zrzut zapasów!
+DRONY!
+Pomocnik
++1 tarcza i wolniejsze pociski wrogów

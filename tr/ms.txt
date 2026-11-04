@@ -99,3 +99,24 @@ Kumpul {n} kuasa
 Tamatkan {n} peringkat
 Kalahkan seekor bos
 Tamatkan peringkat tanpa hilang nyawa
+Cat
+Api enjin
+Klasik
+Lautan
+Gula-gula
+Hutan
+Emas
+Hologram
+Api
+Ais
+Galaksi
+Limau
+Pelangi
+{n} ★
+Bintang baharu!
+Hujan syiling!
+Makhluk asing emas! Tembak!
+Bekalan jatuh!
+DRON!
+Pembantu
++1 perisai dan peluru musuh lebih perlahan
