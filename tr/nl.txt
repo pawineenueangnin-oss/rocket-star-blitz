@@ -85,3 +85,17 @@ Geen-schade-bonus
 Combobonus
 Totaal
 Tik om over te slaan
+Power-up-duur
+Extra leven
+Missies
+Dagbeloning
+Dag {n}
+Ophalen
+Opgehaald
+Morgen nieuwe missies
+Versla {n} aliens
+Verzamel {n} munten
+Verzamel {n} power-ups
+Haal {n} level(s)
+Versla een baas
+Haal een level zonder een leven te verliezen

@@ -85,3 +85,17 @@ Bônus sem dano
 Bônus de combo
 Total
 Toque para pular
+Duração dos poderes
+Vida extra
+Missões
+Prêmio diário
+Dia {n}
+Pegar
+Pego
+Novas missões amanhã
+Derrote {n} alienígenas
+Junte {n} moedas
+Junte {n} poderes
+Passe {n} fase(s)
+Derrote um chefe
+Passe uma fase sem perder vida

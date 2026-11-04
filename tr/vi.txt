@@ -85,3 +85,17 @@ Thưởng không trúng đòn
 Thưởng combo
 Tổng
 Chạm để bỏ qua
+Thời gian tăng sức
+Thêm mạng
+Nhiệm vụ
+Quà hằng ngày
+Ngày {n}
+Nhận
+Đã nhận
+Nhiệm vụ mới vào ngày mai
+Hạ {n} người ngoài hành tinh
+Nhặt {n} xu
+Nhặt {n} vật phẩm tăng sức
+Vượt {n} màn
+Hạ một trùm
+Vượt màn mà không mất mạng

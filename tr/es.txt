@@ -85,3 +85,17 @@ Bono sin daño
 Bono de combo
 Total
 Toca para saltar
+Duración de poderes
+Vida extra
+Misiones
+Premio diario
+Día {n}
+Recoger
+Recogido
+Nuevas misiones mañana
+Derrota {n} alienígenas
+Junta {n} monedas
+Junta {n} poderes
+Supera {n} nivel(es)
+Derrota a un jefe
+Supera un nivel sin perder vidas

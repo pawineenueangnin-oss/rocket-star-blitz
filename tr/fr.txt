@@ -85,3 +85,17 @@ Bonus sans dégâts
 Bonus combo
 Total
 Touchez pour passer
+Durée des bonus
+Vie en plus
+Missions
+Cadeau du jour
+Jour {n}
+Récupérer
+Récupéré
+Nouvelles missions demain
+Bats {n} aliens
+Ramasse {n} pièces
+Ramasse {n} bonus
+Termine {n} niveau(x)
+Bats un boss
+Termine un niveau sans perdre de vie

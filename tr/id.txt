@@ -85,3 +85,17 @@ Bonus tanpa luka
 Bonus kombo
 Total
 Ketuk untuk lewati
+Durasi Power-up
+Nyawa Ekstra
+Misi
+Hadiah Harian
+Hari {n}
+Ambil
+Diambil
+Misi baru besok
+Kalahkan {n} alien
+Kumpulkan {n} koin
+Kumpulkan {n} power-up
+Selesaikan {n} level
+Kalahkan satu bos
+Selesaikan level tanpa kehilangan nyawa

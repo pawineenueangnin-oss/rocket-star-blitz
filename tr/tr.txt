@@ -85,3 +85,17 @@ Hasarsız bonus
 Kombo bonusu
 Toplam
 Geçmek için dokun
+Güç Süresi
+Ekstra Can
+Görevler
+Günlük Ödül
+{n}. Gün
+Al
+Alındı
+Yarın yeni görevler
+{n} uzaylı yen
+{n} jeton topla
+{n} güçlendirme topla
+{n} bölüm geç
+Bir boss yen
+Can kaybetmeden bölüm geç

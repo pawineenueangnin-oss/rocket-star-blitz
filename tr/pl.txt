@@ -85,3 +85,17 @@ Premia bez obrażeń
 Premia za combo
 Razem
 Dotknij, aby pominąć
+Czas wzmocnień
+Dodatkowe życie
+Misje
+Nagroda dnia
+Dzień {n}
+Odbierz
+Odebrano
+Nowe misje jutro
+Pokonaj kosmitów: {n}
+Zbierz monety: {n}
+Zbierz wzmocnienia: {n}
+Ukończ poziomy: {n}
+Pokonaj bossa
+Ukończ poziom bez utraty życia

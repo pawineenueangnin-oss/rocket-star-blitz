@@ -85,3 +85,17 @@ Kein-Schaden-Bonus
 Combo-Bonus
 Gesamt
 Tippen zum Überspringen
+Power-up-Dauer
+Extraleben
+Missionen
+Tagesbonus
+Tag {n}
+Abholen
+Abgeholt
+Neue Missionen morgen
+Besiege {n} Aliens
+Sammle {n} Münzen
+Sammle {n} Power-ups
+Schaffe {n} Level
+Besiege einen Boss
+Schaffe ein Level ohne Lebensverlust

@@ -47,8 +47,37 @@ try{window.AndroidAds&&AndroidAds.configure&&AndroidAds.configure(JSON.stringify
 const LOG=(...a)=>{try{console.log('[Starzoomer]',...a);}catch(e){}};
 // ---------- Save ----------
 const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem('rsb_save')||'{}');}catch(e){}
- const d={reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{rate:0,dmg:0,shd:0,mag:0},snd:1,mus:1,vib:1,shake:1,q:'auto',diff:1,endBest:0,cleared:0};
- for(const k in d)if(s[k]===undefined)s[k]=d[k];for(const k in d.upg)if(s.upg[k]===undefined)s.upg[k]=0;return s;})();
+ if(!s||typeof s!=='object'||Array.isArray(s))s={};
+ const d={v:2,reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{},snd:1,mus:1,vib:1,shake:1,q:'auto',diff:1,endBest:0,cleared:0,dly:null};
+ for(const k in d)if(s[k]===undefined)s[k]=d[k];
+ // v17 save v2: 6 upgrades x up to 5 levels; older saves (v1, 4 upgrades x 4 levels) keep their levels and coins
+ if(!s.upg||typeof s.upg!=='object')s.upg={};for(const k of['rate','dmg','shd','mag','life','pwr'])s.upg[k]=Math.max(0,Math.min(k==='life'?2:5,(s.upg[k]|0)));
+ s.cr=Math.max(0,+s.cr||0);
+ if(!s.dly||typeof s.dly!=='object')s.dly={d:0,hi:0,m:[],ld:0,ls:0};s.v=2;return s;})();
+// ---------- permanent upgrades (hangar shop). Small bonuses so auto-difficulty balance holds ----------
+const UPG=[
+ {k:'dmg',n:'damage',ic:'H',cost:[120,280,520,860,1300],fx:l=>'+'+l*6+'%'},
+ {k:'rate',n:'fireRate',ic:'S',cost:[120,280,520,860,1300],fx:l=>'+'+l*6+'%'},
+ {k:'shd',n:'shield',ic:'P',cost:[150,350,650,1000,1500],fx:l=>'+'+[0,1,1,2,2,3][l]},
+ {k:'mag',n:'magnet',ic:'M',cost:[100,220,420,700,1050],fx:l=>'+'+l*20+'%'},
+ {k:'pwr',n:'puTime',ic:'X',cost:[100,240,450,750,1100],fx:l=>'+'+l*8+'%'},
+ {k:'life',n:'lives',ic:'U',cost:[600,1500],fx:l=>'+'+l}];
+const UPF={dmg:()=>1+SAVE.upg.dmg*.06,rate:()=>1+SAVE.upg.rate*.06,shd:()=>[0,1,1,2,2,3][SAVE.upg.shd],mag:()=>1+SAVE.upg.mag*.2,pwr:()=>1+SAVE.upg.pwr*.08,life:()=>SAVE.upg.life};
+// ---------- daily missions + login streak (device local date; never goes backwards) ----------
+const DAILY={
+ POOL:[{id:'kill',n:[40,80,120],r:[40,70,100]},{id:'coin',n:[60,120],r:[40,70]},{id:'pu',n:[4,8],r:[40,70]},{id:'stage',n:[1,2],r:[50,90]},{id:'boss',n:[1],r:[90]},{id:'nodmg',n:[1],r:[100]}],
+ LOGIN:[20,30,40,50,60,80,120],
+ today(){const n=new Date();return Math.floor(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())/864e5);},
+ eff(){const D=SAVE.dly;return Math.max(this.today(),D.hi||0);},
+ roll(){const D=SAVE.dly,e=this.eff();if(e>D.hi)D.hi=e;
+  if(e!==D.d||!Array.isArray(D.m)||D.m.length!==3){let r=(e*2654435761)>>>0||7;const R=()=>{r=(r*1103515245+12345)>>>0;return((r>>>8)&0xffff)/65536;};
+   const ids=this.POOL.slice();const m=[];while(m.length<3){const P=ids.splice(Math.floor(R()*ids.length),1)[0],j=Math.floor(R()*P.n.length);m.push({id:P.id,n:P.n[j],r:P.r[j],p:0,c:0});}
+   D.d=e;D.m=m;persist();}return D;},
+ track(id,a){const D=SAVE.dly;if(!D.m||D.d!==D.hi)return;for(const m of D.m)if(m.id===id&&!m.c&&m.p<m.n){m.p=Math.min(m.n,m.p+(a||1));if(m.p>=m.n&&id!=='kill'&&id!=='coin')persist();}},
+ loginDay(){const D=SAVE.dly,e=this.eff();if(e<=D.ld)return 0;return e-D.ld===1?(D.ls%7)+1:1;},
+ claimLogin(){const n=this.loginDay();if(!n)return 0;const v=this.LOGIN[n-1];const D=SAVE.dly;D.ld=this.eff();D.ls=n;SAVE.cr+=v;persist();return v;},
+ claim(i){const m=SAVE.dly.m[i];if(!m||m.c||m.p<m.n)return 0;m.c=1;SAVE.cr+=m.r;persist();return m.r;},
+ badge(){this.roll();return !!this.loginDay()||SAVE.dly.m.some(m=>!m.c&&m.p>=m.n);}};
 function persist(){try{localStorage.setItem('rsb_save',JSON.stringify(SAVE));}catch(e){}}
 // ---------- Ads (AndroidAds bridge, same conventions as earlier P-Prece games; web stub grants rewards) ----------
 const Ads={lastInter:Date.now(),minGap:90000,cleared:0,stageRewards:0,

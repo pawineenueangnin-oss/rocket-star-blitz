@@ -85,3 +85,17 @@ Bonus tanpa cedera
 Bonus kombo
 Jumlah
 Ketik untuk langkau
+Masa Kuasa
+Nyawa Tambahan
+Misi
+Ganjaran Harian
+Hari {n}
+Tuntut
+Dituntut
+Misi baharu esok
+Kalahkan {n} makhluk asing
+Kumpul {n} syiling
+Kumpul {n} kuasa
+Tamatkan {n} peringkat
+Kalahkan seekor bos
+Tamatkan peringkat tanpa hilang nyawa

@@ -8,10 +8,11 @@ const UI={cur:null,
  hideAll(){this.el().style.display='none';this.el().innerHTML='';this.cur=null;$('pz').style.display='none';},
  hud(on){$('hudb').style.display=on?'flex':'none';if(on){this.el().style.display='none';Ads.banner(false);}},
  ttl(){return`<div class="logo"><div class="l1">STAR</div><div class="l2">ZOOMER</div></div>`;},
- menu(){G.mode='menu';this.hud(false);if(BGS.i!==4)setBG(4);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);
+ menu(){G.mode='menu';this.hud(false);if(BGS.i!==4)setBG(4);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);persist();
   this.show(`${this.ttl()}<div class="tag">${T('tag')}</div><div class="sp"></div>
   <button class="b big" data-a="play">▶ ${T('play')}</button>
-  <div class="row"><button class="b" data-a="map">${T('select')}</button><button class="b" data-a="hangar">${T('hangar')}</button></div>
+  <div class="row"><button class="b" data-a="map">${T('select')}</button></div>
+  <div class="row mrow"><button class="b gold mb" data-a="hangar"><img src="${this.ico('C')}" alt="">${T('hangar')}</button><button class="b mb" data-a="missions"><img src="${this.ico('X')}" alt="">${T('missions')}${DAILY.badge()?'<i class="dot"></i>':''}</button></div>
   ${SAVE.cleared?`<button class="b pink" data-a="endless">∞ ${T('endless')}</button>`:''}
   <div class="row"><button class="b sm" data-a="settings">⚙ ${T('settings')}</button></div>
   <div class="hi">${T('best')} <b>${SAVE.hi}</b> · ◆ ${SAVE.cr}</div>
@@ -39,9 +40,19 @@ const UI={cur:null,
   let h=`<div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('hangar')}</h2><span class="cr">◆ ${SAVE.cr}</span></div><h3>${T('ships')}</h3><div class="ships">`;
   SHIPS.forEach((s,i)=>{const own=SAVE.ships[i],can=SAVE.reached>=req[i]||DEBUG;h+=`<div class="ship ${SAVE.ship===i?'sel':''}"><img src="${ART.spr.ship[i].c.toDataURL()}" alt=""><b>${s.n}</b><small>${T('sh'+(i+1))}</small>
    ${own?(SAVE.ship===i?`<span class="ok">${T('equipped')}</span>`:`<button class="b sm" data-a="equip" data-i="${i}">${T('equip')}</button>`):can?`<button class="b sm gold${SAVE.cr<costs[i]?' poor':''}" data-a="buyship" data-i="${i}">◆ ${costs[i]}</button>`:`<small class="lk">🔒 ${T('unlockAt').replace('{n}',req[i]-1)}</small>`}</div>`;});
-  h+=`</div><h3>${T('upgrades')}</h3><div class="upg">`;const UC=[150,350,700,1200];
-  [['rate','fireRate'],['dmg','damage'],['shd','shield'],['mag','magnet']].forEach(([k,n])=>{const lv=SAVE.upg[k];h+=`<div class="u"><span class="un">${T(n)}</span><span class="pips">${[0,1,2,3].map(j=>`<i class="${j<lv?'on':''}"></i>`).join('')}</span>${lv>=4?`<span class="ok">${T('max')}</span>`:`<button class="b sm gold" data-a="upg" data-k="${k}" ${SAVE.cr<UC[lv]?'disabled':''}>◆ ${UC[lv]}</button>`}</div>`;});
-  this.show(h+'</div>','hangar');this.UC=UC;this.SC=costs;},
+  h+=`</div><h3>${T('upgrades')}</h3><div class="upg">`;
+  UPG.forEach(u=>{const lv=SAVE.upg[u.k],mx=u.cost.length,c=u.cost[lv],nb=this.bought===u.k;h+=`<div class="u${nb?' bought':''}"><img class="ui" src="${this.ico(u.ic)}" alt=""><span class="un"><b>${T(u.n)}</b><small>${u.fx(lv)}${lv<mx?' → '+u.fx(lv+1):''}</small><span class="pips">${Array.from({length:mx},(_,j)=>`<i class="${j<lv?'on':''}${nb&&j===lv-1?' pop':''}"></i>`).join('')}</span></span>${lv>=mx?`<span class="ok">${T('max')}</span>`:`<button class="b sm gold" data-a="upg" data-k="${u.k}" ${SAVE.cr<c?'disabled':''}>◆ ${c}</button>`}${nb?`<span class="fly">-◆${this.boughtC}</span>`:''}</div>`;});
+  this.show(h+'</div>','hangar');this.bought=null;this.SC=costs;},
+ ico(k){const c=this._ic||(this._ic={});return c[k]||(c[k]=ART.spr.pu[k].c.toDataURL());},
+ missions(){G.mode='menu';this.hud(false);Ads.banner(true);const D=DAILY.roll(),ln=DAILY.loginDay(),cd=ln||D.ls;
+  let h=`<div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('missions')}</h2><span class="cr">◆ ${SAVE.cr}</span></div>
+  <h3>${T('daily')}</h3><div class="login"><div class="days">${DAILY.LOGIN.map((v,j)=>{const d=j+1,st=ln?(d<ln?'got':d===ln?'now':''):(d<=cd?'got':'');return`<div class="dy ${st}"><small>${T('day').replace('{n}',d)}</small><img src="${this.ico('C')}" alt=""><b>${v}</b></div>`;}).join('')}</div>
+  ${ln?`<button class="b gold" data-a="login">${T('claim')} ◆ ${DAILY.LOGIN[ln-1]}</button>`:`<span class="ok">✓ ${T('claimed')}</span>`}</div>
+  <h3>${T('missions')}</h3><div class="msn">`;
+  const IC={kill:'H',coin:'C',pu:'L',stage:'W',boss:'B',nodmg:'P'};
+  D.m.forEach((m,i)=>{const f=Math.min(1,m.p/m.n),rd=m.p>=m.n&&!m.c;h+=`<div class="mi ${m.c?'done':rd?'rdy':''}"><img class="ui" src="${this.ico(IC[m.id])}" alt=""><span class="mt"><b>${T('m_'+m.id).replace('{n}',m.n)}</b><span class="bar"><i style="width:${(f*100).toFixed(1)}%"></i><em>${m.p} / ${m.n}</em></span></span>${m.c?`<span class="ok">✓</span>`:`<button class="b sm gold" data-a="mclaim" data-i="${i}" ${rd?'':'disabled'}>◆ ${m.r}</button>`}</div>`;});
+  this.show(h+`</div><div class="tmr">${T('newTomorrow')}</div>`,'missions');},
+ reward(v){AU.sfx('coin');AU.sfx('power');vib(40);toast('+◆ '+v);},
  settings(from){this.from=from||'menu';const tg=(k,n)=>`<div class="set"><span>${T(n)}</span><button class="tg ${SAVE[k]?'on':''}" data-a="tog" data-k="${k}">${SAVE[k]?'ON':'OFF'}</button></div>`;
   const langs=Object.keys(LANG_NAMES).map(l=>`<option value="${l}" ${l===LANG&&localStorage.getItem('rsb_lang')?'selected':''}>${LANG_NAMES[l]}</option>`).join('');
   this.show(`<div class="hd"><button class="b sm" data-a="back">◀</button><h2>${T('settings')}</h2><span></span></div><div class="sets">
@@ -94,7 +105,10 @@ const UI={cur:null,
    case'tog':{const k=b.dataset.k;SAVE[k]=SAVE[k]?0:1;persist();AU.setVol();if(k==='mus'&&SAVE.mus){AU.songId=-2;AU.play(50);}this.settings(this.from);break;}
    case'equip':SAVE.ship=i;persist();P.ship=i;this.hangar();break;
    case'buyship':if(SAVE.cr>=this.SC[i]){SAVE.cr-=this.SC[i];SAVE.ships[i]=1;SAVE.ship=i;persist();AU.sfx('power');}else toast(T('needCr'));this.hangar();break;
-   case'upg':{const k=b.dataset.k,c=this.UC[SAVE.upg[k]];if(SAVE.cr>=c){SAVE.cr-=c;SAVE.upg[k]++;persist();AU.sfx('power');}this.hangar();break;}
+   case'upg':{const k=b.dataset.k,u=UPG.find(x=>x.k===k),c=u&&u.cost[SAVE.upg[k]];if(c&&SAVE.cr>=c){SAVE.cr-=c;SAVE.upg[k]++;persist();AU.sfx('power');AU.sfx('coin');vib(40);this.bought=k;this.boughtC=c;}else toast(T('needCr'));this.hangar();break;}
+   case'missions':this.missions();break;
+   case'login':{const v=DAILY.claimLogin();if(v)this.reward(v);this.missions();break;}
+   case'mclaim':{const v=DAILY.claim(i);if(v)this.reward(v);this.missions();break;}
       case'next':if(G.stage>=10){this.menu();toast(T('victory'));}else{const n=G.stage+1;b.disabled=true;Ads.interThen(G.stage,()=>this.warpTo(n));}break;
    case'retry':G.sector=0;startStage(G.endless?0:G.stage,G.endless);break;
    case'dbl':b.disabled=true;Ads.rewarded().then(ok=>{if(ok){SAVE.cr+=G.credits;G.credits*=2;persist();AU.sfx('coin');toast('◆ x2');}else toast(T('noVideo'));this.result(true,{stars:SAVE.stars[G.stage-1]||1});});break;
@@ -102,7 +116,7 @@ const UI={cur:null,
 // Back button (Android bridge calls window.onAndroidBack(); browsers: history trap + Escape). Returns true when handled.
 UI.back=function(){const m=G.mode,c=this.cur;if(document.querySelector('.adMock.adI'))return true;
  if(m==='warp'){WARP.skip();return true;}if(m==='play'){this.pause();return true;}if(m==='paused'){$('pz').style.display='none';G.mode='play';last=performance.now();return true;}
- if(c==='settings'){this.from==='map'?this.map():this.menu();return true;}if(c==='map'||c==='hangar'){this.menu();return true;}if(c==='result'){this.map();return true;}return false;};
+ if(c==='settings'){this.from==='map'?this.map():this.menu();return true;}if(c==='map'||c==='hangar'||c==='missions'){this.menu();return true;}if(c==='result'){this.map();return true;}return false;};
 window.onAndroidBack=()=>UI.back();
 addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='GoBack'){UI.back();e.preventDefault();}});
 try{if(!window.AndroidAds||window.__adTest){history.pushState({rsb:1},'');addEventListener('popstate',()=>{if(UI.back())history.pushState({rsb:1},'');});}}catch(e){}

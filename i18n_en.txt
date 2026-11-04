@@ -85,3 +85,17 @@ noDmg|No-damage bonus
 comboBonus|Combo bonus
 total|Total
 tapSkip|Tap to skip
+puTime|Power-up Time
+lives|Extra Life
+missions|Missions
+daily|Daily Reward
+day|Day {n}
+claim|Claim
+claimed|Claimed
+newTomorrow|New missions tomorrow
+m_kill|Defeat {n} aliens
+m_coin|Collect {n} coins
+m_pu|Collect {n} power-ups
+m_stage|Clear {n} stage(s)
+m_boss|Defeat a boss
+m_nodmg|Clear a stage without losing a life

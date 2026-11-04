@@ -85,3 +85,17 @@ Bonus na walang tama
 Combo bonus
 Kabuuan
 I-tap para laktawan
+Tagal ng Power-up
+Dagdag na Buhay
+Mga Misyon
+Pang-araw-araw na Gantimpala
+Araw {n}
+Kunin
+Nakuha na
+Bagong misyon bukas
+Talunin ang {n} alien
+Mangolekta ng {n} barya
+Mangolekta ng {n} power-up
+Tapusin ang {n} stage
+Talunin ang isang boss
+Tapusin ang stage nang walang nawalang buhay

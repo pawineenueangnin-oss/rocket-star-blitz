@@ -85,3 +85,17 @@ Bonus senza danni
 Bonus combo
 Totale
 Tocca per saltare
+Durata potenziamenti
+Vita extra
+Missioni
+Premio del giorno
+Giorno {n}
+Riscuoti
+Riscosso
+Nuove missioni domani
+Sconfiggi {n} alieni
+Raccogli {n} monete
+Raccogli {n} potenziamenti
+Supera {n} livello/i
+Sconfiggi un boss
+Supera un livello senza perdere vite

@@ -473,7 +473,7 @@ function drawHUD(){const top=SAFE_T+6,S=ART.spr;cx.textBaseline='middle';
  const wc=P.wt==='B'?'#ffb35a':PU_COL[P.wt];spr(S.pu[P.wt==='B'?'W':P.wt],19,by+29,.36);const wn={B:'BLT',S:'SPR',L:'LSR',H:'MSL'}[P.wt];cx.font='6px PS2P';hs(wn+' '+(P.wl>=MAXWL?'MAX':'L'+P.wl),29,by+29,wc);
  for(let i=0;i<5;i++){const on=i<=tierOf();cx.fillStyle=on?TIER_COL[i]:'rgba(255,255,255,.14)';rrect(88+i*9,by+26,7,6,2);cx.fill();if(on&&i===tierOf()&&QUAL>0){cx.globalCompositeOperation='lighter';spr(ART.glow[['b','c','g','y','w'][i]],91.5+i*9,by+29,.35);cx.globalCompositeOperation='source-over';}}
  // timed power-up gauges
- let ix=GW-22;for(const [k,v] of [['M',P.magT],['X',P.x2T]]){if(v>0){gauge(ix,by-62,11,Math.min(1,v/12),PU_COL[k],k);ix-=30;}}
+ let ix=GW-22;for(const [k,v] of [['M',P.magT],['X',P.x2T]]){if(v>0){gauge(ix,by-62,11,Math.min(1,v/(12*UPF.pwr())),PU_COL[k],k);ix-=30;}}
  const bb=$('bombB');if(bb&&FX.lastBombs!==P.bombs){FX.lastBombs=P.bombs;bb.dataset.n=P.bombs;bb.classList.toggle('empty',P.bombs<=0);}
  // boss warning: hazard-striped banner
  if(G.warnT>0){const a=Math.abs(Math.sin(G.warnT*5)),y=GH*.38;cx.fillStyle='rgba(60,0,20,'+(.55*a+.2)+')';cx.fillRect(0,y,GW,72);
