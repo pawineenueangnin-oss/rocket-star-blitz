@@ -88,30 +88,37 @@ Object.assign(AL,{
   spikeT(g,0,-12,0,-19,2,STL,'#bff8ff');
   const h=()=>poly(g,[0,3,-6,4,-6.4,8.5,-3,11.6,0,12],true);hull6(g,h,DK,6.4,{h:6});
   aEye(g,-2.9,7.6,1.8,'#5af0ff',-1);aEye(g,2.9,7.6,1.8,'#5af0ff',1);},
- split(g){ // BROOD POD: spiked egg-sac, magma veins, three eyes, jagged maw
-  for(let i=0;i<10;i++){const a=i/10*TAU+.3;spikeT(g,Math.cos(a)*10,Math.sin(a)*10,Math.cos(a)*17,Math.sin(a)*17,2,CRM,'#ffb06a');}
-  const b=()=>{g.beginPath();for(let i=0;i<=28;i++){const a=i/28*TAU,r=12.5+Math.sin(a*5)*1.1;g.lineTo(Math.cos(a)*r,Math.sin(a)*r);}g.closePath();};
-  g.save();g.shadowColor='#ff5a1a';g.shadowBlur=9;b();g.fillStyle=GR(g,-4,-5,1,14,[[0,'#ff9a5a'],[.35,'#b8281a'],[.8,'#42060e'],[1,'#160206']]);g.fill();g.restore();
-  g.save();b();g.clip();for(let i=0;i<7;i++){const a=i/7*TAU+.2;vein(g,i%2?'#ffb03a':'#ff6a1a',.8,[0,0,Math.cos(a+.4)*6,Math.sin(a+.4)*6,Math.cos(a)*13,Math.sin(a)*13]);}
-  
-  g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.arc(3,4,10,0,7);g.fill();g.restore();
-  b();g.strokeStyle='rgba(20,2,0,.9)';g.lineWidth=.8;g.stroke();
-  aEye(g,-4.8,-2.6,2.4,'#ffe14a',-1);aEye(g,4.8,-2.6,2.4,'#ffe14a',1);cEye(g,0,-8.2,1.6,'#ffe14a');
-  g.fillStyle='#120002';g.beginPath();g.moveTo(-6,3.4);for(let i=0;i<=6;i++)g.lineTo(-6+i*2,i%2?5:3.2);g.lineTo(6,3.4);g.quadraticCurveTo(0,10,-6,3.4);g.closePath();g.fill();
-  fangs(g,0,3.6,10,5,2.6);g.save();g.translate(0,8.6);g.scale(1,-1);fangs(g,0,0,7,3,2);g.restore();},
- mini(g){ // SPAWNLING: spiky imp with one eye and fangs
-  for(let i=0;i<7;i++){const a=i/7*TAU-Math.PI/2;spikeT(g,Math.cos(a)*5,Math.sin(a)*5,Math.cos(a)*9.6,Math.sin(a)*9.6,1.5,CRM,'#ffb04a');}
-  g.save();g.shadowColor='#ff7a1a';g.shadowBlur=6;g.beginPath();g.arc(0,0,6.6,0,7);g.fillStyle=GR(g,-2.5,-3,.5,8,[[0,'#ff9a6a'],[.45,'#a0201a'],[1,'#2a0408']]);g.fill();g.restore();
-  g.beginPath();g.arc(0,0,6.6,0,7);g.strokeStyle='rgba(20,0,0,.9)';g.lineWidth=.6;g.stroke();cEye(g,0,-1,2.4,'#ffe14a');fangs(g,0,3.4,4,2,2.2);},
- mine(g){ // EYE MINE: black spiked orb watching you
-  for(let i=0;i<8;i++){const a=i/8*TAU;spikeT(g,Math.cos(a)*8,Math.sin(a)*8,Math.cos(a)*17,Math.sin(a)*17,2.4,DK,'#ff4ad8');
-   g.save();g.shadowColor='#ff4fd8';g.shadowBlur=5;g.fillStyle='#ffd0f4';g.beginPath();g.arc(Math.cos(a)*16.6,Math.sin(a)*16.6,1.1,0,7);g.fill();g.restore();}
-  hull6(g,()=>{g.beginPath();g.arc(0,0,10,0,7);},DK2,10,{h:10,glow:'rgba(255,60,200,.85)',gb:8,rim:'rgba(255,160,230,.6)'});
-  g.fillStyle='rgba(255,140,220,.55)';for(let i=0;i<8;i++){const a=i/8*TAU+.4;g.beginPath();g.arc(Math.cos(a)*8.4,Math.sin(a)*8.4,.6,0,7);g.fill();}
-  cEye(g,0,.4,4.4,'#ff2a3a');}});
+ split(g){ // MAGMA GEODE: faceted lava-crystal arrowhead, glowing cracks, three eyes, jagged maw
+  [[-11,-9,-17,-16],[11,-9,17,-16],[-14,2,-18.5,-1],[14,2,18.5,-1],[0,-11,0,-18]].forEach(q=>spikeT(g,q[0],q[1],q[2],q[3],2.2,CRM,'#ffc06a'));
+  const P=[0,17,-6,9,-15,5,-13,-5,-7,-13,0,-9,7,-13,13,-5,15,5,6,9];const b=()=>poly(g,P);
+  g.save();g.shadowColor='#ff5a1a';g.shadowBlur=9;b();g.fillStyle=GL(g,-10,-12,8,16,[[0,'#ffb07a'],[.3,'#c8301a'],[.7,'#4a0810'],[1,'#140206']]);g.fill();g.restore();
+  g.save();b();g.clip();for(let i=0;i<P.length;i+=2){const j=(i+2)%P.length;g.fillStyle=(i/2)%2?'rgba(255,190,120,.22)':'rgba(10,0,6,.32)';g.beginPath();g.moveTo(0,1);g.lineTo(P[i],P[i+1]);g.lineTo(P[j],P[j+1]);g.closePath();g.fill();}
+  vein(g,'#ffb03a',.9,[-13,-5,-8,-2,-6,1]);vein(g,'#ff7a1a',.9,[13,-5,8,-2,6,1]);vein(g,'#ffd04a',.8,[0,17,1,12,-1,8]);vein(g,'#ff7a1a',.7,[-15,5,-9,6,-5,8]);vein(g,'#ff7a1a',.7,[15,5,9,6,5,8]);g.restore();
+  b();g.strokeStyle='#0a0002';g.lineWidth=1.1;g.stroke();
+  g.strokeStyle='rgba(255,220,170,.7)';g.lineWidth=.6;g.beginPath();g.moveTo(-13,-5);g.lineTo(-7,-13);g.lineTo(0,-9);g.lineTo(7,-13);g.lineTo(13,-5);g.stroke();
+  aEye(g,-5.4,-3,2.5,'#ffe14a',-1);aEye(g,5.4,-3,2.5,'#ffe14a',1);cEye(g,0,-8.4,1.5,'#ffe14a');
+  g.fillStyle='#120002';poly(g,[-6,3,6,3,0,11]);g.fill();fangs(g,0,3.2,11,5,2.8);g.save();g.translate(0,9.4);g.scale(1,-1);fangs(g,0,0,5,2,1.8);g.restore();},
+ mini(g){ // MAGMA SHARD: arrowhead crystal fragment, one eye
+  const P=[0,10.5,-4,4,-8.6,-4,-3.6,-6,-4.4,-10.2,0,-7,4.4,-10.2,3.6,-6,8.6,-4,4,4];const b=()=>poly(g,P);
+  g.save();g.shadowColor='#ff7a1a';g.shadowBlur=6;b();g.fillStyle=GL(g,-6,-8,5,10,[[0,'#ffb07a'],[.4,'#c0281a'],[1,'#2a0408']]);g.fill();g.restore();
+  g.save();b();g.clip();g.fillStyle='rgba(10,0,6,.35)';poly(g,[0,1,8.6,-4,4,4,0,10.5]);g.fill();g.fillStyle='rgba(255,200,130,.25)';poly(g,[0,1,-8.6,-4,-3.6,-6,0,-7]);g.fill();
+  vein(g,'#ffd04a',.7,[0,10.5,.6,7,0,4]);g.restore();
+  b();g.strokeStyle='#0a0002';g.lineWidth=.9;g.stroke();cEye(g,0,-1.4,2.5,'#ffe14a');},
+ mine(g){ // CROSS MINE: four-pronged rhombus bomb-pod, glowing tips, slit core eye
+  const A=[0,Math.PI/2,Math.PI,Math.PI*1.5];
+  A.forEach(a=>{const c=Math.cos(a),s=Math.sin(a);spikeT(g,c*7,s*7,c*17.5,s*17.5,3,DK,'#ff4ad8');
+   g.save();g.shadowColor='#ff4fd8';g.shadowBlur=5;g.fillStyle='#ffe0f8';g.beginPath();g.moveTo(c*17.8,s*17.8);g.lineTo(c*15.4-s*1.3,s*15.4+c*1.3);g.lineTo(c*15.4+s*1.3,s*15.4-c*1.3);g.closePath();g.fill();g.restore();});
+  [Math.PI/4,Math.PI*.75,Math.PI*1.25,Math.PI*1.75].forEach(a=>spikeT(g,Math.cos(a)*7,Math.sin(a)*7,Math.cos(a)*12.5,Math.sin(a)*12.5,1.6,DK2,'#ff8ae8'));
+  const P=[0,-11.5,4,-4,11.5,0,4,4,0,11.5,-4,4,-11.5,0,-4,-4];const b=()=>poly(g,P);
+  hull6(g,b,DK2,11.5,{h:11,glow:'rgba(255,60,200,.9)',gb:8,rim:'rgba(255,160,230,.7)'});
+  g.save();b();g.clip();for(let i=0;i<P.length;i+=4){g.fillStyle='rgba(255,120,220,.18)';g.beginPath();g.moveTo(0,0);g.lineTo(P[i],P[i+1]);g.lineTo(P[i+2],P[i+3]);g.closePath();g.fill();}
+  [[0,-11.5],[11.5,0],[0,11.5],[-11.5,0]].forEach(q=>vein(g,'#ff4fd8',.8,[q[0]*.95,q[1]*.95,q[0]*.6,q[1]*.6,q[0]*.35,q[1]*.35]));g.restore();
+  b();g.strokeStyle='#05000c';g.lineWidth=1;g.stroke();
+  g.fillStyle='#04010a';poly(g,[-6.4,0,0,-4.6,6.4,0,0,4.6]);g.fill();cEye(g,0,.2,3.6,'#ff2a3a');}});
 Object.assign(EANIM,{zig:{c:[0,9,'g',.9]},sine:{c:[0,-3,'p',1.4]},vwing:{c:[0,0,'r',.9],flap:1},diver:{f:[0,-12,'y'],c:[0,2.6,'r',.8]},kami:{f:[0,-11,'o'],c:[0,-1,'r',1]},
- saucer:{lights:1,c:[0,-5.6,'r',.9]},shield:{c:[0,7.6,'c',.8]},split:{c:[0,-2,'o',1.3]},mini:{c:[0,-1,'y',.6]},mine:{c:[0,.4,'r',1.5]}});
+ saucer:{lights:1,c:[0,-5.6,'r',.9]},shield:{c:[0,7.6,'c',.8]},split:{c:[0,-1,'o',1.3]},mini:{c:[0,-1.4,'y',.6]},mine:{c:[0,.2,'r',1.3]}});
 const ESZ={zig:[40,42],sine:[38,40],vwing:[44,34],diver:[38,42],kami:[36,36],saucer:[50,34],shield:[44,42],split:[38,38],mini:[22,22],mine:[38,38]};
+const ETIER_K={mine:[null,null,'hue-rotate(65deg) saturate(1.35) contrast(1.12)'],split:[null,null,'hue-rotate(150deg) saturate(1.25) contrast(1.12)'],mini:[null,null,'hue-rotate(150deg) saturate(1.25) contrast(1.12)']};
 const ETIER=[null,'hue-rotate(-38deg) saturate(1.25)','hue-rotate(150deg) saturate(1.15) brightness(.95)'];
 function tierVar(s,f){const c=mkC(s.c.width,s.c.height),g=c.getContext('2d');if(!('filter' in g))return s;g.filter=f;g.drawImage(s.c,0,0);return{c,w:s.w,h:s.h};}
 function eTier(){return G.endless?G.sector%3:G.stage<=3?0:G.stage<=6?1:2;}
@@ -150,7 +157,7 @@ function coinSpr14(){return mk(22,22,g=>{
  g.fillStyle='rgba(255,255,255,.8)';g.beginPath();g.ellipse(-3.4,-4.2,2.2,1,-.7,0,7);g.fill();},3);}
 function coinEdge14(){return mk(22,22,g=>{g.beginPath();g.arc(0,0,8.6,0,7);g.fillStyle=GL(g,-8,0,8,0,[[0,'#5a3200'],[.5,'#c88a10'],[1,'#5a3200']]);g.fill();},3);}
 const _ba14=buildArt;buildArt=function(){_ba14();const S=ART.spr;
- for(const k in ESZ){S[k]=mk(ESZ[k][0],ESZ[k][1],AL[k]);for(let t=1;t<3;t++)S[k+'_'+t]=tierVar(S[k],ETIER[t]);}
+ for(const k in ESZ){S[k]=mk(ESZ[k][0],ESZ[k][1],AL[k]);for(let t=1;t<3;t++)S[k+'_'+t]=tierVar(S[k],(ETIER_K[k]&&ETIER_K[k][t])||ETIER[t]);}
  for(const k in PU_COL)S.pu[k]=puSpr14(k);S.coin=coinSpr14();S.coinE=coinEdge14();};
 // fly-to-HUD burst for collected rewards
 const FLY=[];const _fxp=FX.pickup;FX.pickup=function(k,x,y){_fxp(k,x,y);if(FLY.length<28)FLY.push({k,x,y,t:0,d:k==='C'?.42:.6});
