@@ -77,15 +77,17 @@ function killE(e){e.a=false;G.kills++;DAILY.track('kill');G.combo++;if(G.combo>(
  const big=e.type==='saucer'||e.type==='shield';G.pity+=big?3:1;
  if(Math.random()<(big?(early()?.75:.55):(early()?.1:.06))||G.pity>(early()?18:34)){G.pity=0;drop(e.x,e.y,pickPU());}
  if(m>1&&e.r>10)text(e.x,e.y-10,'+'+sc,'#ffe14a');}
-// v20: S+L merged into cycling capsule 'WA', H+W+P+D into 'WB' (same total share as before: 29.8% / 38.6%)
-function pickPU(){const r=Math.random()*100;return r<30?'WA':r<68.5?'WB':r<76?'B':r<81.5?'V':r<86?'U':r<93.5?'M':'X';}
-const CYC={WA:['S','L'],WB:['H','W','P','D']},CAP={cyc:1,life:12,hcd:.45,lcd:.6,near:110};
-function drop(x,y,k){const p=take(PK);if(!p)return;p.x=x;p.y=y;p.vx=rnd(-30,30);p.vy=k==='C'?rnd(-60,-20):-40;p.cy=CYC[k]||null;p.ci=p.cy?(Math.random()*p.cy.length)|0:0;p.k=p.cy?p.cy[p.ci]:k;p.ct=0;p.hcd=0;p.fl=0;p.hits=0;p.t=0;p.v=1;}
+// v21: cycling capsule 'WA' = S->L->D (36% = 12% each), 'WB' = H->W->P (32.5% = 10.83% each); weapon total 68.5% as v20
+function pickPU(){const r=Math.random()*100;return r<36?'WA':r<68.5?'WB':r<76?'B':r<81.5?'V':r<86?'U':r<93.5?'M':'X';}
+const CYC={WA:['S','L','D'],WB:['H','W','P']},CAP={cyc:1.6,spMin:.8,spMax:1.6,kMin:2,kMax:3,spDecay:1.2,life:12,hcd:.45,lcd:.6,near:110};
+function drop(x,y,k){const p=take(PK);if(!p)return;p.x=x;p.y=y;p.vx=rnd(-30,30);p.vy=k==='C'?rnd(-60,-20):-40;p.cy=CYC[k]||null;p.ci=p.cy?(Math.random()*p.cy.length)|0:0;p.k=p.cy?p.cy[p.ci]:k;p.ct=0;p.hcd=0;p.fl=0;p.hits=0;p.t=0;p.v=1;p.ang=Math.random()*TAU;p.av0=(Math.random()<.5?-1:1)*rnd(CAP.spMin,CAP.spMax);p.av=p.av0;}
+// v21 free spin: capsule tumbles around its centre; hit kicks decay back to base speed (visual only, collision stays circular)
+function capSpin(p,dt){if(p.av0===undefined)return;p.av+=(p.av0-p.av)*(1-Math.exp(-CAP.spDecay*dt));p.ang=(p.ang+p.av*dt)%TAU;}
 function capPhys(p,dt){const old=p.t>CAP.life;p.vy=Math.min(p.vy+(old?220:110)*dt,old?140:65);p.vx*=Math.exp(-.7*dt);if(p.hcd>0)p.hcd-=dt;if(p.fl>0)p.fl-=dt;
  if(p.x<16){p.x=16;p.vx=Math.abs(p.vx);}else if(p.x>GW-16){p.x=GW-16;p.vx=-Math.abs(p.vx);}if(!old&&p.y<SAFE_T+40&&p.vy<0){p.vy=Math.abs(p.vy)*.6;p.y=Math.max(p.y,SAFE_T+16);}
  if(p.cy&&!old){p.ct+=dt;if(p.ct>=CAP.cyc){p.ct=0;capNext(p);}}}
 function capNext(p){p.ci=(p.ci+1)%p.cy.length;p.k=p.cy[p.ci];p.fl=.16;}
-function capBump(p,bx){if(p.t>CAP.life||p.hcd>0||(P.alive&&Math.hypot(p.x-P.x,p.y-P.y)<CAP.near))return false;p.hcd=CAP.hcd;p.hits++;p.vy=-rnd(130,160);p.vx=(p.x>=bx?1:-1)*rnd(45,85);p.fl=.16;if(p.cy){p.ct=0;capNext(p);}
+function capBump(p,bx){if(p.t>CAP.life||p.hcd>0||(P.alive&&Math.hypot(p.x-P.x,p.y-P.y)<CAP.near))return false;p.hcd=CAP.hcd;p.hits++;p.vy=-rnd(130,160);p.vx=(p.x>=bx?1:-1)*rnd(45,85);p.fl=.16;if(p.av0!==undefined)p.av+=(p.x>=bx?1:-1)*rnd(CAP.kMin,CAP.kMax);if(p.cy){p.ct=0;capNext(p);}
  const r=part(p.x,p.y,0,0,.3,22,null,2);if(r)r.c=hexRGB(PU_COL[p.k]);AU.sfx('deflect');return true;}
 function comboMul(){return Math.min(8,1+Math.floor(G.combo/8));}
 // ---------- hazards ----------
@@ -260,7 +262,7 @@ function update(dt){if(G.mode!=='play'&&G.mode!=='clear'&&G.mode!=='over'&&G.mod
  // pickups
  const mr=(P.magT>0?150:34*UPF.mag())+(P.magT>0?0:6);for(const p of PK){if(!p.a)continue;p.t+=dt;const dx=P.x-p.x,dy=P.y-p.y,d=Math.hypot(dx,dy)||1;
   if(p.k==='C'&&QUAL>0&&Math.random()<.06)part(p.x+rnd(-3,3),p.y+rnd(-3,3),0,20,.35,1.6,ART.glow.y,0);
-  if(P.alive&&(d<(p.k==='C'?mr:Math.min(mr,60))||(p.k==='C'&&G.boss&&G.boss.dead)||(G.mode==='clear'))){const s=460,k2=Math.min(1,dt*9);p.vx+=(dx/d*s-p.vx)*k2;p.vy+=(dy/d*s-p.vy)*k2;}else if(p.k==='C'){p.vy=Math.min(p.vy+140*dt,110);p.vx*=.98;}else capPhys(p,dt);
+  if(P.alive&&(d<(p.k==='C'?mr:Math.min(mr,60))||(p.k==='C'&&G.boss&&G.boss.dead)||(G.mode==='clear'))){const s=460,k2=Math.min(1,dt*9);p.vx+=(dx/d*s-p.vx)*k2;p.vy+=(dy/d*s-p.vy)*k2;}else if(p.k==='C'){p.vy=Math.min(p.vy+140*dt,110);p.vx*=.98;}else capPhys(p,dt);if(p.k!=='C')capSpin(p,dt);
   p.x+=p.vx*dt;p.y+=p.vy*dt;if(P.alive&&d<18+tierOf()*1.5){p.a=false;pickup(p.k,p.x,p.y);continue;}if(p.y>GH+20)p.a=false;}
  // particles
  for(const p of PT){if(!p.a)continue;p.l-=dt;if(p.l<=0){p.a=false;continue;}p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.k===0){p.vx*=.96;p.vy*=.96;}}

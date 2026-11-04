@@ -354,7 +354,7 @@ function render(dt){cx.globalAlpha=1;cx.globalCompositeOperation='source-over';c
    cx.save();cx.translate(p.x,p.y);cx.scale(sxx,1);if(sxx<.97){const ce=S.coinE;cx.drawImage(ce.c,-ce.w/2+(Math.cos(ph)>0?1.7:-1.7)/sxx,-ce.h/2,ce.w,ce.h);}cx.drawImage(c.c,-c.w/2,-c.h/2,c.w,c.h);cx.restore();if(sxx>.93){cx.globalCompositeOperation='lighter';spr(S.glint,p.x+2,p.y-2,.6+Math.sin(ph*3)*.2);cx.globalCompositeOperation='source-over';}}
   else{const s=S.pu[p.k],by=p.y+Math.sin(p.t*4)*2.5;cx.globalCompositeOperation='lighter';cx.globalAlpha=.8;spr(S.puGlow[p.k],p.x,by,1+Math.sin(p.t*7)*.14);cx.globalAlpha=1;
    cx.strokeStyle=rgba(PU_COL[p.k],.55);cx.lineWidth=1.2;cx.beginPath();cx.arc(p.x,by,15+Math.sin(p.t*5),p.t*3,p.t*3+4.2);cx.stroke();
-   const oa=p.t*3;spr(S.glint,p.x+Math.cos(oa)*15,by+Math.sin(oa)*15*.5,.5);cx.globalCompositeOperation='source-over';if(p.cy)spr(S.cycRing,p.x,by,1);spr(s,p.x,by,.95,Math.sin(p.t*2.5)*.15);if(p.fl>0){cx.globalCompositeOperation='lighter';cx.globalAlpha=Math.min(1,p.fl*7);spr(ART.glow.w,p.x,by,1.3);cx.globalAlpha=1;cx.globalCompositeOperation='source-over';}
+   const oa=p.t*3;spr(S.glint,p.x+Math.cos(oa)*15,by+Math.sin(oa)*15*.5,.5);cx.globalCompositeOperation='source-over';if(p.cy)spr(S.cycRing,p.x,by,1);spr(s,p.x,by,.95,p.ang||1e-6);if(p.fl>0){cx.globalCompositeOperation='lighter';cx.globalAlpha=Math.min(1,p.fl*7);spr(ART.glow.w,p.x,by,1.3);cx.globalAlpha=1;cx.globalCompositeOperation='source-over';}
    if(Math.sin(p.t*2.2)>.96){cx.globalCompositeOperation='lighter';spr(S.glint,p.x-4,by-6,1);cx.globalCompositeOperation='source-over';}}}
  // boss
  const B=G.boss;if(B){drawBoss(B);}drawRings(dt);
