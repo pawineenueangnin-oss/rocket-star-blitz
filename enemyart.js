@@ -121,6 +121,13 @@ const ESZ={zig:[40,42],sine:[38,40],vwing:[44,34],diver:[38,42],kami:[36,36],sau
 const ETIER_K={mine:[null,null,'hue-rotate(65deg) saturate(1.35) contrast(1.12)'],split:[null,null,'hue-rotate(150deg) saturate(1.25) contrast(1.12)'],mini:[null,null,'hue-rotate(150deg) saturate(1.25) contrast(1.12)']};
 const ETIER=[null,'hue-rotate(-38deg) saturate(1.25)','hue-rotate(150deg) saturate(1.15) brightness(.95)'];
 function tierVar(s,f){const c=mkC(s.c.width,s.c.height),g=c.getContext('2d');if(!('filter' in g))return s;g.filter=f;g.drawImage(s.c,0,0);return{c,w:s.w,h:s.h};}
+// v22: stage 7-10 tier = ultraviolet/indigo duotone (luminance ramp, dark outline, soft violet glow), pre-rendered once
+const UV_RAMP=[[0,[8,2,22]],[.22,[40,12,104]],[.45,[98,46,214]],[.7,[176,140,255]],[.9,[236,222,255]],[1,[255,255,255]]];
+function uvVar(s){const W=s.c.width,H=s.c.height,a=mkC(W,H),ga=a.getContext('2d');ga.drawImage(s.c,0,0);let id;try{id=ga.getImageData(0,0,W,H);}catch(e){return tierVar(s,ETIER[2]);}const d=id.data;
+ for(let i=0;i<d.length;i+=4){if(!d[i+3])continue;let L=(.3*d[i]+.59*d[i+1]+.11*d[i+2])/255;L=Math.min(1,Math.max(0,(L-.05)*1.3));let j=1;while(j<UV_RAMP.length-1&&UV_RAMP[j][0]<L)j++;const p=UV_RAMP[j-1],q=UV_RAMP[j],t=(L-p[0])/(q[0]-p[0]||1);for(let k=0;k<3;k++)d[i+k]=p[1][k]+(q[1][k]-p[1][k])*t;}
+ ga.putImageData(id,0,0);const sil=tintOf({c:a},'#05000c'),c=mkC(W,H),g=c.getContext('2d'),o=Math.max(1,Math.round(W/s.w*.6));
+ g.save();g.shadowColor='rgba(170,110,255,.95)';g.shadowBlur=o*5;g.drawImage(sil,0,0);g.restore();
+ for(const[dx,dy]of[[o,0],[-o,0],[0,o],[0,-o],[o,o],[-o,-o],[o,-o],[-o,o]])g.drawImage(sil,dx,dy);g.drawImage(a,0,0);return{c,w:s.w,h:s.h};}
 function eTier(){return G.endless?G.sector%3:G.stage<=3?0:G.stage<=6?1:2;}
 // ---------- rewards ----------
 function puIcon(g,k){
@@ -157,7 +164,7 @@ function coinSpr14(){return mk(22,22,g=>{
  g.fillStyle='rgba(255,255,255,.8)';g.beginPath();g.ellipse(-3.4,-4.2,2.2,1,-.7,0,7);g.fill();},3);}
 function coinEdge14(){return mk(22,22,g=>{g.beginPath();g.arc(0,0,8.6,0,7);g.fillStyle=GL(g,-8,0,8,0,[[0,'#5a3200'],[.5,'#c88a10'],[1,'#5a3200']]);g.fill();},3);}
 const _ba14=buildArt;buildArt=function(){_ba14();const S=ART.spr;
- for(const k in ESZ){S[k]=mk(ESZ[k][0],ESZ[k][1],AL[k]);for(let t=1;t<3;t++)S[k+'_'+t]=tierVar(S[k],(ETIER_K[k]&&ETIER_K[k][t])||ETIER[t]);}
+ for(const k in ESZ){S[k]=mk(ESZ[k][0],ESZ[k][1],AL[k]);for(let t=1;t<3;t++)S[k+'_'+t]=t===2?uvVar(S[k]):tierVar(S[k],(ETIER_K[k]&&ETIER_K[k][t])||ETIER[t]);}
  for(const k in PU_COL)S.pu[k]=puSpr14(k);S.coin=coinSpr14();S.coinE=coinEdge14();};
 // fly-to-HUD burst for collected rewards
 const FLY=[];const _fxp=FX.pickup;FX.pickup=function(k,x,y){_fxp(k,x,y);if(FLY.length<28)FLY.push({k,x,y,t:0,d:k==='C'?.42:.6});

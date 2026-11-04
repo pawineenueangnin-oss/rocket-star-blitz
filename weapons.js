@@ -12,7 +12,9 @@ fire=function(dt){const sh=P.ship,L=P.wl,lv=P.wlv||1,dm=UPF.dmg()*pwMul(),S=ART.
  else if(sh===1){const n=Math.min(9,1+L*2);for(let i=0;i<n;i++)pShot(P.x+(i-(n-1)/2)*3,y,(i-(n-1)/2)*.075,700,.85*dm,S.pbS);}
  else{const n=Math.min(3,L);for(let i=0;i<n;i++)pShot(P.x+(i-(n-1)/2)*12,y,0,640,2.8*dm,S.pbT,1,8,20);if(L>=4){pShot(P.x-14,y+8,-.2,620,1.6*dm,S.pbT,0,8,20);pShot(P.x+14,y+8,.2,620,1.6*dm,S.pbT,0,8,20);}if(L>=5){pShot(P.x-22,y+12,-.4,600,1.4*dm,S.pbT,0,8,20);pShot(P.x+22,y+12,.4,600,1.4*dm,S.pbT,0,8,20);}}
  AU.sfx('shot');};
-function laserLv(){const e=2*(P.wlv||1)-1;return{w:7+e*4,dps:(30+e*11)*UPF.dmg()*pwMul()*(P.ship===2?1.25:1)};}
+// v22: laser toned down: base dps 41/62/82 by level, power (W) adds only +5%/lvl to the beam (max x1.2) -> max ~98 (+16% vs pre-v20 max 85)
+const LZ_DPS=[41,62,82];function lzMul(){return 1+.05*(P.pw||0);}
+function laserLv(){const lv=Math.min(3,Math.max(1,P.wlv||1)),e=2*lv-1;return{w:7+e*4,dps:LZ_DPS[lv-1]*UPF.dmg()*lzMul()*(P.ship===2?1.25:1)};}
 laserDmg=function(dt){const q=laserLv(),w=q.w,d=q.dps*dt;P.lw=w;let top=-20;
  EN.forEach(e=>{if(!e.a||e.y>P.y)return;if(Math.abs(e.x-P.x)<w/2+e.r){hitE(e,d,true);}});
  const B=G.boss;if(B&&!B.dead&&B.t>=3&&Math.abs(B.x-P.x)<B.w*.45){let hitT=false;for(const t of B.tur){if(t.alive&&Math.abs(B.x+t.ox-P.x)<w/2+10){bossHit(B,B.x+t.ox,B.y+t.oy,d);hitT=true;top=B.y+t.oy;break;}}if(!hitT){const cy=Math.abs(B.x-P.x)<18?B.y+B.coreOy:B.y+B.h*.3;bossHit(B,P.x,cy,d);top=cy;}}
