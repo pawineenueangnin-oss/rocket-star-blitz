@@ -10,32 +10,39 @@ const UI={cur:null,
  ttl(){return`<div class="logo"><div class="l1">STAR</div><div class="l2">ZOOMER</div></div>`;},
  menu(){G.mode='menu';this.hud(false);if(BGS.i!==4)setBG(4);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);persist();
   this.show(`${this.ttl()}<div class="tag">${T('tag')}</div><div class="sp"></div>
-  <button class="b big" data-a="play">▶ ${T('play')}</button>
+  <button class="b big" data-a="play">▶ ${T('play')}${SAVE.far>=0?` · ${UI.isSpFar()?'★':T('stage')+' '+UI.furthest()}`:''}</button>
   <div class="row"><button class="b" data-a="map">${T('select')}</button></div>
   <div class="row mrow"><button class="b gold mb" data-a="hangar"><img src="${this.ico('C')}" alt="">${T('hangar')}</button><button class="b mb" data-a="missions"><img src="${this.ico('X')}" alt="">${T('missions')}${DAILY.badge()?'<i class="dot"></i>':''}</button></div>
-  ${SAVE.cleared?`<button class="b pink" data-a="endless">∞ ${T('endless')}</button>`:''}
   <div class="row"><button class="b sm" data-a="settings">⚙ ${T('settings')}</button></div>
   <div class="hi">${T('best')} <b>${SAVE.hi}</b> · ★ ${totStars()} · ◆ ${SAVE.cr}</div>
   <div class="studio"><img src="studio-logo.png" alt=""><span>P-Prece Studio</span></div>`,'menu');},
- map(){G.mode='menu';this.hud(false);Ads.banner(true);
-  let h=`<div class="mtop"><div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('select')}</h2><span class="cr"><span class="tst">★ ${totStars()}/30</span> ◆ ${SAVE.cr}</span></div></div><div class="path" id="spath"><svg class="pl" id="spl"></svg>`;
+ // v26 staircase map: page p shows stages 10p+1..10p+10 with the Special Stage that follows them at the top; pager by tens
+ furthest(){return SAVE.far>=0?(SAVE.far%11===0?10*(SAVE.far/11+1):stNum(SAVE.far)):Math.min(10,SAVE.reached);},
+ isSpFar(){return SAVE.far>=0&&SAVE.far%11===0;},
+ farPage(){return SAVE.far<0?0:this.isSpFar()?SAVE.far/11:Math.floor((stNum(SAVE.far)-1)/10);},
+ map(pg){G.mode='menu';this.hud(false);Ads.banner(true);const maxP=this.farPage();const p=this.mapPage=Math.max(0,Math.min(DEBUG?999:maxP,pg===undefined?maxP:pg));
+  const pager=`<div class="pager"><button class="b sm" data-a="mpg" data-i="${p-1}" ${p>0?'':'disabled'}>◀</button><b>${T('stage')} ${10*p+1}–${10*p+10}</b><button class="b sm" data-a="mpg" data-i="${p+1}" ${(SAVE.far>=11*p||DEBUG)?'':'disabled'}>▶</button></div>`;
+  let h=`<div class="mtop"><div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('select')}</h2><span class="cr"><span class="tst">★ ${totStars()}/30</span> ◆ ${SAVE.cr}</span></div>${pager}</div><div class="path" id="spath"><svg class="pl" id="spl"></svg>`;
   const STAR=(c1,c2,id)=>`<svg viewBox="-50 -50 100 100" class="sv"><defs><radialGradient id="g${id}" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient></defs><polygon class="sp0" points="${MSTAR(46,21)}" fill="url(#g${id})"/><polygon class="sp1" points="${MSTAR(36,16)}" fill="none"/></svg>`;
-  const cur=Math.min(10,Math.max(1,SAVE.reached)),seen=SAVE.mapSeen||0,fresh=seen&&SAVE.reached>seen&&SAVE.reached<=10?SAVE.reached:0;
-  for(let i=1;i<=10;i++){const lock=i>SAVE.reached&&!DEBUG,st=SAVE.stars[i-1]||0,done=i<SAVE.reached,hu=MHUE[i-1];
+  const seen=SAVE.mapSeen||0,fresh=seen&&SAVE.reached>seen&&SAVE.reached<=10?SAVE.reached:0;const lit=[];let cur=1;
+  for(let j=1;j<=10;j++){const N=10*p+j;let lock,done,st=0,hu,act,nm;
+   if(N<=10){lock=N>SAVE.reached&&!DEBUG;st=SAVE.stars[N-1]||0;done=N<SAVE.reached||(N===10&&SAVE.cleared);hu=MHUE[N-1];act=`data-a="stage" data-i="${N}"`;nm=T('n'+N);}
+   else{const s=secOf(N);lock=s>SAVE.far&&!DEBUG;done=s<SAVE.far;hu=MHUE[bIdx(s)];act=`data-a="sec" data-i="${s}"`;nm=T('n'+(bIdx(s)+1));}
+   if(!lock)cur=j;lit[j]=done;
    const c1=lock?'#6a6a86':`hsl(${hu},100%,68%)`,c2=lock?'#23203a':`hsl(${hu+25},90%,38%)`;
-   h+=`<button class="snode ${lock?'lock':done?'done':'cur'}${i===fresh?' fresh':''}" data-a="stage" data-i="${i}" ${lock?'disabled':''} style="--hu:${hu}">${STAR(c1,c2,i)}<span class="num">${lock?'🔒':i}</span><span class="lbl"><span class="nm">${T('n'+i)}</span><span class="st">${[0,1,2].map(j=>`<i class="${j<st?'on':''}">★</i>`).join('')}</span></span></button>`;}
-  const eo=SAVE.cleared||DEBUG;
-  h+=`<button class="snode end ${eo?'':'lock'}" data-a="endless" ${eo?'':'disabled'}><span class="portal"><i></i><i></i><i></i></span><span class="num">${eo?'∞':'🔒'}</span><span class="lbl"><span class="nm">${T('endless')}</span><span class="st2">${SAVE.cleared?T('best')+' '+SAVE.endBest:''}</span></span></button></div>`;
-  this.show(h,'map');SAVE.mapSeen=SAVE.reached;persist();this.mapLayout(cur);},
+   h+=`<button class="snode ${lock?'lock':done?'done':'cur'}${N===fresh?' fresh':''}" ${act} ${lock?'disabled':''} style="--hu:${hu}">${STAR(c1,c2,N)}<span class="num">${lock?'🔒':N}</span><span class="lbl"><span class="nm">${nm}</span><span class="st">${N<=10?[0,1,2].map(k=>`<i class="${k<st?'on':''}">★</i>`).join(''):''}</span></span></button>`;}
+  const ss=11*p,eo=ss<=SAVE.far||DEBUG;lit[10]=eo;
+  h+=`<button class="snode end ${eo?'':'lock'}" data-a="sec" data-i="${ss}" ${eo?'':'disabled'}><span class="portal"><i></i><i></i><i></i></span><span class="num">${eo?'★':'🔒'}</span><span class="lbl"><span class="nm">${T('spStage')}</span><span class="st2">${T('spName')}</span></span></button></div>`;
+  this.show(h,'map');SAVE.mapSeen=SAVE.reached;persist();this.mapLit=lit;this.mapCur=SAVE.far===ss?11:cur;this.mapLayout(this.mapCur);},
  mapLayout(cur){const pth=$('spath');if(!pth)return;document.body.classList.toggle('lowq',QUAL===0);const W=pth.clientWidth,step=Math.max(112,Math.min(150,innerHeight*.17)),top=200,H=top+10*step+70;pth.style.height=H+'px';
   const X=[.3,.5,.7,.5],rtl=document.documentElement.dir==='rtl',pos=[];
   for(let i=1;i<=10;i++){let x=X[(i-1)%4];if(rtl)x=1-x;pos[i]={x:Math.round(W*.5+(x-.5)*Math.min(W,520)),y:top+(10-i)*step+step*.5};}
   pos[11]={x:Math.round(W/2),y:72};
   const ns=pth.querySelectorAll('.snode');ns.forEach((n,k)=>{const p=pos[k+1];n.style.left=p.x+'px';n.style.top=p.y+'px';});
-  let s='';for(let i=1;i<=10;i++){const a=pos[i],b=pos[i+1],lit=i<SAVE.reached||(i===10&&SAVE.cleared),my=(a.y+b.y)/2,d=`M${a.x},${a.y} C${a.x},${my} ${b.x},${my} ${b.x},${b.y}`;
+  const L=this.mapLit||[];let s='';for(let i=1;i<=10;i++){const a=pos[i],b=pos[i+1],lit=!!L[i],my=(a.y+b.y)/2,d=`M${a.x},${a.y} C${a.x},${my} ${b.x},${my} ${b.x},${b.y}`;
    s+=`${lit?`<path d="${d}" class="pgw" style="--hu:${MHUE[i-1]}"/>`:''}<path d="${d}" class="pg ${lit?'lit':''}" style="--hu:${MHUE[i-1]}"/><path d="${d}" class="pd ${lit?'lit':''}"/>`;}
   const sv=$('spl');sv.setAttribute('width',W);sv.setAttribute('height',H);sv.innerHTML=s;
-  const sc=this.el();requestAnimationFrame(()=>{const p=pos[cur];sc.scrollTop=Math.max(0,pth.offsetTop+p.y-sc.clientHeight*.55);});},
+  const sc=this.el();requestAnimationFrame(()=>{const p=pos[cur]||pos[1];sc.scrollTop=Math.max(0,pth.offsetTop+p.y-sc.clientHeight*.55);});},
  hangar(){G.mode='menu';this.hud(false);Ads.banner(true);const costs=[0,800,2000],req=[0,3,6];
   let h=`<div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('hangar')}</h2><span class="cr">◆ ${SAVE.cr}</span></div><h3>${T('ships')}</h3><div class="ships">`;
   SHIPS.forEach((s,i)=>{const own=SAVE.ships[i],can=SAVE.reached>=req[i]||DEBUG;h+=`<div class="ship ${SAVE.ship===i?'sel':''}"><img src="${skinSet(i,SAVE.skin).b.c.toDataURL()}" alt=""><b>${s.n}</b><small>${T('sh'+(i+1))}</small>
@@ -64,10 +71,10 @@ const UI={cur:null,
   $('sQ').onchange=e=>{SAVE.q=e.target.value;persist();setQuality();};
   $('sL').onchange=e=>{const v=e.target.value;try{if(v==='auto')localStorage.removeItem('rsb_lang');else localStorage.setItem('rsb_lang',v);}catch(_){}LANG=v==='auto'?detectLang():v;applyLang();this.settings(this.from);};},
  result(win,o){Ads.banner(true);this.hud(false);const s=G.stage;const canR=Ads.canReward();
-  const sc=`<div class="res"><div class="rs">${T('score')} <b>${G.score}</b></div><div class="rs">${T('credits')} <b>◆ ${G.credits}</b></div><div class="rs">${T('best')} <b>${G.endless?SAVE.endBest:SAVE.best[s-1]||0}</b></div></div>`;
+  const sc=`<div class="res"><div class="rs">${T('score')} <b>${G.score}</b></div><div class="rs">${T('credits')} <b>◆ ${G.credits}</b></div><div class="rs">${T('best')} <b>${G.endless?SAVE.hi:SAVE.best[s-1]||0}</b></div></div>`;
   if(win){FX.fw=4;const L=G.tally||{base:G.score,kb:0,cr:G.credits,bk:'comboBonus',bv:0,tot:G.score};const inst=!!this.tallyDone;
    const row=(lab,v,pre,cls)=>`<div class="tr ${cls||''} ${inst?'in done':''}" data-v="${v}" data-p="${pre||''}"><span>${lab}</span><b>${inst?(pre||'')+v:''}</b></div>`;
-   this.show(`<div class="burst"></div>${G.special?`<div class="spbadge">★ ${T('spStage')} ★</div>`:''}<h2 class="big gold">${T(G.endless?'sectorClear':'clear')}</h2><div class="tally">${row(T('score'),L.base)}${row(T('killBonus'),L.kb,'+')}${row(T('credits'),L.cr,'◆ ','crr')}${row(T(L.bk),L.bv,'+')}<i class="tl"></i>${row(T('total'),L.tot,'','tot')}</div>
+   this.show(`<div class="burst"></div>${G.special?`<div class="spbadge">★ ${T('spStage')} ★</div>`:''}<h2 class="big gold">${G.special?'':`<small class="rsn">${T('stage')} ${G.endless?stNum(G.sector-1):s}</small><br>`}${T('clear')}</h2><div class="tally">${row(T('score'),L.base)}${row(T('killBonus'),L.kb,'+')}${row(T('credits'),L.cr,'◆ ','crr')}${row(T(L.bk),L.bv,'+')}<i class="tl"></i>${row(T('total'),L.tot,'','tot')}</div>
    <div class="stars ${inst?'':'hid'}"${G.endless?' style="display:none"':''}>${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div>${o.sb||G.starBonus?`<div class="sbn ${inst?'':'hid'}">${T(G.special?'spBonus':'starBonus')} <b>+◆ ${o.sb||G.starBonus}</b></div>`:''}<div class="nb ${o.nb&&inst?'':'hid'}">${T('newBest')}</div>
    <div class="tsk ${inst?'hid':''}">${T('tapSkip')}</div><div class="after ${inst?'':'hid'}">${canR&&G.credits>0?`<button class="b pink" data-a="dbl">▶ ${T('double')}</button>`:''}
    <button class="b big" data-a="next">${s>=10&&!G.endless?T('victory'):T('next')} ▶</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div></div>`,'result');
@@ -90,25 +97,24 @@ const UI={cur:null,
   this.show(`<div class="burst"></div><div class="vbadge">★ ★ ★</div>
   <h2 class="big gold vtitle">${T('allClear')}</h2>
   <p class="vsub">${T('victorySub')}</p>
-  <div class="vunlock">∞ ${T('endless')}</div>
-  <button class="b big pink" data-a="toEndless">▶ ${T('toEndless')}</button>
-  <button class="b" data-a="menu">${T('toMenu')}</button>`,'victory');},
+  <div class="vunlock">★ ${T('spStage')} → ${T('stage')} 11</div>
+  <button class="b big pink" data-a="toEndless">▶ ${T('toEndless')}</button>`,'victory');},
  warpTo(n){WARP.start(n,false,()=>startStage(n));},
  endlessNext(){WARP.start(0,true,()=>startStage(0,true));},
  pause(){if(G.mode!=='play')return;G.mode='paused';$('pz').style.display='flex';$('pz').innerHTML=`<h2>${T('paused')}</h2><button class="b big" data-pa="resume">▶ ${T('resume')}</button><button class="b" data-pa="restart">${T('restart')}</button><button class="b" data-pa="quit">${T('quit')}</button>
   <div class="row"><button class="tg ${SAVE.snd?'on':''}" data-pa="snd">♪ ${T('sound')}</button><button class="tg ${SAVE.mus?'on':''}" data-pa="mus">♫ ${T('music')}</button></div>`;
   $('pz').querySelectorAll('[data-pa]').forEach(b=>b.onclick=()=>{AU.sfx('ui');const k=b.dataset.pa;if(k==='resume'){$('pz').style.display='none';G.mode='play';last=performance.now();}
-   else if(k==='restart'){$('pz').style.display='none';G.sector=0;startStage(G.endless?0:G.stage,G.endless);}else if(k==='quit'){$('pz').style.display='none';this.map();}
+   else if(k==='restart'){$('pz').style.display='none';G.fresh=true;startStage(G.endless?0:G.stage,G.endless);}else if(k==='quit'){$('pz').style.display='none';this.map();}
    else{SAVE[k]=SAVE[k]?0:1;persist();AU.setVol();this.pause2();}});},
  pause2(){G.mode='play';this.pause();},
  pauseToggle(){if(G.mode==='play')this.pause();else if(G.mode==='paused'){$('pz').style.display='none';G.mode='play';}},
- begin(n){this.hideAll();startStage(n);},
+ begin(n){this.hideAll();G.fresh=true;startStage(n);},
+ beginSec(s){this.hideAll();G.fresh=true;G.sector=Math.max(0,s);startStage(0,true);},
  act(a,b){const i=+b.dataset.i;
   switch(a){
-   case'play':this.begin(Math.min(SAVE.reached,10));break;case'map':this.map();break;case'hangar':this.hangar();break;case'menu':this.menu();break;
+   case'play':if(SAVE.far>=0&&SAVE.cleared)this.beginSec(SAVE.far);else this.begin(Math.min(SAVE.reached,10));break;case'map':this.map();break;case'mpg':this.map(i);break;case'sec':this.beginSec(i);break;case'hangar':this.hangar();break;case'menu':this.menu();break;
    case'settings':this.settings(this.cur);break;case'back':this.from==='map'?this.map():this.menu();break;
    case'stage':this.begin(i);break;
-   case'endless':G.sector=0;this.hideAll();startStage(0,true);break;
    case'tog':{const k=b.dataset.k;SAVE[k]=SAVE[k]?0:1;persist();AU.setVol();if(k==='mus'&&SAVE.mus){AU.songId=-2;AU.play(50);}this.settings(this.from);break;}
    case'equip':SAVE.ship=i;persist();P.ship=i;this.hangar();break;
    case'buyship':if(SAVE.cr>=this.SC[i]){SAVE.cr-=this.SC[i];SAVE.ships[i]=1;SAVE.ship=i;persist();AU.sfx('power');}else toast(T('needCr'));this.hangar();break;
@@ -116,9 +122,9 @@ const UI={cur:null,
    case'missions':this.missions();break;
    case'login':{const v=DAILY.claimLogin();if(v)this.reward(v);this.missions();break;}
    case'mclaim':{const v=DAILY.claim(i);if(v)this.reward(v);this.missions();break;}
-      case'next':if(G.endless){b.disabled=true;Ads.interThen(G.sector,()=>this.endlessNext());}else if(G.stage>=10){this.victory();}else{const n=G.stage+1;b.disabled=true;Ads.interThen(G.stage,()=>this.warpTo(n));}break;
-   case'toEndless':b.disabled=true;G.sector=0;Ads.interThen(Math.max(G.stage,10),()=>{this.hideAll();WARP.start(0,true,()=>startStage(0,true));});break;
-   case'retry':G.sector=0;startStage(G.endless?0:G.stage,G.endless);break;
+      case'next':if(G.endless){b.disabled=true;Ads.interThen(stNum(G.sector-1),()=>this.endlessNext());}else if(G.stage>=10){this.victory();}else{const n=G.stage+1;b.disabled=true;Ads.interThen(G.stage,()=>this.warpTo(n));}break;
+   case'toEndless':b.disabled=true;G.sector=0;G.fresh=true;Ads.interThen(Math.max(G.stage,10),()=>{this.hideAll();WARP.start(0,true,()=>startStage(0,true));});break;
+   case'retry':G.fresh=true;startStage(G.endless?0:G.stage,G.endless);break;
    case'dbl':b.disabled=true;Ads.rewarded().then(ok=>{if(ok){SAVE.cr+=G.credits;G.credits*=2;persist();AU.sfx('coin');toast('◆ x2');}else toast(T('noVideo'));this.result(true,{stars:G.endless?0:SAVE.stars[G.stage-1]||1});});break;
    case'cont':b.disabled=true;Ads.rewarded().then(ok=>{if(ok)revive();else{toast(T('noVideo'));b.disabled=false;}});break;}}};
 // Back button (Android bridge calls window.onAndroidBack(); browsers: history trap + Escape). Returns true when handled.
@@ -137,4 +143,4 @@ function boot(){applyLang();buildArt();setQuality();setBG(4,1);$('pauseB').oncli
  if('serviceWorker'in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
  document.addEventListener('pointerdown',()=>AU.init(),{once:true});}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
-addEventListener('resize',()=>{if(UI.cur==='map')UI.mapLayout(Math.min(10,Math.max(1,SAVE.reached)));});
+addEventListener('resize',()=>{if(UI.cur==='map')UI.mapLayout(UI.mapCur||1);});

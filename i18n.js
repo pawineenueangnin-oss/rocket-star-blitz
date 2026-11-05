@@ -129,9 +129,9 @@ const I18N_RAW={
 "Treasure Comet",
 "Special Stage Bonus",
 "Mega Reward!",
-"All 10 stages cleared!",
-"Endless mode unlocked — how far can you go?",
-"Play Endless",
+"Stages 1–10 cleared!",
+"Next: the Special Stage Treasure Comet, then Stage 11 and beyond!",
+"Continue",
 "Main Menu"
 ],
 "th": [
@@ -262,9 +262,9 @@ const I18N_RAW={
 "ดาวหางสมบัติ",
 "โบนัสด่านพิเศษ",
 "รางวัลใหญ่!",
-"ผ่านครบทั้ง 10 ด่านแล้ว!",
-"ปลดล็อกโหมดไม่รู้จบแล้ว — จะไปได้ไกลแค่ไหน?",
-"เล่นโหมดไม่รู้จบ",
+"ผ่านด่าน 1–10 แล้ว!",
+"ต่อไป: ด่านพิเศษ ดาวหางสมบัติ แล้วไปต่อด่าน 11 และต่อ ๆ ไป!",
+"ไปต่อ",
 "กลับเมนูหลัก"
 ],
 "zh": [
@@ -395,9 +395,9 @@ const I18N_RAW={
 "宝藏彗星",
 "特别关卡奖励",
 "超级奖励！",
-"全部 10 关通关！",
-"无尽模式已解锁 — 你能飞多远？",
-"进入无尽模式",
+"第1–10关全部通关！",
+"接下来：特别关卡「宝藏彗星」，然后是第11关及更多！",
+"继续",
 "返回主菜单"
 ],
 "hi": [
@@ -528,9 +528,9 @@ const I18N_RAW={
 "ख़ज़ाना धूमकेतु",
 "विशेष स्टेज बोनस",
 "मेगा इनाम!",
-"सभी 10 चरण पूरे!",
-"एंडलेस मोड अनलॉक — आप कितनी दूर जाएँगे?",
-"एंडलेस खेलें",
+"स्टेज 1–10 पूरे!",
+"आगे: स्पेशल स्टेज ट्रेज़र कॉमेट, फिर स्टेज 11 और आगे!",
+"जारी रखें",
 "मुख्य मेनू"
 ],
 "es": [
@@ -661,9 +661,9 @@ const I18N_RAW={
 "Cometa del tesoro",
 "Bonus de fase especial",
 "¡Megapremio!",
-"¡Las 10 etapas completadas!",
-"Modo infinito desbloqueado — ¿hasta dónde llegas?",
-"Jugar Infinito",
+"¡Niveles 1–10 superados!",
+"Siguiente: la Fase Especial Cometa del Tesoro, ¡y luego el nivel 11 y más!",
+"Continuar",
 "Menú principal"
 ],
 "ar": [
@@ -794,9 +794,9 @@ const I18N_RAW={
 "مذنّب الكنز",
 "مكافأة المرحلة الخاصة",
 "جائزة كبرى!",
-"اكتملت المراحل العشر كلها!",
-"فُتح الوضع اللانهائي — إلى أي مدى ستصل؟",
-"العب اللانهائي",
+"أنهيت المراحل 1–10!",
+"التالي: المرحلة الخاصة مذنّب الكنز، ثم المرحلة 11 وما بعدها!",
+"متابعة",
 "القائمة الرئيسية"
 ],
 "fr": [
@@ -927,9 +927,9 @@ const I18N_RAW={
 "Comète au trésor",
 "Bonus niveau spécial",
 "Méga récompense !",
-"Les 10 stages terminés !",
-"Mode Infini débloqué — jusqu’où irez-vous ?",
-"Jouer en Infini",
+"Niveaux 1 à 10 terminés !",
+"Ensuite : le niveau spécial Comète au trésor, puis le niveau 11 et au-delà !",
+"Continuer",
 "Menu principal"
 ],
 "pt": [
@@ -1060,9 +1060,9 @@ const I18N_RAW={
 "Cometa do tesouro",
 "Bônus da fase especial",
 "Megaprêmio!",
-"Todas as 10 fases concluídas!",
-"Modo Infinito desbloqueado — até onde você vai?",
-"Jogar Infinito",
+"Fases 1–10 concluídas!",
+"A seguir: a Fase Especial Cometa do Tesouro, depois a fase 11 e mais!",
+"Continuar",
 "Menu principal"
 ],
 "ru": [
@@ -1193,9 +1193,9 @@ const I18N_RAW={
 "Комета сокровищ",
 "Бонус особого этапа",
 "Мегаприз!",
-"Все 10 этапов пройдены!",
-"Бесконечный режим открыт — как далеко зайдёте?",
-"Играть в Бесконечный",
+"Уровни 1–10 пройдены!",
+"Дальше: особый уровень «Комета сокровищ», затем уровень 11 и выше!",
+"Продолжить",
 "Главное меню"
 ],
 "ja": [
@@ -1326,9 +1326,9 @@ const I18N_RAW={
 "おたからすいせい",
 "スペシャルボーナス",
 "メガごほうび！",
-"全10ステージクリア！",
-"エンドレス解除 — どこまで行ける？",
-"エンドレスへ",
+"ステージ1〜10クリア！",
+"次はスペシャルステージ「宝のすい星」、そしてステージ11へ！",
+"つづける",
 "メインメニュー"
 ],
 "de": [
@@ -1459,9 +1459,9 @@ const I18N_RAW={
 "Schatzkomet",
 "Spezialstufen-Bonus",
 "Mega-Belohnung!",
-"Alle 10 Stages geschafft!",
-"Endlos-Modus freigeschaltet — wie weit kommst du?",
-"Endlos spielen",
+"Level 1–10 geschafft!",
+"Als Nächstes: Spezial-Level Schatzkomet, dann Level 11 und weiter!",
+"Weiter",
 "Hauptmenü"
 ],
 "id": [
@@ -1592,9 +1592,9 @@ const I18N_RAW={
 "Komet Harta",
 "Bonus Tahap Spesial",
 "Hadiah Mega!",
-"Semua 10 stage selesai!",
-"Mode Endless terbuka — seberapa jauh kau pergi?",
-"Main Endless",
+"Tahap 1–10 selesai!",
+"Berikutnya: Tahap Spesial Komet Harta, lalu tahap 11 dan seterusnya!",
+"Lanjut",
 "Menu utama"
 ],
 "ko": [
@@ -1725,9 +1725,9 @@ const I18N_RAW={
 "보물 혜성",
 "스페셜 스테이지 보너스",
 "메가 보상!",
-"스테이지 10개 모두 클리어!",
-"엔드리스 모드 해금 — 얼마나 멀리 갈까?",
-"엔드리스 플레이",
+"스테이지 1–10 클리어!",
+"다음: 스페셜 스테이지 보물 혜성, 그다음 스테이지 11로!",
+"계속",
 "메인 메뉴"
 ],
 "tr": [
@@ -1858,9 +1858,9 @@ const I18N_RAW={
 "Hazine Kuyruklu Yıldızı",
 "Özel Bölüm Bonusu",
 "Mega Ödül!",
-"10 aşamanın hepsi tamam!",
-"Sonsuz mod açıldı — ne kadar uzağa gideceksin?",
-"Sonsuz oyna",
+"Bölüm 1–10 tamamlandı!",
+"Sırada: Özel Bölüm Hazine Kuyrukluyıldızı, sonra bölüm 11 ve ötesi!",
+"Devam",
 "Ana menü"
 ],
 "vi": [
@@ -1991,9 +1991,9 @@ const I18N_RAW={
 "Sao chổi kho báu",
 "Thưởng màn đặc biệt",
 "Phần thưởng lớn!",
-"Đã phá xong cả 10 màn!",
-"Mở khóa chế độ Vô tận — bạn đi được bao xa?",
-"Chơi Vô tận",
+"Đã qua màn 1–10!",
+"Tiếp theo: Màn đặc biệt Sao chổi kho báu, rồi màn 11 trở đi!",
+"Tiếp tục",
 "Menu chính"
 ],
 "it": [
@@ -2124,9 +2124,9 @@ const I18N_RAW={
 "Cometa del tesoro",
 "Bonus livello speciale",
 "Mega premio!",
-"Tutte e 10 le fasi completate!",
-"Modalità Infinita sbloccata — fino a dove arrivi?",
-"Gioca Infinito",
+"Livelli 1–10 completati!",
+"Ora: il Livello Speciale Cometa del Tesoro, poi il livello 11 e oltre!",
+"Continua",
 "Menu principale"
 ],
 "pl": [
@@ -2257,9 +2257,9 @@ const I18N_RAW={
 "Kometa skarbów",
 "Bonus etapu specjalnego",
 "Mega nagroda!",
-"Wszystkie 10 etapów ukończone!",
-"Tryb Nieskończony odblokowany — jak daleko zajdziesz?",
-"Graj Nieskończony",
+"Etapy 1–10 ukończone!",
+"Dalej: Etap Specjalny Kometa Skarbów, potem etap 11 i kolejne!",
+"Dalej",
 "Menu główne"
 ],
 "nl": [
@@ -2390,9 +2390,9 @@ const I18N_RAW={
 "Schatkomeet",
 "Bonus speciaal level",
 "Megabeloning!",
-"Alle 10 stages gehaald!",
-"Eindeloze modus ontgrendeld — hoe ver kom je?",
-"Speel Eindeloos",
+"Levels 1–10 gehaald!",
+"Hierna: het Speciale Level Schatkomeet, dan level 11 en verder!",
+"Doorgaan",
 "Hoofdmenu"
 ],
 "fil": [
@@ -2523,9 +2523,9 @@ const I18N_RAW={
 "Kometa ng Kayamanan",
 "Bonus ng Espesyal na Yugto",
 "Mega Gantimpala!",
-"Natapos ang lahat ng 10 stage!",
-"Nabukas ang Endless mode — gaano kalayo ang abot mo?",
-"Maglaro ng Endless",
+"Tapos ang Stage 1–10!",
+"Susunod: Special Stage Treasure Comet, tapos Stage 11 at higit pa!",
+"Ituloy",
 "Pangunahing menu"
 ],
 "ms": [
@@ -2656,9 +2656,9 @@ const I18N_RAW={
 "Komet Harta",
 "Bonus Peringkat Khas",
 "Ganjaran Mega!",
-"Kesemua 10 peringkat selesai!",
-"Mod Endless dibuka — sejauh mana anda boleh pergi?",
-"Main Endless",
+"Peringkat 1–10 selesai!",
+"Seterusnya: Peringkat Khas Komet Harta, kemudian peringkat 11 dan seterusnya!",
+"Teruskan",
 "Menu utama"
 ],
 "bn": [
@@ -2789,9 +2789,9 @@ const I18N_RAW={
 "গুপ্তধন ধূমকেতু",
 "বিশেষ পর্যায় বোনাস",
 "মেগা পুরস্কার!",
-"সব ১০টি ধাপ সম্পন্ন!",
-"এন্ডলেস মোড আনলক — কতদূর যাবেন?",
-"এন্ডলেস খেলুন",
+"স্টেজ ১–১০ শেষ!",
+"এরপর: স্পেশাল স্টেজ ট্রেজার কমেট, তারপর স্টেজ ১১ এবং আরও!",
+"চালিয়ে যাও",
 "প্রধান মেনু"
 ]
 };

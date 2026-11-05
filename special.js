@@ -1,7 +1,7 @@
 // Starzoomer — v24 endless SPECIAL STAGE "Treasure Comet": every 10th endless sector (10, 20, 30 ...).
 // Easy bonus stage: golden-purple comet sky, crystal-rain gems (harmless, no fire, no contact damage), gentle waves with
 // slow sparse bullets (fire x0.45, bullet speed x0.72, hp x0.75 via mkDM), treasure ships, coin rain, supply capsules, no boss.
-// Ends with a MEGA REWARD burst: bonus coins 100 + 10*sector, plus weapon MAX (or 1UP if already MAX, lives capped at 6).
+// v26: special stage after stage 10, 20, 30 ... (staircase). Ends with a MEGA REWARD burst: bonus coins 100 + 10*preceding stage number, plus weapon MAX (or 1UP if already MAX, lives capped at 6).
 'use strict';
 const SP={dur:46,bonus:n=>100+10*n,lifeCap:6,puChance:.16,pity:12};
 ED.gem=[2,10,80];
@@ -36,7 +36,7 @@ const _ke24=killE;killE=function(e){_ke24(e);if(!G.special)return;
  else if(e.type==='gold'){drop(e.x-10,e.y,pickPU());drop(e.x+10,e.y,pickPU());}
  else{G.spPity=(G.spPity||0)+1;if(Math.random()<SP.puChance||G.spPity>SP.pity){G.spPity=0;drop(e.x,e.y,pickPU());}}};
 // mega reward
-function spMega(){G.spEnd=0;const n=G.sector+1;G.spBonus=SP.bonus(n);AU.sfx('clear');AU.sfx('power');G.flash=.5;G.shake=6;FX.fw=3;P.magT=Math.max(P.magT,8);P.inv=Math.max(P.inv,6);
+function spMega(){G.spEnd=0;const n=stNum();G.spBonus=SP.bonus(n);AU.sfx('clear');AU.sfx('power');G.flash=.5;G.shake=6;FX.fw=3;P.magT=Math.max(P.magT,8);P.inv=Math.max(P.inv,6);
  EB.forEach(b=>b.a=false);ring(GW/2,GH*.4,60,'#ffd23a');ring(GW/2,GH*.4,110,'#c060ff');
  for(let i=0;i<36;i++)later(i*.05,()=>{const a=Math.random()*TAU,r=rnd(10,60);const p=take(PK);if(!p)return;p.x=GW/2+Math.cos(a)*r;p.y=GH*.4+Math.sin(a)*r;p.vx=Math.cos(a)*rnd(60,140);p.vy=Math.sin(a)*rnd(60,140)-40;p.k='C';p.t=0;p.v=1;});
  if(P.wl<MAXWL||(P.wt!=='B'&&(P.wlv||1)<3)){const t0=tierOf();P.wl=MAXWL;if(P.wt!=='B')P.wlv=3;setTier();if(tierOf()>t0)evolve();G.spGift='max';text(P.x,P.y-40,T('pPower')+' MAX','#ffe14a');}
@@ -47,13 +47,16 @@ const _up24=update;update=function(dt){_up24(dt);if(!G.special||G.mode!=='play')
  for(const e of EN)if(e.a&&e.type==='gem')e.x+=Math.sin(e.t*2+e.ph)*24*dt;
  if(G.spEnd<0&&G.t>=G.dur+1.5&&P.alive&&(G.t>=G.dur+6||!EN.some(e=>e.a&&e.y>0)))spMega();
  else if(G.spEnd>=0){G.spEnd+=dt;if(G.spEnd>=3.4&&P.alive)stageClear();}};
-const _sc24=stageClear;stageClear=function(){_sc24();if(!G.special||!G.endless)return;const b=G.spBonus||SP.bonus(G.sector);SAVE.cr+=b;G.starBonus=b;persist();};
+const _sc24=stageClear;stageClear=function(){_sc24();if(!G.special||!G.endless)return;const b=G.spBonus||SP.bonus(stNum(G.sector-1));SAVE.cr+=b;G.starBonus=b;persist();};
 const _rv24=revive;revive=function(){_rv24();if(G.special&&!G.boss)AU.play(61);};
 if(window.DBG){Object.assign(DBG,{
  // jump straight to endless sector n (1-based, as shown on screen); keeps a fresh ship if not already in endless
- endless(n){UI.hideAll();if(!G.endless||G.mode==='menu'){G.sector=0;startStage(0,true);}G.sector=Math.max(0,(n|0)-1);startStage(0,true);return this.state();},
+ endless(n){UI.hideAll();G.fresh=!G.endless||G.mode==='menu';G.sector=Math.max(0,(n|0)-1);startStage(0,true);return this.state();},
+ // v26: jump to numbered stage N (1..), 'sp' after stage N via spAfter(N)
+ stage(N){if(N<=10){UI.hideAll();G.fresh=true;startStage(N);return this.state();}return this.endless(secOf(N)+1);},
+ spAfter(N){return this.endless(secOf(N+1));},
  // set the NEXT endless sector (used by the next stage start / warp) without starting it
  setSector(n){G.sector=Math.max(0,(n|0)-1);return G.sector;},
  toSpEnd(){G.t=G.dur;G.evI=G.ev.length;LATER.length=0;EN.forEach(e=>e.a=false);},
- sp(){return{special:!!G.special,sector:G.sector,num:G.sector+1,bIdx:bIdx(),bg:G.bg,dur:G.dur,t:+G.t.toFixed(1),spEnd:+(G.spEnd||0).toFixed(2),bonus:G.spBonus,gift:G.spGift,starBonus:G.starBonus,lives:P.lives,wl:P.wl,fire:+G.dm.fire.toFixed(3),spd:+G.dm.spd.toFixed(3),hp:+G.dm.hp.toFixed(3),gems:EN.filter(e=>e.a&&e.type==='gem').length,boss:!!G.boss,warnT:G.warnT};},
+ sp(){return{special:!!G.special,sector:G.sector,stNum:stNum(),far:SAVE.far,num:G.sector+1,bIdx:bIdx(),bg:G.bg,dur:G.dur,t:+G.t.toFixed(1),spEnd:+(G.spEnd||0).toFixed(2),bonus:G.spBonus,gift:G.spGift,starBonus:G.starBonus,lives:P.lives,wl:P.wl,fire:+G.dm.fire.toFixed(3),spd:+G.dm.spd.toFixed(3),hp:+G.dm.hp.toFixed(3),gems:EN.filter(e=>e.a&&e.type==='gem').length,boss:!!G.boss,warnT:G.warnT};},
  bmap(k){const o=[];for(let s=0;s<k;s++)o.push(isSpecial(s)?'SP':bIdx(s));return o;}});}

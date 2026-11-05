@@ -18,7 +18,11 @@ function clearAll(){[PB,EB,EN,PT,PK,HZ,TX].forEach(p=>p.forEach(o=>o.a=false));}
 // sf() returns the relative growth (1.00 .. 1.45 .. cap/0.80) and scales enemy hp, speed, fire, bullet speed,
 // wave size/spawn spacing, boss + turret hp. DM_BASE holds the fixed easy baseline multipliers.
 const D_BASE=.80,D_STEP=.05,D_CAP=1.40;
-function dFactor(stage,endless,sector){const n=endless?10+1+(sector||0):stage;return Math.min(D_CAP,D_BASE*(1+D_STEP*(Math.max(1,n)-1)));}
+// v26 staircase: after stage 10 the run continues as numbered stages; internal sector index s: s%11==0 is a Special Stage
+// (s=0 after stage 10, 11 after 20, ...), other s are stage stNum(s)=10+s-floor(s/11) (11..20, 21..30 ...). Special uses the preceding stage's number.
+function stNum(s){s=s===undefined?G.sector:s;return 10+s-Math.floor(s/11);}
+function secOf(N){if(N<=10)return -1;const m=N-11;return 1+m+Math.floor(m/10);}
+function dFactor(stage,endless,sector){const n=endless?stNum(sector||0):stage;return Math.min(D_CAP,D_BASE*(1+D_STEP*(Math.max(1,n)-1)));}
 const DM_BASE={hp:.55,spd:.62,fire:.30,gap:1.9,lives:4,cap:5};
 const G={mode:'menu',stage:1,endless:false,sector:0,t:0,dur:80,boss:null,warnT:0,score:0,combo:0,comboT:0,deaths:0,credits:0,shake:0,flash:0,hs:0,bg:0,ev:[],evI:0,
  contUsed:false,clearT:0,pity:0,scroll:0,lvlSpeed:1,dm:DM_BASE,kills:0,stats:{t:0}};
@@ -27,8 +31,8 @@ const tierOf=()=>clamp(P.wl-1,0,4);const MAXWL=5;
 // early-game easing: stages 1-3 softer, stage 1 also warms up over its first 60 s; stage 4+ untouched
 // v24: every 10th endless sector (10,20,30..) is a special stage; bIdx() = boss/background index for normal sectors,
 // counting only normal sectors so the boss sequence continues after a special stage (no boss lost from the rotation)
-function isSpecial(sec){sec=sec===undefined?G.sector:sec;return G.endless&&(sec+1)%10===0;}
-function bIdx(sec){sec=sec===undefined?G.sector:sec;return (sec-Math.floor((sec+1)/10))%10;}
+function isSpecial(sec){sec=sec===undefined?G.sector:sec;return G.endless&&sec%11===0;}
+function bIdx(sec){sec=sec===undefined?G.sector:sec;return ((sec-Math.floor(sec/11)-1)%10+10)%10;}
 function early(){return !G.endless&&G.stage<=3;}
 function warm(){return !G.endless&&G.stage===1&&!G.boss?.82+.18*Math.min(1,G.t/60):1;}
 function mkDM(){const b=DM_BASE;return{name:'auto',lives:b.lives,get cap(){return Math.round(b.cap*sf());},get hp(){return b.hp*(G.special?.75:1);},gap:b.gap,get spd(){return b.spd*warm()*(G.special?.72:1);},get fire(){return b.fire*warm()*(G.special?.45:1);}};}
@@ -129,7 +133,7 @@ function startBoss(){const i=G.endless?bIdx():G.stage-1;const D=BOSS_DEF[i];cons
  tur.forEach(t=>t.mhp=t.hp);
  const hp=Math.round(380*sf()*G.dm.hp);
  G.boss={i,D,x:GW/2,y:-hh-20,w:D[1],h:D[2],hp,mhp:hp,phase:0,t:0,pt:0,pi:0,pat:BOSS_PAT[i].slice(),cur:null,cur2:null,fl:0,spr:ART.bossSpr[i]||(ART.bossSpr[i]=bossSpr(i)),tur,dead:0,sa:0,beam:null,coreOy:hh*.25};
- if(G.endless&&G.sector>=10)G.boss.pat.push(BOSS_EXTRA[i]);
+ if(G.endless&&stNum()>=21)G.boss.pat.push(BOSS_EXTRA[i]);
  AU.play(100+i);}
 function bossFireCore(B,a,spd,spr,r){const b=eShoot({x:B.x,y:B.y+B.coreOy},a,spd,spr,r);return b;}
 function bossUpd(B,dt){B.t+=dt;if(B.fl>0)B.fl-=dt;const hh=B.h/2;
@@ -216,19 +220,19 @@ function pickup(k,x,y){AU.sfx(k==='C'?'coin':'power');
 // ---------- stage flow ----------
 function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector=endless?(G.sector||0):0;G.special=isSpecial();G.dm=mkDM();
  clearAll();RINGS.length=0;LATER.length=0;G.t=0;G.boss=null;G.warnT=0;G.deaths=0;G.combo=0;G.contUsed=false;G.clearT=0;G.pity=0;G.kills=0;G.maxCombo=0;G.noIntro=false;G.credits=0;G.starBonus=0;G.newStars=0;G.bg=G.special?10:endless?bIdx():n-1;
- if(!endless||G.sector===0){G.score=0;P.ship=SAVE.ship;P.lives=G.dm.lives-1+SHIPS[P.ship].hp+(early()?1:0)+UPF.life();P.wt='B';P.wl=1;P.wlv=1;P.pw=0;P.dlv=0;P.bombs=early()&&G.stage<=2?3:2;P.spd=0;}setTier();P.evoT=0;P.magT=0;P.x2T=0;P.downT=0;
+ const fr=!endless||G.fresh;G.fresh=false;if(fr){G.score=0;P.ship=SAVE.ship;P.lives=G.dm.lives-1+SHIPS[P.ship].hp+(early()?1:0)+UPF.life();P.wt='B';P.wl=1;P.wlv=1;P.pw=0;P.dlv=0;P.bombs=early()&&G.stage<=2?3:2;P.spd=0;}setTier();P.evoT=0;P.magT=0;P.x2T=0;P.downT=0;
  P.shield=UPF.shd()+(P.ship===2?1:0);P.x=P.tx=GW/2;P.y=P.ty=GH-110;P.inv=early()?3:2;P.alive=true;P.bombT=0;
  Ads.stageRewards=0;buildStage();if(early()&&G.stage<=2){later(8,()=>drop(GW*.5,30,'W'));later(30,()=>drop(rnd(90,GW-90),30,'WA'));later(52,()=>drop(rnd(90,GW-90),30,'WB'));}setBG(G.bg);G.mode='play';AU.play(G.special?61:G.endless?1+bIdx():G.stage);UI.hud(true);LOG('stage',G.stage,'endless',G.endless,G.sector);}
 // stars: 3 = no life lost, 2 = one life lost, 1 = cleared; each newly earned star pays STAR_BONUS coins once
 const STAR_BONUS=20;
 function stageClear(){G.mode='clear';G.clearT=0;AU.play(-1);AU.sfx('clear');const s=G.stage;DAILY.track('stage');if(G.deaths===0)DAILY.track('nodmg');
- if(G.endless){G.sector++;SAVE.endBest=Math.max(SAVE.endBest,G.sector);SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();
+ if(G.endless){G.sector++;SAVE.endBest=Math.max(SAVE.endBest,G.sector);SAVE.far=Math.max(SAVE.far,G.sector);SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();
   // v23: endless shows a short sector-clear panel (banner + double-coins rewarded), then Next -> interstitial (sector>=3, 90 s gap) -> warp
   {const base=G.score,kb=G.kills*25;G.score=base+kb;if(G.score>SAVE.hi)SAVE.hi=G.score;persist();G.tally={base,kb,cr:G.credits,bk:'comboBonus',bv:0,tot:G.score};UI.tallyDone=false;}
   setTimeout(()=>UI.result(true,{stars:0,nb:false,sb:0}),1800);return;}
  {const base=G.score,kb=G.kills*25,nd=G.deaths===0,bv=nd?3000+s*1000:Math.min(20000,(G.maxCombo||0)*60);G.score=base+kb+bv;G.tally={base,kb,cr:G.credits,bk:nd?'noDmg':'comboBonus',bv,tot:G.score};UI.tallyDone=false;}
  const stars=G.deaths===0?3:G.deaths===1?2:1,os=SAVE.stars[s-1]||0;G.newStars=Math.max(0,stars-os);G.starBonus=G.newStars*STAR_BONUS;SAVE.cr+=G.starBonus;SAVE.stars[s-1]=Math.max(os,stars);const nb=G.score>(SAVE.best[s-1]||0);if(nb)SAVE.best[s-1]=G.score;if(G.score>SAVE.hi)SAVE.hi=G.score;
- SAVE.reached=Math.max(SAVE.reached,Math.min(10,s+1));if(s===10)SAVE.cleared=1;SAVE.cr+=G.credits;persist();
+ SAVE.reached=Math.max(SAVE.reached,Math.min(10,s+1));if(s===10){SAVE.cleared=1;SAVE.far=Math.max(SAVE.far,0);}SAVE.cr+=G.credits;persist();
  setTimeout(()=>UI.result(true,{stars,nb,sb:G.starBonus}),1800);}
 function gameOver(){if(G.mode!=='play')return;G.mode='over';AU.play(-1);AU.sfx('over');SAVE.cr+=G.credits;if(G.score>SAVE.hi)SAVE.hi=G.score;if(G.endless)SAVE.endBest=Math.max(SAVE.endBest,G.sector);persist();UI.result(false,{});}
 function revive(){G.mode='play';P.alive=true;P.lives=1;P.inv=3;P.shield=Math.max(P.shield,1);P.bombs=Math.max(P.bombs,2);P.x=P.tx=GW/2;P.y=P.ty=GH-110;EB.forEach(b=>b.a=false);G.contUsed=true;SAVE.cr-=G.credits;G.credits=0;AU.play(G.boss?100+G.boss.i:G.special?61:G.endless?1+bIdx():G.stage);UI.hud(true);}
@@ -319,6 +323,6 @@ const DBG={god:false,fast:false,auto:false,
   P.tx=clamp(tx,14,GW-14);P.ty=GH-110;},
  state(){return{dFactor:+dFactor(G.stage,G.endless,G.sector).toFixed(3),sf:+sf().toFixed(3),mode:G.mode,stage:G.stage,endless:G.endless,sector:G.sector,t:+G.t.toFixed(1),boss:G.boss?{hp:Math.round(G.boss.hp),mhp:G.boss.mhp,ph:G.boss.phase,name:G.boss.D[0]}:null,score:G.score,lives:P.lives,en:EN.filter(e=>e.a).length,eb:EB.filter(e=>e.a).length,pt:PT.filter(e=>e.a).length,cr:SAVE.cr,reached:SAVE.reached};},
  upgFx(){return{dmgMul:UPF.dmg(),rateMul:UPF.rate(),fireInterval:+(SHIPS[P.ship].fi/UPF.rate()).toFixed(4),startShield:UPF.shd(),magR:34*UPF.mag(),puSec:12*UPF.pwr(),extraLives:UPF.life(),lives:P.lives,shield:P.shield,magT:P.magT,x2T:P.x2T};},daily(){return JSON.parse(JSON.stringify(SAVE.dly));},
- start(n,e){UI.hideAll();startStage(n,e);},killBoss(){if(G.boss)damageBoss(G.boss,1e9);},toBoss(){G.t=G.dur+2.4;G.evI=G.ev.length;LATER.length=0;EN.forEach(e=>e.a=false);},
+ start(n,e){UI.hideAll();G.fresh=true;startStage(n,e);},killBoss(){if(G.boss)damageBoss(G.boss,1e9);},toBoss(){G.t=G.dur+2.4;G.evI=G.ev.length;LATER.length=0;EN.forEach(e=>e.a=false);},
  shot(stage,sec){this.start(stage);this.sim(sec);}};
 if(DEBUG)window.DBG=DBG;window.__G=G;window.__P=P;

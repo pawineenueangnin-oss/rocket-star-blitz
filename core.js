@@ -23,7 +23,7 @@ window.RSB_AD_UNITS=window.RSB_AD_UNITS||{
  window.AndroidAds={configure(){},
   showBanner(){lg('banner');if(fill!=='ok')return;if(!bn)bn=box('adB','AD TEST · Banner &nbsp;<b>rsb_banner_menu</b>&nbsp; 320×50');bn.style.display='flex';},
   hideBanner(){if(bn)bn.style.display='none';},
-  showInterstitial(){lg('inter');if(fill!=='ok'){setTimeout(()=>window.onInterstitialClosed&&window.onInterstitialClosed(),300);return;}if(document.querySelector('.adMock.adI'))return;const d=box('adI','<div><div class="adT">AD TEST · Interstitial</div><b>rsb_inter_stage_end</b><br><small>full screen · after the stage-clear panel / endless sector clear, before the warp (from stage or sector 3, 90 s+ apart)</small></div><button class="adX">✕</button>');d.querySelector('button').onclick=()=>{d.remove();window.onInterstitialClosed&&window.onInterstitialClosed();};},
+  showInterstitial(){lg('inter');if(fill!=='ok'){setTimeout(()=>window.onInterstitialClosed&&window.onInterstitialClosed(),300);return;}if(document.querySelector('.adMock.adI'))return;const d=box('adI','<div><div class="adT">AD TEST · Interstitial</div><b>rsb_inter_stage_end</b><br><small>full screen · after the stage-clear panel, before the warp (from stage 3, 90 s+ apart)</small></div><button class="adX">✕</button>');d.querySelector('button').onclick=()=>{d.remove();window.onInterstitialClosed&&window.onInterstitialClosed();};},
   isRewardedReady(){return fill!=='nofill';},
   showRewarded(){lg('reward');if(fill==='fail'){setTimeout(()=>window.onRewardedFailed&&window.onRewardedFailed(),200);return true;}
    const d=box('adI','<div><div class="adT">AD TEST · Rewarded</div><b>rsb_reward_continue</b><br><small>x2 coins (stage clear) · continue with shield (game over) · max 2 per stage</small><br><br><span class="adW">▶ watching… 3</span><br><button class="adC" disabled>Claim reward</button><br><button class="adS">Skip (no reward)</button></div>');
@@ -48,12 +48,15 @@ const LOG=(...a)=>{try{console.log('[Starzoomer]',...a);}catch(e){}};
 // ---------- Save ----------
 const SAVE=(()=>{let s={};try{s=JSON.parse(localStorage.getItem('rsb_save')||'{}');}catch(e){}
  if(!s||typeof s!=='object'||Array.isArray(s))s={};
- const d={v:2,reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{},snd:1,mus:1,vib:1,shake:1,q:'auto',diff:1,endBest:0,cleared:0,dly:null};
+ const d={v:2,reached:1,stars:[],best:[],hi:0,cr:0,ships:[1,0,0],ship:0,upg:{},snd:1,mus:1,vib:1,shake:1,q:'auto',diff:1,endBest:0,cleared:0,dly:null,far:-1};
+ const mig=s.far===undefined;
  for(const k in d)if(s[k]===undefined)s[k]=d[k];
  // v17 save v2: 6 upgrades x up to 5 levels; older saves (v1, 4 upgrades x 4 levels) keep their levels and coins
  if(!s.upg||typeof s.upg!=='object')s.upg={};for(const k of['rate','dmg','shd','mag','life','pwr'])s.upg[k]=Math.max(0,Math.min(k==='life'?2:5,(s.upg[k]|0)));
  s.cr=Math.max(0,+s.cr||0);
- if(!s.dly||typeof s.dly!=='object')s.dly={d:0,hi:0,m:[],ld:0,ls:0};s.v=2;return s;})();
+ if(!s.dly||typeof s.dly!=='object')s.dly={d:0,hi:0,m:[],ld:0,ls:0};s.v=2;
+ // v26 migration: old Endless best sector k -> unlocked numbered stage 10+k; cleared stage 10 -> Special + stage 11 path unlocked
+ if(mig){let f=(s.cleared||s.reached>10)?0:-1;if((s.endBest|0)>0){const m=(s.endBest|0)-1;f=Math.max(f,1+m+Math.floor(m/10));}s.far=f;}if((s.far|0)>=0&&!s.cleared)s.cleared=1;s.far=s.far|0;return s;})();
 // ---------- permanent upgrades (hangar shop). Small bonuses so auto-difficulty balance holds ----------
 const UPG=[
  {k:'dmg',n:'damage',ic:'H',cost:[120,280,520,860,1300],fx:l=>'+'+l*6+'%'},
