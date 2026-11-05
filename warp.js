@@ -22,7 +22,7 @@ const WARP={on:null,st:[],D:5.9,
   if(t>=2.6&&!o.flashed){o.flashed=true;AU.sfx('warpflash');}
   if(t>=3.05&&!o.arr){o.arr=true;AU.sfx('warpin');}
   if(t>=this.D)this.finish();},
- swap(){const o=this.on;const bg=o.endless?G.sector%10:o.n-1;setBG(bg,true);for(const s of this.st)s.d=Math.random()*GH*.8;},
+ swap(){const o=this.on;const bg=o.endless?(isSpecial()?10:bIdx()):o.n-1;setBG(bg,true);for(const s of this.st)s.d=Math.random()*GH*.8;},
  draw(dt){const o=this.on;if(!o)return;const t=o.t,v=this.spd(t),VX=GW/2,VY=GH*.38;
   // flash envelope
   const fl=t<2.45?0:t<2.75?(t-2.45)/.3:t<3.25?1-(t-2.75)/.5:0;
@@ -48,7 +48,7 @@ const WARP={on:null,st:[],D:5.9,
   // stage title card
   if(t>3.0){const a=Math.min(1,(t-3)/.35)*Math.min(1,Math.max(0,(this.D-.25-t)/.5)),pop=Math.min(1,(t-3)/.3),sc=.6+.4*(1-Math.pow(1-pop,3))+Math.max(0,(t-3.3))*.02;
    cx.save();cx.globalAlpha=a;cx.translate(GW/2,GH*.36);cx.textAlign='center';cx.textBaseline='middle';
-   const big=o.endless?T('endless'):T('stage')+' '+o.n,sub=o.endless?T('stage')+' ∞-'+(G.sector+1):T('n'+o.n);
+   const sp=o.endless&&isSpecial(),big=sp?T('spStage'):o.endless?T('endless'):T('stage')+' '+o.n,sub=sp?T('spName')+' ∞-'+(G.sector+1):o.endless?T('stage')+' ∞-'+(G.sector+1):T('n'+o.n);
    // light bars
    cx.globalCompositeOperation='lighter';const bw=Math.min(GW*.86,40+(t-3)*700);cx.fillStyle='rgba(120,220,255,.55)';cx.fillRect(-bw/2,-44,bw,2);cx.fillRect(-bw/2,40,bw,2);cx.fillStyle='rgba(255,255,255,.9)';cx.fillRect(-bw/4,-44,bw/2,1);cx.fillRect(-bw/4,40,bw/2,1);
    cx.globalAlpha=a*.5;cx.drawImage(ART.glow.c.c,-GW*.45,-70,GW*.9,140);cx.globalAlpha=a;cx.globalCompositeOperation='source-over';

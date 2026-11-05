@@ -121,3 +121,7 @@ DRONES!
 Helper
 +1 schild en tragere vijandelijke kogels
 LEVEL OMHOOG!
+Speciaal level
+Schatkomeet
+Bonus speciaal level
+Megabeloning!

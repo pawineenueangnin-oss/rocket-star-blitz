@@ -121,3 +121,7 @@ DRONES!
 Ajudante
 +1 escudo e tiros inimigos mais lentos
 SUBIU DE NÍVEL!
+Fase especial
+Cometa do tesouro
+Bônus da fase especial
+Megaprêmio!

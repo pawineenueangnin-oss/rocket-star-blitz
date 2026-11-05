@@ -121,3 +121,7 @@ Arcoíris
 Ayudante
 +1 escudo y disparos enemigos más lentos
 ¡SUBES DE NIVEL!
+Fase especial
+Cometa del tesoro
+Bonus de fase especial
+¡Megapremio!

@@ -210,3 +210,4 @@ body.lowq .snode .sv{filter:none}body.lowq .snode.cur:before{animation:none}
 .tst{font-family:PS2P;font-size:.62em;color:#ffe14a;margin-inline-start:.3em;white-space:nowrap}.cr .tst{font-size:1em;margin-inline-end:.5em}
 .set.hlp{border-color:rgba(255,210,100,.5)}.set.hlp>span{display:flex;flex-direction:column;gap:.15em}.set .sd{font-size:.72em;opacity:.85;line-height:1.2}
 .sbn{color:#ffe14a;font-weight:800;animation:v6star .5s cubic-bezier(.2,1.6,.4,1) both}.sbn.hid{display:none}.sbn b{font-family:PS2P;font-size:.8em}
+.spbadge{display:inline-block;margin:.1em auto 0;padding:.25em .9em;border-radius:1em;font-weight:800;font-size:.95em;color:#2a0850;background:linear-gradient(#fff3b0,#ffd23a 55%,#ff9a1a);box-shadow:0 0 .8em rgba(190,90,255,.8),0 0 0 2px #b04aff;max-width:90%;overflow-wrap:anywhere}

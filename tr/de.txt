@@ -121,3 +121,7 @@ DROHNEN!
 Helfer
 +1 Schild und langsamere Gegnerschüsse
 LEVEL UP!
+Spezialstufe
+Schatzkomet
+Spezialstufen-Bonus
+Mega-Belohnung!

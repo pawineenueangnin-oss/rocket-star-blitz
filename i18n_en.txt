@@ -121,3 +121,7 @@ pDrone|DRONES!
 helper|Helper
 helperD|+1 shield and slower enemy shots
 levelUp|LEVEL UP!
+spStage|Special Stage
+spName|Treasure Comet
+spBonus|Special Stage Bonus
+spMega|Mega Reward!

@@ -121,3 +121,7 @@ DRONES !
 Assistant
 +1 bouclier et tirs ennemis plus lents
 NIVEAU SUPÉRIEUR !
+Niveau spécial
+Comète au trésor
+Bonus niveau spécial
+Méga récompense !
