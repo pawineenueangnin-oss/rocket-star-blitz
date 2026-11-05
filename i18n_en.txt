@@ -24,7 +24,6 @@ restart|Restart
 quit|Quit
 gameover|Game Over
 clear|Stage Clear!
-sectorClear|Sector Clear!
 score|Score
 best|Best
 credits|Credits
@@ -42,7 +41,6 @@ fireRate|Fire rate
 damage|Damage
 shield|Shield
 magnet|Magnet
-endless|Endless
 stage|Stage
 skip|Skip
 howto|Drag anywhere to fly · auto fire · B = bomb
@@ -50,7 +48,6 @@ madeBy|Made by
 privacy|Privacy policy
 unlockAt|Clear stage {n}
 newBest|New best!
-victory|Victory!
 bomb|Bomb
 noVideo|Video not available right now
 needCr|Not enough credits
@@ -67,7 +64,7 @@ pLife|1UP!
 n1|Violet Veil
 n2|Cinder Belt
 n3|Frostmoon Rime
-n4|Twin Suns Sector
+n4|Twin Suns Zone
 n5|Coral Drift
 n6|Storm Rift
 n7|Glass Comet Field

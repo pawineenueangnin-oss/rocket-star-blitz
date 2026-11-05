@@ -24,7 +24,6 @@ Reiniciar
 Salir
 Fin del juego
 ¡Nivel superado!
-¡Sector superado!
 Puntos
 Récord
 Créditos
@@ -42,7 +41,6 @@ Cadencia
 Daño
 Escudo
 Imán
-Infinito
 Nivel
 Saltar
 Arrastra para volar · disparo automático · B = bomba
@@ -50,7 +48,6 @@ Hecho por
 Política de privacidad
 Supera el nivel {n}
 ¡Nuevo récord!
-¡Victoria!
 Bomba
 Vídeo no disponible ahora
 Créditos insuficientes
@@ -67,7 +64,7 @@ Más velocidad
 Velo Violeta
 Cinturón de Ceniza
 Luna Helada Rime
-Sector de los Soles Gemelos
+Zona de los Soles Gemelos
 Deriva de Coral
 Grieta de Tormenta
 Campo de Cometas de Cristal

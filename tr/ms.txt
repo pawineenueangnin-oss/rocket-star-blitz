@@ -24,7 +24,6 @@ Mula semula
 Keluar
 Permainan tamat
 Peringkat selesai!
-Sektor selesai!
 Skor
 Terbaik
 Kredit
@@ -42,7 +41,6 @@ Kecepatan tembak
 Kerosakan
 Perisai
 Magnet
-Tanpa henti
 Peringkat
 Langkau
 Seret untuk terbang · tembak automatik · B = bom
@@ -50,7 +48,6 @@ Dibuat oleh
 Kebijakan privasi
 Tamatkan peringkat {n}
 Rekor baru!
-Menang!
 Bom
 Video tiada buat masa ini
 Kredit tidak mencukupi

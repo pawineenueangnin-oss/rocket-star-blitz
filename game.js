@@ -196,7 +196,7 @@ function laserDmg(dt){const L=P.wl,w=7+L*4,dps=(30+L*11)*UPF.dmg()*(P.ship===2?1
  P.ltop=top;if(Math.random()<.5)part(P.x+rnd(-w/2,w/2),top+4,rnd(-40,40),rnd(20,80),.25,2,ART.glow.c);AU.sfx('laser');}
 function hitE(e,d,beam){if(e.type==='shield'&&e.shOn&&!beam){AU.sfx('deflect');e.fl=.04;return false;}if(e.type==='shield'&&e.shOn&&beam)d*=.25;
  e.hp-=d;e.fl=.06;if(e.hp<=0)killE(e);else if(!beam)AU.sfx('hit');return true;}
-function hurt(){if(P.inv>0||!P.alive)return;if(DBG.god){P.inv=.5;return;}
+function hurt(){if(P.inv>0||!P.alive)return;if(window.DBG&&DBG.god){P.inv=.5;return;}
  if(P.shield>0){P.shield--;P.inv=1.3;AU.sfx('shieldhit');vib(40);clearNear(80);return;}
  if(P.wl>1){P.wl--;setTier();P.inv=1.6;P.downT=.6;G.combo=0;G.shake=9;G.flash=.35;boom(P.x,P.y,18,['o','c','w']);AU.sfx('tierdown');vib(90);clearNear(110);text(P.x,P.y-34,T('tierDown'),'#ffb35a');return;}
  P.lives--;G.deaths++;G.combo=0;P.wl=early()?Math.max(1,P.wl-1):1;setTier();P.inv=early()?3.2:2.4;P.spd=Math.max(0,P.spd-1);G.shake=12;G.flash=.6;boom(P.x,P.y,26,['o','c','w']);AU.sfx('hurt');vib(160);clearNear(140);P.bombs=Math.max(P.bombs,2);
@@ -218,11 +218,18 @@ function pickup(k,x,y){AU.sfx(k==='C'?'coin':'power');
  else{if(k==='P')P.shield=Math.min(4,P.shield+1);if(k==='B')P.bombs=Math.min(5,P.bombs+1);if(k==='V')P.spd=Math.min(3,P.spd+1);if(k==='U')P.lives=Math.min(9,P.lives+1);if(k==='M')P.magT=12*UPF.pwr();if(k==='X')P.x2T=12*UPF.pwr();text(x,y-16,T(nm),PU_COL[k]);}
  G.score+=500;}
 // ---------- stage flow ----------
+// v28: pre-warm heavy procedural art (stage bg tiles, boss hull/damage layers, turret sprite) in small chunks during the
+// warp/intro so the first boss frames don't hitch. Each job runs in its own timer tick.
+const PW={q:[],t:0};function prewarm(bg,bi){const A=ART.bg,j=PW.q;
+ if(bg>=0&&TH[bg]){const th=TH[bg];j.push(()=>{A['f'+bg]||(A['f'+bg]=nebTile6(bg,false));},()=>{A['w'+bg]||(A['w'+bg]=nebTile6(bg,true));},()=>{A['l'+bg]||(A['l'+bg]=landmark6(th.lm));});}
+ if(bi>=0&&BOSS_DEF[bi]){j.push(()=>{ART.bossSpr[bi]||(ART.bossSpr[bi]=bossSpr(bi));},()=>{ART.turSpr[bi]||(ART.turSpr[bi]=turretSpr(BOSS_DEF[bi][3]));},
+  ()=>{const c=document.createElement('canvas');c.width=c.height=8;const g=c.getContext('2d');g.scale(.02,.02);for(const ph of [0,1,2])bossDraw(g,bi,{t:0,ph,fl:1,dead:.5});});}
+ const run=()=>{PW.t=0;const f=PW.q.shift();if(f){try{f();}catch(e){}PW.t=setTimeout(run,70);}};if(!PW.t)PW.t=setTimeout(run,120);}
 function startStage(n,endless){G.endless=!!endless;G.stage=endless?10:n;G.sector=endless?(G.sector||0):0;G.special=isSpecial();G.dm=mkDM();
  clearAll();RINGS.length=0;LATER.length=0;G.t=0;G.boss=null;G.warnT=0;G.deaths=0;G.combo=0;G.contUsed=false;G.clearT=0;G.pity=0;G.kills=0;G.maxCombo=0;G.noIntro=false;G.credits=0;G.starBonus=0;G.newStars=0;G.bg=G.special?10:endless?bIdx():n-1;
  const fr=!endless||G.fresh;G.fresh=false;if(fr){G.score=0;P.ship=SAVE.ship;P.lives=G.dm.lives-1+SHIPS[P.ship].hp+(early()?1:0)+UPF.life();P.wt='B';P.wl=1;P.wlv=1;P.pw=0;P.dlv=0;P.bombs=early()&&G.stage<=2?3:2;P.spd=0;}setTier();P.evoT=0;P.magT=0;P.x2T=0;P.downT=0;
  P.shield=UPF.shd()+(P.ship===2?1:0);P.x=P.tx=GW/2;P.y=P.ty=GH-110;P.inv=early()?3:2;P.alive=true;P.bombT=0;
- Ads.stageRewards=0;buildStage();if(early()&&G.stage<=2){later(8,()=>drop(GW*.5,30,'W'));later(30,()=>drop(rnd(90,GW-90),30,'WA'));later(52,()=>drop(rnd(90,GW-90),30,'WB'));}setBG(G.bg);G.mode='play';AU.play(G.special?61:G.endless?1+bIdx():G.stage);UI.hud(true);LOG('stage',G.stage,'endless',G.endless,G.sector);}
+ Ads.stageRewards=0;buildStage();if(early()&&G.stage<=2){later(8,()=>drop(GW*.5,30,'W'));later(30,()=>drop(rnd(90,GW-90),30,'WA'));later(52,()=>drop(rnd(90,GW-90),30,'WB'));}setBG(G.bg);G.mode='play';AU.play(G.special?61:G.endless?1+bIdx():G.stage);UI.hud(true);if(!G.special)prewarm(-1,endless?bIdx():n-1);LOG('stage',G.stage,'endless',G.endless,G.sector);}
 // stars: 3 = no life lost, 2 = one life lost, 1 = cleared; each newly earned star pays STAR_BONUS coins once
 const STAR_BONUS=20;
 function stageClear(){G.mode='clear';G.clearT=0;AU.play(-1);AU.sfx('clear');const s=G.stage;DAILY.track('stage');if(G.deaths===0)DAILY.track('nodmg');
@@ -315,9 +322,9 @@ let last=performance.now();
 function frame(now){const raw=now-last;last=now;const dt=Math.min(.05,raw/1000);
  if(G.mode==='warp')WARP.update(dt);
  const opq=G.mode==='menu'&&(UI.cur==='map'||UI.cur==='hangar'||UI.cur==='missions'||UI.cur==='settings')&&UI.el().style.display!=='none';
- if(!DBG.fast&&!opq){if(G.hs>0){G.hs-=dt;if(BGS.i>=0)render(0);}else{update(dt);if(BGS.i>=0)render(dt);}}AU.tick();perf(raw);requestAnimationFrame(frame);}
+ if(!(window.DBG&&DBG.fast)&&!opq){if(G.hs>0){G.hs-=dt;if(BGS.i>=0)render(0);}else{update(dt);if(BGS.i>=0)render(dt);}}AU.tick();perf(raw);requestAnimationFrame(frame);}
 // ---------- debug hook (?debug=1) ----------
-const DBG={god:false,fast:false,auto:false,
+if(DEBUG){const DBG={god:false,fast:false,auto:false,
  sim(sec,step){step=step||1/60;const n=Math.round(sec/step);for(let i=0;i<n;i++){if(this.auto)this.pilot(step);update(step);if(G.mode!=='play'&&G.mode!=='clear')break;}return this.state();},
  pilot(dt){if(!P.alive)return;let tx=GW/2;const B=G.boss;if(B&&!B.dead){tx=B.x+(B.tur.find(t=>t.alive)||{ox:0}).ox;}else{let best=null,bd=1e9;EN.forEach(e=>{if(e.a&&e.y>0&&e.y<P.y){const d=Math.abs(e.x-P.x);if(d<bd){bd=d;best=e;}}});if(best)tx=best.x;}
   P.tx=clamp(tx,14,GW-14);P.ty=GH-110;},
@@ -325,4 +332,4 @@ const DBG={god:false,fast:false,auto:false,
  upgFx(){return{dmgMul:UPF.dmg(),rateMul:UPF.rate(),fireInterval:+(SHIPS[P.ship].fi/UPF.rate()).toFixed(4),startShield:UPF.shd(),magR:34*UPF.mag(),puSec:12*UPF.pwr(),extraLives:UPF.life(),lives:P.lives,shield:P.shield,magT:P.magT,x2T:P.x2T};},daily(){return JSON.parse(JSON.stringify(SAVE.dly));},
  start(n,e){UI.hideAll();G.fresh=true;startStage(n,e);},killBoss(){if(G.boss)damageBoss(G.boss,1e9);},toBoss(){G.t=G.dur+2.4;G.evI=G.ev.length;LATER.length=0;EN.forEach(e=>e.a=false);},
  shot(stage,sec){this.start(stage);this.sim(sec);}};
-if(DEBUG)window.DBG=DBG;window.__G=G;window.__P=P;
+window.DBG=DBG;window.__G=G;window.__P=P;}

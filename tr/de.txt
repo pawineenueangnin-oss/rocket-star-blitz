@@ -24,7 +24,6 @@ Neu starten
 Beenden
 Spiel vorbei
 Level geschafft!
-Sektor geschafft!
 Punkte
 Rekord
 Credits
@@ -42,7 +41,6 @@ Feuerrate
 Schaden
 Schild
 Magnet
-Endlos
 Level
 Überspringen
 Ziehen zum Fliegen · Autofeuer · B = Bombe
@@ -50,7 +48,6 @@ Erstellt von
 Datenschutz
 Schaffe Level {n}
 Neuer Rekord!
-Sieg!
 Bombe
 Gerade kein Video verfügbar
 Nicht genug Credits

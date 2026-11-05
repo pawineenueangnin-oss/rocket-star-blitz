@@ -10,7 +10,7 @@ const UI={cur:null,
  ttl(){return`<div class="logo"><div class="l1">STAR</div><div class="l2">ZOOMER</div></div>`;},
  menu(){G.mode='menu';this.hud(false);if(BGS.i!==4)setBG(4);P.ship=SAVE.ship;P.alive=true;P.inv=0;clearAll();AU.play(50);Ads.banner(true);persist();
   this.show(`${this.ttl()}<div class="tag">${T('tag')}</div><div class="sp"></div>
-  <button class="b big" data-a="play">▶ ${T('play')}${SAVE.far>=0?` · ${UI.isSpFar()?'★':T('stage')+' '+UI.furthest()}`:''}</button>
+  <button class="b big" data-a="play"><span class="dirg">▶</span> ${T('play')}${SAVE.far>=0?` · ${UI.isSpFar()?'★':T('stage')+' '+UI.furthest()}`:''}</button>
   <div class="row"><button class="b" data-a="map">${T('select')}</button></div>
   <div class="row mrow"><button class="b gold mb" data-a="hangar"><img src="${this.ico('C')}" alt="">${T('hangar')}</button><button class="b mb" data-a="missions"><img src="${this.ico('X')}" alt="">${T('missions')}${DAILY.badge()?'<i class="dot"></i>':''}</button></div>
   <div class="row"><button class="b sm" data-a="settings">⚙ ${T('settings')}</button></div>
@@ -21,8 +21,8 @@ const UI={cur:null,
  isSpFar(){return SAVE.far>=0&&SAVE.far%11===0;},
  farPage(){return SAVE.far<0?0:this.isSpFar()?SAVE.far/11:Math.floor((stNum(SAVE.far)-1)/10);},
  map(pg){G.mode='menu';this.hud(false);Ads.banner(true);const maxP=this.farPage();const p=this.mapPage=Math.max(0,Math.min(DEBUG?999:maxP,pg===undefined?maxP:pg));
-  const pager=`<div class="pager"><button class="b sm" data-a="mpg" data-i="${p-1}" ${p>0?'':'disabled'}>◀</button><b>${T('stage')} ${10*p+1}–${10*p+10}</b><button class="b sm" data-a="mpg" data-i="${p+1}" ${(SAVE.far>=11*p||DEBUG)?'':'disabled'}>▶</button></div>`;
-  let h=`<div class="mtop"><div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('select')}</h2><span class="cr"><span class="tst">★ ${totStars()}/30</span> ◆ ${SAVE.cr}</span></div>${pager}</div><div class="path" id="spath"><svg class="pl" id="spl"></svg>`;
+  const pager=`<div class="pager"><button class="b sm" data-a="mpg" data-i="${p-1}" ${p>0?'':'disabled'}><span class="dirg">◀</span></button><b>${T('stage')} ${10*p+1}–${10*p+10}</b><button class="b sm" data-a="mpg" data-i="${p+1}" ${(SAVE.far>=11*p||DEBUG)?'':'disabled'}><span class="dirg">▶</span></button></div>`;
+  let h=`<div class="mtop"><div class="hd"><button class="b sm" data-a="menu"><span class="dirg">◀</span></button><h2>${T('select')}</h2><span class="cr"><span class="tst">★ ${totStars()}/30</span> ◆ ${SAVE.cr}</span></div>${pager}</div><div class="path" id="spath"><svg class="pl" id="spl"></svg>`;
   const tier=mapTier(p),seen=SAVE.mapSeen||0,fresh=seen&&SAVE.reached>seen&&SAVE.reached<=10?SAVE.reached:0;const lit=[];let cur=1;
   const starsRow=(st)=>[0,1,2].map(k=>`<img class="sti" src="${mapStarURL(k<st)}" alt="">`).join('');
   for(let j=1;j<=10;j++){const N=10*p+j;let lock,done,st=0,hu,act,nm,ti;
@@ -44,15 +44,15 @@ const UI={cur:null,
   const sv=$('spl');sv.setAttribute('width',W);sv.setAttribute('height',H);sv.innerHTML=s;
   const sc=this.el();requestAnimationFrame(()=>{const p=pos[cur]||pos[1];sc.scrollTop=Math.max(0,pth.offsetTop+p.y-sc.clientHeight*.55);});},
  hangar(){G.mode='menu';this.hud(false);Ads.banner(true);const costs=[0,800,2000],req=[0,3,6];
-  let h=`<div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('hangar')}</h2><span class="cr">◆ ${SAVE.cr}</span></div><h3>${T('ships')}</h3><div class="ships">`;
+  let h=`<div class="hd"><button class="b sm" data-a="menu"><span class="dirg">◀</span></button><h2>${T('hangar')}</h2><span class="cr">◆ ${SAVE.cr}</span></div><h3>${T('ships')}</h3><div class="ships">`;
   SHIPS.forEach((s,i)=>{const own=SAVE.ships[i],can=SAVE.reached>=req[i]||DEBUG;h+=`<div class="ship ${SAVE.ship===i?'sel':''}"><img src="${skinSet(i,SAVE.skin).b.c.toDataURL()}" alt=""><b>${s.n}</b><small>${T('sh'+(i+1))}</small>
    ${own?(SAVE.ship===i?`<span class="ok">${T('equipped')}</span>`:`<button class="b sm" data-a="equip" data-i="${i}">${T('equip')}</button>`):can?`<button class="b sm gold${SAVE.cr<costs[i]?' poor':''}" data-a="buyship" data-i="${i}">◆ ${costs[i]}</button>`:`<small class="lk">🔒 ${T('unlockAt').replace('{n}',req[i]-1)}</small>`}</div>`;});
   h+=`</div>${skinUI()}<h3>${T('upgrades')}</h3><div class="upg">`;
-  UPG.forEach(u=>{const lv=SAVE.upg[u.k],mx=u.cost.length,c=u.cost[lv],nb=this.bought===u.k;h+=`<div class="u${nb?' bought':''}"><img class="ui" src="${this.ico(u.ic)}" alt=""><span class="un"><b>${T(u.n)}</b><small>${u.fx(lv)}${lv<mx?' → '+u.fx(lv+1):''}</small><span class="pips">${Array.from({length:mx},(_,j)=>`<i class="${j<lv?'on':''}${nb&&j===lv-1?' pop':''}"></i>`).join('')}</span></span>${lv>=mx?`<span class="ok">${T('max')}</span>`:`<button class="b sm gold" data-a="upg" data-k="${u.k}" ${SAVE.cr<c?'disabled':''}>◆ ${c}</button>`}${nb?`<span class="fly">-◆${this.boughtC}</span>`:''}</div>`;});
+  UPG.forEach(u=>{const lv=SAVE.upg[u.k],mx=u.cost.length,c=u.cost[lv],nb=this.bought===u.k;h+=`<div class="u${nb?' bought':''}"><img class="ui" src="${this.ico(u.ic)}" alt=""><span class="un"><b>${T(u.n)}</b><small>${u.fx(lv)}${lv<mx?' <span class="dirg">→</span> '+u.fx(lv+1):''}</small><span class="pips">${Array.from({length:mx},(_,j)=>`<i class="${j<lv?'on':''}${nb&&j===lv-1?' pop':''}"></i>`).join('')}</span></span>${lv>=mx?`<span class="ok">${T('max')}</span>`:`<button class="b sm gold" data-a="upg" data-k="${u.k}" ${SAVE.cr<c?'disabled':''}>◆ ${c}</button>`}${nb?`<span class="fly">-◆${this.boughtC}</span>`:''}</div>`;});
   this.show(h+'</div>','hangar');this.bought=null;this.SC=costs;},
  ico(k){const c=this._ic||(this._ic={});return c[k]||(c[k]=ART.spr.pu[k].c.toDataURL());},
  missions(){G.mode='menu';this.hud(false);Ads.banner(true);const D=DAILY.roll(),ln=DAILY.loginDay(),cd=ln||D.ls;
-  let h=`<div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('missions')}</h2><span class="cr">◆ ${SAVE.cr}</span></div>
+  let h=`<div class="hd"><button class="b sm" data-a="menu"><span class="dirg">◀</span></button><h2>${T('missions')}</h2><span class="cr">◆ ${SAVE.cr}</span></div>
   <h3>${T('daily')}</h3><div class="login"><div class="days">${DAILY.LOGIN.map((v,j)=>{const d=j+1,st=ln?(d<ln?'got':d===ln?'now':''):(d<=cd?'got':'');return`<div class="dy ${st}"><small>${T('day').replace('{n}',d)}</small><img src="${this.ico('C')}" alt=""><b>${v}</b></div>`;}).join('')}</div>
   ${ln?`<button class="b gold" data-a="login">${T('claim')} ◆ ${DAILY.LOGIN[ln-1]}</button>`:`<span class="ok">✓ ${T('claimed')}</span>`}</div>
   <h3>${T('missions')}</h3><div class="msn">`;
@@ -62,7 +62,7 @@ const UI={cur:null,
  reward(v){AU.sfx('coin');AU.sfx('power');vib(40);toast('+◆ '+v);},
  settings(from){this.from=from||'menu';const tg=(k,n)=>`<div class="set"><span>${T(n)}</span><button class="tg ${SAVE[k]?'on':''}" data-a="tog" data-k="${k}">${SAVE[k]?'ON':'OFF'}</button></div>`;
   const langs=Object.keys(LANG_NAMES).map(l=>`<option value="${l}" ${l===LANG&&localStorage.getItem('rsb_lang')?'selected':''}>${LANG_NAMES[l]}</option>`).join('');
-  this.show(`<div class="hd"><button class="b sm" data-a="back">◀</button><h2>${T('settings')}</h2><span></span></div><div class="sets">
+  this.show(`<div class="hd"><button class="b sm" data-a="back"><span class="dirg">◀</span></button><h2>${T('settings')}</h2><span></span></div><div class="sets">
   <div class="set hlp"><span>🤖 ${T('helper')}<small class="sd">${T('helperD')}</small></span><button class="tg ${SAVE.helper?'on':''}" data-a="tog" data-k="helper">${SAVE.helper?'ON':'OFF'}</button></div>${tg('snd','sound')}${tg('mus','music')}${tg('vib','vibration')}${tg('shake','shake')}
   <div class="set"><span>${T('quality')}</span><select id="sQ">${['auto','low','high'].map(q=>`<option value="${q}" ${SAVE.q===q?'selected':''}>${T('q_'+q)}</option>`).join('')}</select></div>
   <div class="set"><span>${T('language')}</span><select id="sL"><option value="auto">${T('auto')}</option>${langs}</select></div></div>
@@ -76,10 +76,10 @@ const UI={cur:null,
    const row=(lab,v,pre,cls)=>`<div class="tr ${cls||''} ${inst?'in done':''}" data-v="${v}" data-p="${pre||''}"><span>${lab}</span><b>${inst?(pre||'')+v:''}</b></div>`;
    this.show(`<div class="burst"></div>${G.special?`<div class="spbadge">★ ${T('spStage')} ★</div>`:''}<h2 class="big gold">${G.special?'':`<small class="rsn">${T('stage')} ${G.endless?stNum(G.sector-1):s}</small><br>`}${T('clear')}</h2><div class="tally">${row(T('score'),L.base)}${row(T('killBonus'),L.kb,'+')}${row(T('credits'),L.cr,'◆ ','crr')}${row(T(L.bk),L.bv,'+')}<i class="tl"></i>${row(T('total'),L.tot,'','tot')}</div>
    <div class="stars ${inst?'':'hid'}"${G.endless?' style="display:none"':''}>${[1,2,3].map(k=>`<span class="${k<=o.stars?'on':''}">★</span>`).join('')}</div>${o.sb||G.starBonus?`<div class="sbn ${inst?'':'hid'}">${T(G.special?'spBonus':'starBonus')} <b>+◆ ${o.sb||G.starBonus}</b></div>`:''}<div class="nb ${o.nb&&inst?'':'hid'}">${T('newBest')}</div>
-   <div class="tsk ${inst?'hid':''}">${T('tapSkip')}</div><div class="after ${inst?'':'hid'}">${canR&&G.credits>0?`<button class="b pink" data-a="dbl">▶ ${T('double')}</button>`:''}
-   <button class="b big" data-a="next">${s>=10&&!G.endless?T('victory'):T('next')} ▶</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div></div>`,'result');
+   <div class="tsk ${inst?'hid':''}">${T('tapSkip')}</div><div class="after ${inst?'':'hid'}">${canR&&G.credits>0?`<button class="b pink" data-a="dbl"><span class="dirg">▶</span> ${T('double')}</button>`:''}
+   <button class="b big" data-a="next">${T('next')} <span class="dirg">▶</span></button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div></div>`,'result');
    if(!inst)this.countUp(o);}
-  else this.show(`<h2 class="big red">${T('gameover')}</h2>${sc}${!G.contUsed&&canR?`<button class="b pink" data-a="cont">▶ ${T('revive')}</button>`:''}
+  else this.show(`<h2 class="big red">${T('gameover')}</h2>${sc}${!G.contUsed&&canR?`<button class="b pink" data-a="cont"><span class="dirg">▶</span> ${T('revive')}</button>`:''}
    <button class="b big" data-a="retry">${T('retry')}</button><div class="row"><button class="b sm" data-a="hangar">${T('hangar')}</button><button class="b sm" data-a="map">${T('map')}</button></div>`,'result');
   },
  // score tally: each line pops in and counts up with ticks; tap skips to the end
@@ -97,11 +97,11 @@ const UI={cur:null,
   this.show(`<div class="burst"></div><div class="vbadge">★ ★ ★</div>
   <h2 class="big gold vtitle">${T('allClear')}</h2>
   <p class="vsub">${T('victorySub')}</p>
-  <div class="vunlock">★ ${T('spStage')} → ${T('stage')} 11</div>
-  <button class="b big pink" data-a="toEndless">▶ ${T('toEndless')}</button>`,'victory');},
- warpTo(n){WARP.start(n,false,()=>startStage(n));},
+  <div class="vunlock">★ ${T('spStage')} <span class="dirg">→</span> ${T('stage')} 11</div>
+  <button class="b big pink" data-a="toEndless"><span class="dirg">▶</span> ${T('toEndless')}</button>`,'victory');},
+ warpTo(n){prewarm(n-1,n-1);WARP.start(n,false,()=>startStage(n));},
  endlessNext(){WARP.start(0,true,()=>startStage(0,true));},
- pause(){if(G.mode!=='play')return;G.mode='paused';$('pz').style.display='flex';$('pz').innerHTML=`<h2>${T('paused')}</h2><button class="b big" data-pa="resume">▶ ${T('resume')}</button><button class="b" data-pa="restart">${T('restart')}</button><button class="b" data-pa="quit">${T('quit')}</button>
+ pause(){if(G.mode!=='play')return;G.mode='paused';$('pz').style.display='flex';$('pz').innerHTML=`<h2>${T('paused')}</h2><button class="b big" data-pa="resume"><span class="dirg">▶</span> ${T('resume')}</button><button class="b" data-pa="restart">${T('restart')}</button><button class="b" data-pa="quit">${T('quit')}</button>
   <div class="row"><button class="tg ${SAVE.snd?'on':''}" data-pa="snd">♪ ${T('sound')}</button><button class="tg ${SAVE.mus?'on':''}" data-pa="mus">♫ ${T('music')}</button></div>`;
   $('pz').querySelectorAll('[data-pa]').forEach(b=>b.onclick=()=>{AU.sfx('ui');const k=b.dataset.pa;if(k==='resume'){$('pz').style.display='none';G.mode='play';last=performance.now();}
    else if(k==='restart'){$('pz').style.display='none';G.fresh=true;startStage(G.endless?0:G.stage,G.endless);}else if(k==='quit'){$('pz').style.display='none';this.map();}

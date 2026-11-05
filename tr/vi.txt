@@ -24,7 +24,6 @@ Chơi lại
 Thoát
 Kết thúc
 Qua màn!
-Qua khu vực!
 Điểm
 Kỷ lục
 Tín dụng
@@ -42,7 +41,6 @@ Tốc độ bắn
 Sát thương
 Khiên
 Nam châm
-Vô tận
 Màn
 Bỏ qua
 Kéo để bay · tự động bắn · B = bom
@@ -50,7 +48,6 @@ Tạo bởi
 Chính sách riêng tư
 Qua màn {n}
 Kỷ lục mới!
-Chiến thắng!
 Bom
 Hiện chưa có video
 Không đủ tín dụng

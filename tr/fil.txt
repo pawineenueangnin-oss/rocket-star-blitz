@@ -24,7 +24,6 @@ Ulitin mula simula
 Umalis
 Game Over
 Tapos ang stage!
-Tapos ang sektor!
 Iskor
 Pinakamataas
 Credits
@@ -42,7 +41,6 @@ Bilis ng putok
 Lakas
 Kalasag
 Magnet
-Walang katapusan
 Stage
 Laktawan
 I-drag para lumipad · auto-putok · B = bomba
@@ -50,7 +48,6 @@ Gawa ng
 Patakaran sa privacy
 Tapusin ang stage {n}
 Bagong rekord!
-Panalo!
 Bomba
 Walang video ngayon
 Kulang ang credits

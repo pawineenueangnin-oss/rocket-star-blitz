@@ -24,7 +24,6 @@ Opnieuw
 Stoppen
 Game over
 Level gehaald!
-Sector gehaald!
 Score
 Record
 Credits
@@ -42,7 +41,6 @@ Vuursnelheid
 Schade
 Schild
 Magneet
-Eindeloos
 Level
 Overslaan
 Sleep om te vliegen · automatisch vuren · B = bom
@@ -50,7 +48,6 @@ Gemaakt door
 Privacybeleid
 Haal level {n}
 Nieuw record!
-Overwinning!
 Bom
 Nu geen video beschikbaar
 Niet genoeg credits
@@ -67,7 +64,7 @@ Sneller
 Violette Sluier
 Sintelgordel
 IJsmaan Rime
-Tweelingzonnen-sector
+Tweelingzonnen-zone
 Koraaldrift
 Stormkloof
 Glazen Kometenveld

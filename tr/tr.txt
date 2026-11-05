@@ -24,7 +24,6 @@ Yeniden başla
 Çık
 Oyun bitti
 Bölüm geçildi!
-Sektör geçildi!
 Puan
 Rekor
 Kredi
@@ -42,7 +41,6 @@ Atış hızı
 Hasar
 Kalkan
 Mıknatıs
-Sonsuz
 Bölüm
 Geç
 Uçmak için sürükle · otomatik ateş · B = bomba
@@ -50,7 +48,6 @@ Yapımcı
 Gizlilik politikası
 {n}. bölümü geç
 Yeni rekor!
-Zafer!
 Bomba
 Şu an video yok
 Yeterli kredi yok

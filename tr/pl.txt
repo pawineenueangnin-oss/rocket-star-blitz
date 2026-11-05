@@ -24,7 +24,6 @@ Od nowa
 Wyjdź
 Koniec gry
 Poziom ukończony!
-Sektor ukończony!
 Wynik
 Rekord
 Kredyty
@@ -42,7 +41,6 @@ Szybkostrzelność
 Obrażenia
 Tarcza
 Magnes
-Bez końca
 Poziom
 Pomiń
 Przeciągnij, by latać · auto ogień · B = bomba
@@ -50,7 +48,6 @@ Twórca
 Prywatność
 Ukończ poziom {n}
 Nowy rekord!
-Zwycięstwo!
 Bomba
 Wideo teraz niedostępne
 Za mało kredytów

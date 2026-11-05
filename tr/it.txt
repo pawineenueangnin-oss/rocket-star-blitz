@@ -24,7 +24,6 @@ Ricomincia
 Esci
 Game over
 Livello superato!
-Settore superato!
 Punti
 Record
 Crediti
@@ -42,7 +41,6 @@ Cadenza
 Danno
 Scudo
 Calamita
-Infinito
 Livello
 Salta
 Trascina per volare · fuoco automatico · B = bomba
@@ -50,7 +48,6 @@ Creato da
 Privacy
 Supera il livello {n}
 Nuovo record!
-Vittoria!
 Bomba
 Video non disponibile ora
 Crediti insufficienti

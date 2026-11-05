@@ -24,7 +24,6 @@ Ulangi
 Keluar
 Permainan berakhir
 Tahap selesai!
-Sektor selesai!
 Skor
 Terbaik
 Kredit
@@ -42,7 +41,6 @@ Kecepatan tembak
 Kekuatan
 Perisai
 Magnet
-Tanpa akhir
 Tahap
 Lewati
 Geser untuk terbang · tembak otomatis · B = bom
@@ -50,7 +48,6 @@ Dibuat oleh
 Kebijakan privasi
 Selesaikan tahap {n}
 Rekor baru!
-Menang!
 Bom
 Video belum tersedia
 Kredit tidak cukup

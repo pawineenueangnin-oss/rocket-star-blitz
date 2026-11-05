@@ -24,7 +24,6 @@ Recommencer
 Quitter
 Partie terminée
 Niveau réussi !
-Secteur réussi !
 Score
 Record
 Crédits
@@ -42,7 +41,6 @@ Cadence
 Dégâts
 Bouclier
 Aimant
-Infini
 Niveau
 Passer
 Glisse pour voler · tir auto · B = bombe
@@ -50,7 +48,6 @@ Créé par
 Politique de confidentialité
 Réussis le niveau {n}
 Nouveau record !
-Victoire !
 Bombe
 Vidéo indisponible pour l'instant
 Pas assez de crédits

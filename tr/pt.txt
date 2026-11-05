@@ -24,7 +24,6 @@ Reiniciar
 Sair
 Fim de jogo
 Fase concluída!
-Setor concluído!
 Pontos
 Recorde
 Créditos
@@ -42,7 +41,6 @@ Cadência
 Dano
 Escudo
 Ímã
-Infinito
 Fase
 Pular
 Arraste para voar · tiro automático · B = bomba
@@ -50,7 +48,6 @@ Feito por
 Política de privacidade
 Conclua a fase {n}
 Novo recorde!
-Vitória!
 Bomba
 Vídeo indisponível agora
 Créditos insuficientes
