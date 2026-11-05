@@ -211,3 +211,10 @@ body.lowq .snode .sv{filter:none}body.lowq .snode.cur:before{animation:none}
 .set.hlp{border-color:rgba(255,210,100,.5)}.set.hlp>span{display:flex;flex-direction:column;gap:.15em}.set .sd{font-size:.72em;opacity:.85;line-height:1.2}
 .sbn{color:#ffe14a;font-weight:800;animation:v6star .5s cubic-bezier(.2,1.6,.4,1) both}.sbn.hid{display:none}.sbn b{font-family:PS2P;font-size:.8em}
 .spbadge{display:inline-block;margin:.1em auto 0;padding:.25em .9em;border-radius:1em;font-weight:800;font-size:.95em;color:#2a0850;background:linear-gradient(#fff3b0,#ffd23a 55%,#ff9a1a);box-shadow:0 0 .8em rgba(190,90,255,.8),0 0 0 2px #b04aff;max-width:90%;overflow-wrap:anywhere}
+
+/* v25 — stage-10 all-clear victory */
+.scr.victory{background:radial-gradient(ellipse at 50% 35%,rgba(60,20,100,.6),rgba(4,0,16,.88) 70%)}
+.vbadge{font-size:1.6em;letter-spacing:.35em;color:#ffe14a;text-shadow:0 0 .6em #ff8a2a;margin:.4em 0 .2em;animation:v6star .7s cubic-bezier(.2,1.6,.4,1) both}
+.vtitle{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Thai",sans-serif!important;font-weight:900;font-size:1.35em!important;max-width:16em;line-height:1.35;padding:0 .4em}
+.vsub{max-width:18em;text-align:center;color:#ffd0f0;font-size:.95em;line-height:1.4;margin:.3em 0 1em;text-shadow:0 2px 0 #300030}
+.vunlock{font-family:PS2P,system-ui;font-size:.85em;color:#7ae8ff;margin:0 0 1.1em;padding:.45em 1em;border-radius:2em;background:linear-gradient(90deg,rgba(120,40,200,.35),rgba(40,120,220,.35));border:1px solid rgba(180,220,255,.45);box-shadow:0 0 .8em rgba(120,180,255,.35);text-shadow:0 0 .4em #4af}

@@ -125,3 +125,7 @@ spStage|Special Stage
 spName|Treasure Comet
 spBonus|Special Stage Bonus
 spMega|Mega Reward!
+allClear|All 10 stages cleared!
+victorySub|Endless mode unlocked — how far can you go?
+toEndless|Play Endless
+toMenu|Main Menu

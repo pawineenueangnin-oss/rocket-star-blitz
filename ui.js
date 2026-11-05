@@ -86,6 +86,13 @@ const UI={cur:null,
    const r=rows[i],d=r.classList.contains('tot')?750:480,k=Math.min(1,(now-t0)/d),v=+r.dataset.v*(1-Math.pow(1-k,3));r.querySelector('b').textContent=fmt(r,v);if(k<1&&+r.dataset.v>0)AU.sfx('tick');raf=requestAnimationFrame(step);};
   setTimeout(()=>{raf=requestAnimationFrame(step);},350);
   setTimeout(()=>{scr.onpointerdown=e=>{if(!e.target.closest('button'))end();};},150);},
+ victory(){G.mode='menu';this.hud(false);Ads.banner(true);FX.fw=5;AU.sfx('clear');AU.sfx('power');
+  this.show(`<div class="burst"></div><div class="vbadge">★ ★ ★</div>
+  <h2 class="big gold vtitle">${T('allClear')}</h2>
+  <p class="vsub">${T('victorySub')}</p>
+  <div class="vunlock">∞ ${T('endless')}</div>
+  <button class="b big pink" data-a="toEndless">▶ ${T('toEndless')}</button>
+  <button class="b" data-a="menu">${T('toMenu')}</button>`,'victory');},
  warpTo(n){WARP.start(n,false,()=>startStage(n));},
  endlessNext(){WARP.start(0,true,()=>startStage(0,true));},
  pause(){if(G.mode!=='play')return;G.mode='paused';$('pz').style.display='flex';$('pz').innerHTML=`<h2>${T('paused')}</h2><button class="b big" data-pa="resume">▶ ${T('resume')}</button><button class="b" data-pa="restart">${T('restart')}</button><button class="b" data-pa="quit">${T('quit')}</button>
@@ -109,14 +116,15 @@ const UI={cur:null,
    case'missions':this.missions();break;
    case'login':{const v=DAILY.claimLogin();if(v)this.reward(v);this.missions();break;}
    case'mclaim':{const v=DAILY.claim(i);if(v)this.reward(v);this.missions();break;}
-      case'next':if(G.endless){b.disabled=true;Ads.interThen(G.sector,()=>this.endlessNext());}else if(G.stage>=10){this.menu();toast(T('victory'));}else{const n=G.stage+1;b.disabled=true;Ads.interThen(G.stage,()=>this.warpTo(n));}break;
+      case'next':if(G.endless){b.disabled=true;Ads.interThen(G.sector,()=>this.endlessNext());}else if(G.stage>=10){this.victory();}else{const n=G.stage+1;b.disabled=true;Ads.interThen(G.stage,()=>this.warpTo(n));}break;
+   case'toEndless':b.disabled=true;G.sector=0;Ads.interThen(Math.max(G.stage,10),()=>{this.hideAll();WARP.start(0,true,()=>startStage(0,true));});break;
    case'retry':G.sector=0;startStage(G.endless?0:G.stage,G.endless);break;
    case'dbl':b.disabled=true;Ads.rewarded().then(ok=>{if(ok){SAVE.cr+=G.credits;G.credits*=2;persist();AU.sfx('coin');toast('◆ x2');}else toast(T('noVideo'));this.result(true,{stars:G.endless?0:SAVE.stars[G.stage-1]||1});});break;
    case'cont':b.disabled=true;Ads.rewarded().then(ok=>{if(ok)revive();else{toast(T('noVideo'));b.disabled=false;}});break;}}};
 // Back button (Android bridge calls window.onAndroidBack(); browsers: history trap + Escape). Returns true when handled.
 UI.back=function(){const m=G.mode,c=this.cur;if(document.querySelector('.adMock.adI'))return true;
  if(m==='warp'){WARP.skip();return true;}if(m==='play'){this.pause();return true;}if(m==='paused'){$('pz').style.display='none';G.mode='play';last=performance.now();return true;}
- if(c==='settings'){this.from==='map'?this.map():this.menu();return true;}if(c==='map'||c==='hangar'||c==='missions'){this.menu();return true;}if(c==='result'){this.map();return true;}return false;};
+ if(c==='settings'){this.from==='map'?this.map():this.menu();return true;}if(c==='map'||c==='hangar'||c==='missions'||c==='victory'){this.menu();return true;}if(c==='result'){this.map();return true;}return false;};
 window.onAndroidBack=()=>UI.back();
 addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='GoBack'){UI.back();e.preventDefault();}});
 try{if(!window.AndroidAds||window.__adTest){history.pushState({rsb:1},'');addEventListener('popstate',()=>{if(UI.back())history.pushState({rsb:1},'');});}}catch(e){}
