@@ -1,6 +1,6 @@
 // Starzoomer — DOM menus / screens.
 'use strict';
-const MHUE=[275,20,195,40,320,215,165,8,95,300];function MSTAR(R,r){let p=[];for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,q=k%2?r:R;p.push((Math.cos(a)*q).toFixed(1)+','+(Math.sin(a)*q).toFixed(1));}return p.join(' ');}
+const MHUE=[275,20,195,40,320,215,165,8,95,300];
 const UI={cur:null,
  el(){return $('scr');},
  show(html,cls){const s=this.el();s.className='scr '+(cls||'');s.innerHTML=html;s.style.display='flex';this.cur=cls;s.scrollTop=0;
@@ -23,16 +23,16 @@ const UI={cur:null,
  map(pg){G.mode='menu';this.hud(false);Ads.banner(true);const maxP=this.farPage();const p=this.mapPage=Math.max(0,Math.min(DEBUG?999:maxP,pg===undefined?maxP:pg));
   const pager=`<div class="pager"><button class="b sm" data-a="mpg" data-i="${p-1}" ${p>0?'':'disabled'}>◀</button><b>${T('stage')} ${10*p+1}–${10*p+10}</b><button class="b sm" data-a="mpg" data-i="${p+1}" ${(SAVE.far>=11*p||DEBUG)?'':'disabled'}>▶</button></div>`;
   let h=`<div class="mtop"><div class="hd"><button class="b sm" data-a="menu">◀</button><h2>${T('select')}</h2><span class="cr"><span class="tst">★ ${totStars()}/30</span> ◆ ${SAVE.cr}</span></div>${pager}</div><div class="path" id="spath"><svg class="pl" id="spl"></svg>`;
-  const STAR=(c1,c2,id)=>`<svg viewBox="-50 -50 100 100" class="sv"><defs><radialGradient id="g${id}" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient></defs><polygon class="sp0" points="${MSTAR(46,21)}" fill="url(#g${id})"/><polygon class="sp1" points="${MSTAR(36,16)}" fill="none"/></svg>`;
-  const seen=SAVE.mapSeen||0,fresh=seen&&SAVE.reached>seen&&SAVE.reached<=10?SAVE.reached:0;const lit=[];let cur=1;
-  for(let j=1;j<=10;j++){const N=10*p+j;let lock,done,st=0,hu,act,nm;
-   if(N<=10){lock=N>SAVE.reached&&!DEBUG;st=SAVE.stars[N-1]||0;done=N<SAVE.reached||(N===10&&SAVE.cleared);hu=MHUE[N-1];act=`data-a="stage" data-i="${N}"`;nm=T('n'+N);}
-   else{const s=secOf(N);lock=s>SAVE.far&&!DEBUG;done=s<SAVE.far;hu=MHUE[bIdx(s)];act=`data-a="sec" data-i="${s}"`;nm=T('n'+(bIdx(s)+1));}
+  const tier=mapTier(p),seen=SAVE.mapSeen||0,fresh=seen&&SAVE.reached>seen&&SAVE.reached<=10?SAVE.reached:0;const lit=[];let cur=1;
+  const starsRow=(st)=>[0,1,2].map(k=>`<img class="sti" src="${mapStarURL(k<st)}" alt="">`).join('');
+  for(let j=1;j<=10;j++){const N=10*p+j;let lock,done,st=0,hu,act,nm,ti;
+   if(N<=10){lock=N>SAVE.reached&&!DEBUG;st=SAVE.stars[N-1]||0;done=N<SAVE.reached||(N===10&&SAVE.cleared);ti=N-1;hu=MHUE[ti];act=`data-a="stage" data-i="${N}"`;nm=T('n'+N);}
+   else{const s=secOf(N);lock=s>SAVE.far&&!DEBUG;done=s<SAVE.far;ti=bIdx(s);hu=MHUE[ti];act=`data-a="sec" data-i="${s}"`;nm=T('n'+(ti+1));}
    if(!lock)cur=j;lit[j]=done;
-   const c1=lock?'#6a6a86':`hsl(${hu},100%,68%)`,c2=lock?'#23203a':`hsl(${hu+25},90%,38%)`;
-   h+=`<button class="snode ${lock?'lock':done?'done':'cur'}${N===fresh?' fresh':''}" ${act} ${lock?'disabled':''} style="--hu:${hu}">${STAR(c1,c2,N)}<span class="num">${lock?'🔒':N}</span><span class="lbl"><span class="nm">${nm}</span><span class="st">${N<=10?[0,1,2].map(k=>`<i class="${k<st?'on':''}">★</i>`).join(''):''}</span></span></button>`;}
+   const src=mapNodeURL(ti,tier,N,lock),cls=`snode ${lock?'lock':done?'done':'cur'}${N===fresh?' fresh':''}`;
+   h+=`<button class="${cls}" ${act} ${lock?'disabled':''} style="--hu:${hu}"><img class="sv" src="${src}" alt="${N}" draggable="false">${!lock&&!done?`<img class="rk" src="${mapRocketURL()}" alt="" draggable="false"><img class="glw" src="${mapGlowURL(ti)}" alt="" draggable="false">`:''}<span class="lbl"><span class="nm">${nm}</span><span class="st">${N<=10?starsRow(st):''}</span></span></button>`;}
   const ss=11*p,eo=ss<=SAVE.far||DEBUG;lit[10]=eo;
-  h+=`<button class="snode end ${eo?'':'lock'}" data-a="sec" data-i="${ss}" ${eo?'':'disabled'}><span class="portal"><i></i><i></i><i></i></span><span class="num">${eo?'★':'🔒'}</span><span class="lbl"><span class="nm">${T('spStage')}</span><span class="st2">${T('spName')}</span></span></button></div>`;
+  h+=`<button class="snode end ${eo?'':'lock'}" data-a="sec" data-i="${ss}" ${eo?'':'disabled'} style="--hu:45"><img class="sv" src="${mapSpecialURL(!eo)}" alt="★" draggable="false">${eo?`<img class="glw" src="${mapGlowURL(1)}" alt="" draggable="false">`:''}<span class="lbl"><span class="nm">${T('spStage')}</span><span class="st2">${T('spName')}</span></span></button></div>`;
   this.show(h,'map');SAVE.mapSeen=SAVE.reached;persist();this.mapLit=lit;this.mapCur=SAVE.far===ss?11:cur;this.mapLayout(this.mapCur);},
  mapLayout(cur){const pth=$('spath');if(!pth)return;document.body.classList.toggle('lowq',QUAL===0);const W=pth.clientWidth,step=Math.max(112,Math.min(150,innerHeight*.17)),top=200,H=top+10*step+70;pth.style.height=H+'px';
   const X=[.3,.5,.7,.5],rtl=document.documentElement.dir==='rtl',pos=[];
